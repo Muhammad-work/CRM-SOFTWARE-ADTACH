@@ -25,7 +25,7 @@
                         <!-- small box -->
                         <div class="small-box bg-info">
                             <div class="inner">
-                                <h3> 0 </h3>
+                                <h3> ${{ $price }} </h3>
 
                                 <p>Total Sales</p>
                             </div>
@@ -57,14 +57,14 @@
                         <!-- small box -->
                         <div class="small-box bg-secondary">
                             <div class="inner">
-                                <h3> 0 </h3>
+                                <h3> {{ $lead }} </h3>
 
                                 <p>Total Agents Lead Counts</p>
                             </div>
                             <div class="icon">
                                 <i class="ion ion-person-add"></i>
                             </div>
-                            <a href="#" class="small-box-footer">More info <i
+                            <a href="{{ route('viewAgentLeadlTable') }}" class="small-box-footer">More info <i
                                     class="fas fa-arrow-circle-right"></i></a>
                         </div>
                     </div>
@@ -72,14 +72,14 @@
                         <!-- small box -->
                         <div class="small-box bg-primary">
                             <div class="inner">
-                                <h3> 0 </h3>
+                                <h3> {{ $sale }} </h3>
 
                                 <p>Total Agents Sales Counts</p>
                             </div>
                             <div class="icon">
                                 <i class="ion ion-person-add"></i>
                             </div>
-                            <a href="#" class="small-box-footer">More info <i
+                            <a href="{{ route('viewAgentSaleTable') }}" class="small-box-footer">More info <i
                                     class="fas fa-arrow-circle-right"></i></a>
                         </div>
                     </div>
@@ -87,14 +87,14 @@
                         <!-- small box -->
                         <div class="small-box bg-danger">
                             <div class="inner">
-                                <h3> 0 </h3>
+                                <h3> {{ $trial }} </h3>
 
                                 <p>Total Agents Trial Counts</p>
                             </div>
                             <div class="icon">
                                 <i class="ion ion-person-add"></i>
                             </div>
-                            <a href="#" class="small-box-footer">More info <i
+                            <a href="{{ route('viewAgentTrialTable') }}" class="small-box-footer">More info <i
                                     class="fas fa-arrow-circle-right"></i></a>
                         </div>
                     </div>

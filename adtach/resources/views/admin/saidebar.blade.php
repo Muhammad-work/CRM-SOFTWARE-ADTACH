@@ -1,10 +1,10 @@
 @section('sidebar')
     <aside class="main-sidebar sidebar-dark-primary elevation-4">
         <!-- Brand Logo -->
-        <a href="#" class="brand-link">
-            {{-- <img src="{{ asset('storage/img/logo.png') }}" alt="AdminLTE Logo"
-                class="brand-image img-circle elevation-3" style="opacity: .8"> --}}
-            <span class="brand-text font-weight-light">UMA IMPORT INC</span>
+        <a href="{{ route('viewHome') }}" class="brand-link">
+            <img  src="{{ asset('storage/img/logo-2.png') }}" alt="AdminLTE Logo"
+                class="brand-image img-circle elevation-3" style="opacity: .8">
+            <span class="brand-text font-weight-light">PBS Digital</span>
         </a>
 
         <!-- Sidebar -->
@@ -12,7 +12,7 @@
             <!-- Sidebar user panel (optional) -->
             <div class="user-panel mt-3 pb-3 mb-3 d-flex">
                 <div class="info">
-                    <span class="d-block ms-5 text-white">Hello Muhammad</span>
+                    <span class="d-block ms-5 text-white">Hello {{ Auth::user()->name }}</span>
                 </div>
             </div>  
 
@@ -30,50 +30,6 @@
                             </p>
                         </a>
                     </li>
-
-                    {{-- <li class="nav-item">
-                        <a href="#" class="nav-link">
-                            <i class=" nav-icon fa-solid fa-cart-shopping"></i>
-                            <p>
-                               Products
-                                <i class="fas fa-angle-left right"></i>
-                            </p>
-                        </a>
-                        <ul class="nav nav-treeview">
-                            <li class="nav-item">
-                                <a href="#" class="nav-link">
-                                    <i class="far fa-circle nav-icon"></i>
-                                    <p>All Products</p>
-                                </a>
-                            </li>
-                            <li class="nav-item">
-                                <a href="#" class="nav-link">
-                                    <i class="fas fa-angle-left right"></i>
-                                    <p>Category</p>
-                                </a>
-                                <ul class="nav nav-treeview">
-                                    <li class="nav-item">
-                                        <a href="#" class="nav-link">
-                                            <i class="far fa-circle nav-icon"></i>
-                                            <p>All category</p>
-                                        </a>
-                                    </li>
-                                    <li class="nav-item">
-                                        <a href="#" class="nav-link">
-                                            <i class="far fa-circle nav-icon"></i>
-                                            <p>Sub Category</p>
-                                        </a>
-                                    </li>
-                                </ul>
-                            </li>   
-                            <li class="nav-item">
-                                <a href="#" class="nav-link">
-                                    <i class="far fa-circle nav-icon"></i>
-                                    <p>Brands</p>
-                                </a>
-                            </li>
-                        </ul>
-                    </li> --}}
                     <li class="nav-item">
                         <a href="{{ route('viewUserTable') }}" class="nav-link">
                             <i class="nav-icon fa-solid fa-users"></i>
@@ -91,7 +47,7 @@
                         </a>
                     </li>
                     <li class="nav-item">
-                        <a href="#" class="nav-link">
+                        <a href="{{ route('viewAgentLeadlTable') }}" class="nav-link">
                             <i class="nav-icon fa-regular fa-user"></i>
                             <p>
                                 All Agent Lead Reports
@@ -99,7 +55,7 @@
                         </a>
                     </li>
                     <li class="nav-item">
-                        <a href="#" class="nav-link">
+                        <a href="{{ route('viewAgentSaleTable') }}" class="nav-link">
                             <i class="nav-icon fa-solid fa-dollar-sign"></i>
                             <p>
                                 All Agent Sales Reports
@@ -107,7 +63,7 @@
                         </a>
                     </li>
                     <li class="nav-item">
-                        <a href="#" class="nav-link">
+                        <a href="{{ route('viewAgentTrialTable') }}" class="nav-link">
                             <i class="nav-icon far fa-image"></i>
                             <p>
                                 All Agent Trial  Reports
@@ -135,50 +91,13 @@
                     </li>
 
                     <li class="nav-item">
-                        <a href="#" class="nav-link">
+                        <a href="{{ route('logout') }}" class="nav-link">
                             <i class="nav-icon fa-solid fa-right-from-bracket"></i>
                             <p>
                                Logout
                             </p>
                         </a>
                     </li>
-                    {{-- <li class="nav-item">
-                        <a href="#" class="nav-link">
-                            <i class="nav-icon fa-solid fa-file"></i>
-                            <p>
-                                Reports
-                                <i class="fas fa-angle-left right"></i>
-                            </p>
-                        </a>
-                        <ul class="nav nav-treeview">
-                            <li class="nav-item">
-                                <a href="#" class="nav-link">
-                                    <i class="far fa-circle nav-icon"></i>
-                                    <p>Products Stock</p>
-                                </a>
-                            </li>
-                           
-                        </ul>
-                    </li> --}}
-                    {{-- <li class="nav-item">
-                        <a href="#" class="nav-link">
-                            <i class="nav-icon fa-solid fa-gear"></i>
-                            <p>
-                                Settings
-                                <i class="fas fa-angle-left right"></i>
-                            </p>
-                        </a>
-                        <ul class="nav nav-treeview">
-                          
-                            <li class="nav-item">
-                                <a href="#" class="nav-link">
-                                    <i class="far fa-circle nav-icon"></i>
-                                    <p>General Settings</p>
-                                </a>
-                            </li>
-                          
-                        </ul>
-                    </li> --}}
                 </ul>
             </nav>
             <!-- /.sidebar-menu -->

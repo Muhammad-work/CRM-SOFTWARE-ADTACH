@@ -5,12 +5,16 @@ use App\Http\Controllers\userController;
 use App\Http\Controllers\dashboardController;
 use App\Http\Controllers\adminController;
 use App\Http\Controllers\homeController;
+use App\Http\Controllers\CustomerController;
 use App\Http\Middleware\validUser;
 use App\Http\Middleware\validRole;
 
 // Dashboard Routes
 Route::controller(dashboardController::class)->group(function () {
     Route::get('/dashboard', 'viewDashboard')->name('dashboard')->middleware(validUser::class)->middleware(validRole::class);
+    Route::get('/dashboard/viewAgentSaleTable', 'viewAgentSaleTable')->name('viewAgentSaleTable')->middleware(validUser::class)->middleware(validRole::class);
+    Route::get('/dashboard/viewAgentLeadlTable', 'viewAgentLeadlTable')->name('viewAgentLeadlTable')->middleware(validUser::class)->middleware(validRole::class);
+    Route::get('/dashboard/viewAgentTrialTable', 'viewAgentTrialTable')->name('viewAgentTrialTable')->middleware(validUser::class)->middleware(validRole::class);
 });
 
 // User Routes
@@ -44,6 +48,13 @@ Route::controller(userController::class)->group(function () {
 
 Route::controller(homeController::class)->group(function () {
     Route::get('/', 'viewHome')->name('viewHome')->middleware(validUser::class); 
+});
+Route::controller(CustomerController::class)->group(function () {
+    Route::post('/storeCustomerDetail', 'storeCustomerDetail')->name('storeCustomerDetail'); 
+    Route::post('/customerStatus/{id}', 'customerStatus')->name('customerStatus'); 
+    Route::get('/customerSalesTable', 'customerSalesTable')->name('customerSalesTable')->middleware(validUser::class); 
+    Route::get('/customerLeadTable', 'customerLeadTable')->name('customerLeadTable')->middleware(validUser::class); 
+    Route::get('/customerTrialTable', 'customerTrialTable')->name('customerTrialTable')->middleware(validUser::class); 
 });
 
 

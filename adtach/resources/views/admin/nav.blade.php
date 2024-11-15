@@ -12,16 +12,10 @@
             <div class="dropdown me-5">
                 <button class="btn btn-sm btn-secondary dropdown-toggle " type="button" id="dropdownMenuButton1"
                     data-bs-toggle="dropdown" aria-expanded="false">
-                    Muhammad
+                    {{ Auth::user()->name }}
                 </button>
                 <ul class="dropdown-menu me-5" aria-labelledby="dropdownMenuButton1">
-                    <a class="dropdown-item" href=""
-                        onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
-                        Logout
-                    </a>
-                    <form id="logout-form" action="#" method="POST" style="display: none;">
-                        @csrf
-                    </form>
+                    <li><a class="dropdown-item" href="{{ route('logout') }}">Logout</a></li>
                 </ul>
             </div>
         </ul>

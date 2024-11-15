@@ -1,7 +1,15 @@
 @section('front.nav')
-    <nav class="w-full h-[80px] flex justify-between place-items-center px-5 bg-[#25C3C6]">
-        <div>
-            <img class="w-[30%]" src="{{ asset('storage/img/logo.png') }}" alt="">
+    <nav class="w-full h-[80px] flex justify-around place-items-center px-5 bg-[#1D4ED8]">
+        <div class="w-[28%]">
+            <img class="w-[100%]" src="{{ asset('storage/img/logo-2.png') }}" alt="">
+        </div>
+        <div class="w-full">
+            <ul class="flex justify-center place-items-center gap-[5rem]">
+                <li class="font-normal font-xl "><a href="{{ route('viewHome') }}" class="text-white">Home</a></li>
+                <li class="font-normal font-xl "><a href="{{ route('customerSalesTable') }}" class="text-white">Customer Sale Page</a></li>
+                <li class="font-normal font-xl "><a href="{{ route('customerLeadTable') }}" class="text-white">Customer Lead Page</a></li>
+                <li class="font-normal font-xl "><a href="{{ route('customerTrialTable') }}" class="text-white">Customer Trial Page</a></li>
+            </ul>
         </div>
         <div>
             <div class="dropdown">

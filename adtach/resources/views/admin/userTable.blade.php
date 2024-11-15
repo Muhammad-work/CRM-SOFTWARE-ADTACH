@@ -47,7 +47,7 @@
                                 @foreach ($users as $index => $user)
                                     @if ($user->role == 'user')
                                     <tr>
-                                        <td> {{ $index + 1 }} </td>
+                                        <td> {{ $index  }} </td>
                                         <td> {{ $user->name }} </td>
                                         <td>{{ $user->email }}</td>
                                         <td>{{ $user->phone }}</td>
