@@ -112,16 +112,34 @@ class userController extends Controller
 
     public function loginstore(Request $request){
        // Validate the incoming request   
-       $request->validate([
+          // Validate the incoming request data
+    $request->validate([
         'email' => 'required|email',
         'password' => 'required|min:8',
     ]);
-    
+
+    // Attempt to authenticate the user
     if (Auth::attempt(['email' => $request->email, 'password' => $request->password])) {
         // Get the authenticated user
         $user = Auth::user();
-    
-        // Check if the user's role is 'admin'
+
+        // Check if the user has logged in before and has an IP address stored
+        if ($user->ip_address === null) {
+            // First-time login, store the user's IP address
+            $user->ip_address = $request->ip();  // Store the user's IP address
+            $user->save();  // Save it to the database
+        } else {
+            // Check if the IP address matches
+            if ($user->ip_address !== $request->ip()) {
+                // If the IP address does not match, log the user out and show an error
+                Auth::logout();
+                return back()->withErrors([
+                    'email' => 'You cannot log in from this device or location.',
+                ]);
+            }
+        }
+
+        // Check the user's role and redirect accordingly
         if ($user->role === 'admin') {
             return redirect()->route('dashboard'); // Redirect to admin dashboard
         } else {

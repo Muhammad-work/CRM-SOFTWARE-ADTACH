@@ -31,6 +31,7 @@ class CustomerController extends Controller
             'remarks' => $req->remarks,
             'status' => $req->status,  
             'a_name' => Auth::id(), 
+            'name' => Auth::user()->name, 
             'created_at' => now(),
             'updated_at' => now(),
         ]);

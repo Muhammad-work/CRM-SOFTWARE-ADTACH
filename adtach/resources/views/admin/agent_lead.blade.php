@@ -53,7 +53,13 @@
                                         <td><span
                                                 class="bg-warning  py-1 px-2 rounded block mt-5">{{ $customer->status }}</span>
                                         </td>
-                                        <td> {{ $customer['user']->name }} </td>
+                                        <td>
+                                            @if ($customer['user']->name)
+                                                {{ $customer['user']->name }}
+                                             @else
+                                               No User Name
+                                            @endif
+                                        </td>
                                         <td>{{ \Carbon\Carbon::parse($customer->created_at)->format('d M, Y') }}</td>
                                         <td>
                                             <a href="" class="btn btn-primary"><i
