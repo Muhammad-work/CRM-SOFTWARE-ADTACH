@@ -15,6 +15,15 @@ Route::controller(dashboardController::class)->group(function () {
     Route::get('/dashboard/viewAgentSaleTable', 'viewAgentSaleTable')->name('viewAgentSaleTable')->middleware(validUser::class)->middleware(validRole::class);
     Route::get('/dashboard/viewAgentLeadlTable', 'viewAgentLeadlTable')->name('viewAgentLeadlTable')->middleware(validUser::class)->middleware(validRole::class);
     Route::get('/dashboard/viewAgentTrialTable', 'viewAgentTrialTable')->name('viewAgentTrialTable')->middleware(validUser::class)->middleware(validRole::class);
+    Route::get('/dashboard/{id}/update_customer', 'cutomerUPdateDetailFormVIew')->name('cutomerUPdateDetailFormVIew')->middleware(validUser::class)->middleware(validRole::class);
+    Route::post('/dashboard/{id}/cutomerUPdateDetailStore', 'cutomerUPdateDetailStore')->name('cutomerUPdateDetailStore')->middleware(validUser::class)->middleware(validRole::class);
+    Route::post('/dashboard/{id}/cutomerUPdateDetailSaleStore', 'cutomerUPdateDetailSaleStore')->name('cutomerUPdateDetailSaleStore')->middleware(validUser::class)->middleware(validRole::class);
+    Route::post('/dashboard/{id}/cutomerUPdateDetailTrialStore', 'cutomerUPdateDetailTrialStore')->name('cutomerUPdateDetailTrialStore')->middleware(validUser::class)->middleware(validRole::class);
+    Route::get('/dashboard/{id}/cutomerUPdateSaleDetailFormVIew', 'cutomerUPdateSaleDetailFormVIew')->name('cutomerUPdateSaleDetailFormVIew')->middleware(validUser::class)->middleware(validRole::class);
+    Route::get('/dashboard/{id}/cutomerUPdateTrialDetailFormVIew', 'cutomerUPdateTrialDetailFormVIew')->name('cutomerUPdateTrialDetailFormVIew')->middleware(validUser::class)->middleware(validRole::class);
+    Route::get('/dashboard/{id}/deleteLeadCustomerDetails', 'deleteLeadCustomerDetails')->name('deleteLeadCustomerDetails')->middleware(validUser::class)->middleware(validRole::class);
+    Route::get('/dashboard/{id}/deleteSaleCustomerDetails', 'deleteSaleCustomerDetails')->name('deleteSaleCustomerDetails')->middleware(validUser::class)->middleware(validRole::class);
+    Route::get('/dashboard/{id}/deleteTrialCustomerDetails', 'deleteTrialCustomerDetails')->name('deleteTrialCustomerDetails')->middleware(validUser::class)->middleware(validRole::class);
 });
 
 // User Routes

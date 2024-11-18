@@ -111,27 +111,20 @@ class userController extends Controller
     }
 
     public function loginstore(Request $request){
-       // Validate the incoming request   
-          // Validate the incoming request data
+
     $request->validate([
         'email' => 'required|email',
         'password' => 'required|min:8',
     ]);
 
-    // Attempt to authenticate the user
     if (Auth::attempt(['email' => $request->email, 'password' => $request->password])) {
-        // Get the authenticated user
         $user = Auth::user();
 
-        // Check if the user has logged in before and has an IP address stored
         if ($user->ip_address === null) {
-            // First-time login, store the user's IP address
-            $user->ip_address = $request->ip();  // Store the user's IP address
-            $user->save();  // Save it to the database
+            $user->ip_address = $request->ip();  
+            $user->save();  
         } else {
-            // Check if the IP address matches
             if ($user->ip_address !== $request->ip()) {
-                // If the IP address does not match, log the user out and show an error
                 Auth::logout();
                 return back()->withErrors([
                     'email' => 'You cannot log in from this device or location.',
@@ -139,14 +132,12 @@ class userController extends Controller
             }
         }
 
-        // Check the user's role and redirect accordingly
         if ($user->role === 'admin') {
-            return redirect()->route('dashboard'); // Redirect to admin dashboard
+            return redirect()->route('dashboard'); 
         } else {
-            return redirect()->route('viewHome'); // Redirect to regular user home
+            return redirect()->route('viewHome'); 
         }
     } else {
-        // Return error message if login fails
         return back()->withErrors([
             'email' => 'The provided credentials do not match our records.',
         ]);

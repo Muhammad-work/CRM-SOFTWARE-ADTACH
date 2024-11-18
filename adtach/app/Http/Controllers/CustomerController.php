@@ -23,7 +23,7 @@ class CustomerController extends Controller
         
         $email = $req->customer_email ?: 'No Email'; 
         
-       $sql = customer::create([
+        $customer = customer::create([
             'customer_name' => $req->customer_name,
             'customer_email' => $email,
             'customer_number' => $req->customer_number,
@@ -31,10 +31,12 @@ class CustomerController extends Controller
             'remarks' => $req->remarks,
             'status' => $req->status,  
             'a_name' => Auth::id(), 
-            'name' => Auth::user()->name, 
             'created_at' => now(),
             'updated_at' => now(),
         ]);
+
+        $customer->user_name = Auth::user()->name;
+        $customer->save();
         
         return back()->with(['success' => 'Customer Created Successfully']);
     }
@@ -62,6 +64,8 @@ class CustomerController extends Controller
         $user = user::where('id', Auth::id())->first();
         return view('front.customer_lead',compact(['user','customers']));
     }
+
+    
 
     public function customerTrialTable(){
 

@@ -27,6 +27,11 @@
                 <div class="col-md-12">
                     <div class="card-body">
                         <table id="example1" class="table table-bordered table-striped">
+                            @if (session('success'))
+                                <div class="alert alert-success text-center" role="alert">
+                                    {{ session('success') }}
+                                </div>
+                            @endif
                             <thead>
                                 <tr>
                                     <th>ID</th>
@@ -53,18 +58,12 @@
                                         <td><span
                                                 class="bg-warning  py-1 px-2 rounded block mt-5">{{ $customer->status }}</span>
                                         </td>
-                                        <td>
-                                            @if ($customer['user']->name)
-                                                {{ $customer['user']->name }}
-                                             @else
-                                               No User Name
-                                            @endif
-                                        </td>
+                                        <td>{{ $customer->user_name }}</td>
                                         <td>{{ \Carbon\Carbon::parse($customer->created_at)->format('d M, Y') }}</td>
                                         <td>
-                                            <a href="" class="btn btn-primary"><i
-                                                    class="fa-solid fa-pen-to-square"></i></a>
-                                            <a href="" class="btn btn-danger"><i class="fa-solid fa-trash"></i></a>
+                                            <a href="{{ route('cutomerUPdateDetailFormVIew', $customer->id) }}"
+                                                class="btn btn-primary"><i class="fa-solid fa-pen-to-square"></i></a>
+                                            <a href="{{ route('deleteLeadCustomerDetails',$customer->id) }}" class="btn btn-danger"><i class="fa-solid fa-trash"></i></a>
                                         </td>
                                     </tr>
                                 @endforeach
