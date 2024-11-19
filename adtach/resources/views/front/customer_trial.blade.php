@@ -82,9 +82,7 @@
         function searchTable() {
             const searchInput = document.getElementById("searchInput").value.toLowerCase();
             const tableBody = document.getElementById("tableBody");
-            console.log(tableBody);
             const rows = tableBody.getElementsByTagName("tr");
-            console.log(rows);
 
             for (let i = 0; i < rows.length; i++) {
                 let customerName = rows[i].getElementsByTagName("td")[1].textContent.toLowerCase();
@@ -105,7 +103,7 @@
             btn.addEventListener('click', function(e) {
                 target = e.target;
                 text = target.textContent;
-
+            
                 statusInput.forEach((input) => {
                     input.value = text;
                 })

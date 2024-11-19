@@ -10,7 +10,7 @@ use Illuminate\Support\Facades\Hash;
 class adminController extends Controller
 {
      public function viewAdminTable(){
-        $users = user::where('role','admin')->get();
+        $users = user::where('role', 'admin')->Orwhere('role', 'sub_admin')->get();
         return view('admin.adminTable',compact('users'));
      }
 
@@ -24,6 +24,7 @@ class adminController extends Controller
             'user_email' => 'required|email|unique:users,email',
             'user_phone' => 'required|numeric|unique:users,phone',
             'user_password' => 'required|min:8|max:12|confirmed',
+            'role' => 'required'
         ]);
 
         $address = '';
@@ -40,7 +41,7 @@ class adminController extends Controller
           'phone' => $req->user_phone,
           'address' => $address,
           'password' => Hash::make($req->user_password),
-          'role' => 'admin',
+          'role' => $req->role,
           'created_at' => now(),
           'updated_at' => now(),
         ]);
@@ -76,9 +77,14 @@ class adminController extends Controller
             'email' => $req->user_email,
             'phone' => $req->user_phone,
             'address' => $address,
+            'role' =>  $req->role,
+            'ip_address' =>  $req->ip,
             'created_at' => now(),
             'updated_at' => now(),
           ]);
+          $user->role = $req->role;
+          $user->ip_address = $req->ip;
+          $user->save();
 
           return redirect()->route('viewAdminTable')->with(['success' => 'Admin Updated Successfuly']);
 

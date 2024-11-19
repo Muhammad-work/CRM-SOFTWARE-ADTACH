@@ -56,15 +56,23 @@
                                         <td>${{ $customer->price }}</td>
                                         <td>{{ $customer->remarks }}</td>
                                         <td><span
-                                                class="bg-danger py-1 px-2 rounded block mt-5">{{ $customer->status }}</span>
+                                                class="bg-danger py-1 px-2 rounded block mt-5 cursor-pointer">{{ $customer->status }}</span>
                                         </td>
                                         <td> {{ $customer->user_name }}</td>
                                         <td>{{ \Carbon\Carbon::parse($customer->created_at)->format('d M, Y') }}</td>
-                                        <td>
-                                            <a href="{{ route('cutomerUPdateTrialDetailFormVIew', $customer->id) }}"
-                                                class="btn btn-primary"><i class="fa-solid fa-pen-to-square"></i></a>
-                                            <a href="{{ route('deleteTrialCustomerDetails',$customer->id) }}" class="btn btn-danger"><i class="fa-solid fa-trash"></i></a>
-                                        </td>
+                                        @if (Auth::user()->role === 'admin')
+                                            <td>
+                                                <a href="{{ route('cutomerUPdateTrialDetailFormVIew', $customer->id) }}"
+                                                    class="btn btn-primary"><i class="fa-solid fa-pen-to-square"></i></a>
+                                                <a href="{{ route('deleteTrialCustomerDetails', $customer->id) }}"
+                                                    class="btn btn-danger"><i class="fa-solid fa-trash"></i></a>
+                                            </td>
+                                        @else
+                                            <td>
+                                               <a href="{{ route('updateCustomerStatus',$customer->id) }}" class="btn btn-success">Sale</a>
+                                               <a href="{{route('deleteCustomerDetails',$customer->id)}}" class="btn btn-danger">Cancel</a>
+                                            </td>
+                                        @endif
                                     </tr>
                                 @endforeach
                             </tbody>

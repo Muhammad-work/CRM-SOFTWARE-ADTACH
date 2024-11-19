@@ -16,11 +16,11 @@
                         </div>
                         <!-- /.card-header -->
                         <!-- form start -->
-                        <form action="{{ route('storeUpdateUser', $user->id) }}" method="POST" enctype="multipart/form-data" autocomplete="off">
+                        <form action="{{ route('storeUpdateUser',$user->id) }}" method="POST" enctype="multipart/form-data" autocomplete="off">
                             @csrf
                             <div class="card-body">
                                 <div class="row">
-                                 
+
                                     <div class="col-12 mt-2">
                                         <label for="exampleInputEmail1">Name</label>
                                         <input type="text" class="form-control" name="user_name" id="exampleInputEmail1"
@@ -51,14 +51,22 @@
 
                                     <div class="col-12 mt-2">
                                         <label for="exampleInputEmail1"> Address</label>
-                                        <input type="text" class="form-control" name="user_address" id="exampleInputEmail1"
-                                            placeholder="Enter User Address" value="{{ $user->address }}">
+                                        <input type="text" class="form-control" name="user_address"
+                                            id="exampleInputEmail1" placeholder="Enter User Address"
+                                            value="{{ $user->address }}">
                                         @error('user_address')
                                             <span class="text-danger">{{ $message }}</span>
                                         @enderror
                                     </div>
 
-
+                                    <div class="col-12 mt-2">
+                                        <label for="exampleInputEmail1">Enter Ip Address</label>
+                                        <input type="text" class="form-control" name="ip" id="exampleInputEmail1"
+                                            placeholder="Enter IP Address" value="{{ $user->ip_address }}">
+                                        @error('ip')
+                                            <span class="text-danger">{{ $message }}</span>
+                                        @enderror
+                                    </div>
 
                                 </div>
                             </div>

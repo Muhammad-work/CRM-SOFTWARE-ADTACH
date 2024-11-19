@@ -105,7 +105,6 @@ public function cutomerUPdateDetailSaleStore(Request $req, string $id){
      public function  viewAgentTrialTable(){
       
        $customers = Customer::with('user')->where('status','trial')->get();
-
        return view('admin.agent_trial',compact('customers'));
      }
 
@@ -143,5 +142,20 @@ public function cutomerUPdateDetailTrialStore(Request $req, string $id){
   $customer->delete();
   return  redirect()->route('viewAgentTrialTable')->with(['success' => 'Customer Detail Deleted Successfuly']);
 }
+
+
+
+    public function updateCustomerStatus(string $id){
+        $customer = customer::find($id);
+        $customer->status = 'sale';
+        $customer->save();
+        return  redirect()->route('viewAgentTrialTable')->with(['success' => 'Customer Detail Updated Successfuly']);
+      }
+      
+      public function deleteCustomerDetails(string $id){
+        $customer = customer::find($id);
+        $customer->delete();
+        return  redirect()->route('viewAgentTrialTable')->with(['success' => 'Customer Cencel Successfuly']);
+    }
 
 }

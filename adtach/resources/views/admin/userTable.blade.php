@@ -46,19 +46,21 @@
                             <tbody>
                                 @foreach ($users as $index => $user)
                                     @if ($user->role == 'user')
-                                    <tr>
-                                        <td> {{ $index  }} </td>
-                                        <td> {{ $user->name }} </td>
-                                        <td>{{ $user->email }}</td>
-                                        <td>{{ $user->phone }}</td>
-                                        <td>{{ $user->address }}</td>
-                                        <td>{{ $user->role }}</td>
-                                        <td>
-                                            <a href="{{ route('viewEditForm', $user->id) }}" class="btn btn-primary"><i
-                                                    class="fa-solid fa-pen-to-square"></i></a>
-                                            <a href="{{ route('deleteUser', $user->id) }}" class="btn btn-danger"><i class="fa-solid fa-trash"></i></a>
-                                        </td>
-                                    </tr>
+                                        <tr>
+                                            <td> {{ $index - 1 }} </td>
+                                            <td> {{ $user->name }} </td>
+                                            <td>{{ $user->email }}</td>
+                                            <td>{{ $user->phone }}</td>
+                                            <td>{{ $user->address }}</td>
+                                            <td>{{ $user->role }}</td>
+                                                <td>
+                                                    <a href="{{ route('viewEditFormUser', $user->id) }}"
+                                                        class="btn btn-primary"><i
+                                                            class="fa-solid fa-pen-to-square"></i></a>
+                                                    <a href="{{ route('deleteUser', $user->id) }}"
+                                                        class="btn btn-danger"><i class="fa-solid fa-trash"></i></a>
+                                                </td>                
+                                        </tr>
                                     @endif
                                 @endforeach
                             </tbody>

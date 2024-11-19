@@ -45,16 +45,22 @@
                             </thead>
                             <tbody>
                                 @foreach ($users as $index => $user)
-                                    @if ($user->role == 'admin')
+                                    @if ($user->role == 'admin' || $user->role == 'sub_admin')
                                     <tr>
                                         <td> {{ $index + 1 }} </td>
                                         <td> {{ $user->name }} </td>
                                         <td>{{ $user->email }}</td>
                                         <td>{{ $user->phone }}</td>
                                         <td>{{ $user->address }}</td>
-                                        <td>{{ $user->role }}</td>
                                         <td>
-                                            <a href="{{ route('viewEditForm', $user->id) }}" class="btn btn-primary"><i
+                                            @if ($user->role == 'admin')
+                                                <span class="bg-success py-1 px-2 rounded">Main Admin</span> 
+                                                @else
+                                                <span class="bg-warning py-1 px-2 rounded">Admin</span> 
+                                            @endif
+                                        </td>
+                                        <td>
+                                            <a href="{{ route('viewEditFormAdmin', $user->id) }}" class="btn btn-primary"><i
                                                     class="fa-solid fa-pen-to-square"></i></a>
                                             <a href="{{ route('deleteAdmin', $user->id) }}" class="btn btn-danger"><i class="fa-solid fa-trash"></i></a>
                                         </td>

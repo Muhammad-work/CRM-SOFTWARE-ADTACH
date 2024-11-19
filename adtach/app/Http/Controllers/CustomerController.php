@@ -11,7 +11,7 @@ use Illuminate\Support\Facades\Auth;
 class CustomerController extends Controller
 {
     public function storeCustomerDetail(Request $req){
-
+    //   return now();
         $req->validate([
             'customer_name' => 'required|string',
             'customer_number' => 'required|numeric|unique:customers,customer_number',
@@ -31,9 +31,10 @@ class CustomerController extends Controller
             'remarks' => $req->remarks,
             'status' => $req->status,  
             'a_name' => Auth::id(), 
-            'created_at' => now(),
-            'updated_at' => now(),
         ]);
+        $customer->created_at = now();
+        $customer->updated_at = now();
+        $customer->save();
 
         $customer->user_name = Auth::user()->name;
         $customer->save();

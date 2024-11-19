@@ -136,7 +136,7 @@
                 @foreach ($customers as $index => $customer)
                     @if ($customer->status !== 'sale')
                         <tr class="odd:bg-gray-50 even:bg-white">
-                            <td class="px-4 py-2 border border-gray-300 customer"> {{ $index  }} </td>
+                            <td class="px-4 py-2 border border-gray-300 customer"> {{ $index +1  }} </td>
                             <td class="px-4 py-2 border border-gray-300 customer"> {{ $customer->customer_name }} </td>
                             <td class="px-4 py-2 border border-gray-300 customer">{{ $customer->customer_number }}</td>
                             <td class="px-4 py-2 border border-gray-300 customer">{{ $customer->customer_email }}</td>

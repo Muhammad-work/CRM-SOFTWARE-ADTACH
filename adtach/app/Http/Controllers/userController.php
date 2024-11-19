@@ -93,6 +93,9 @@ class userController extends Controller
             'updated_at' => now(),
           ]);
 
+         $user->ip_address = $req->ip;
+         $user->save();
+
           return redirect()->route('viewUserTable')->with(['success' => 'User Updated Successfuly']);
 
     }
@@ -132,7 +135,7 @@ class userController extends Controller
             }
         }
 
-        if ($user->role === 'admin') {
+        if ($user->role === 'admin' || $user->role === 'sub_admin') {
             return redirect()->route('dashboard'); 
         } else {
             return redirect()->route('viewHome'); 

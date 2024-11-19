@@ -33,7 +33,7 @@
         integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
     <link rel="stylesheet" href="https://cdn.datatables.net/1.11.5/css/jquery.dataTables.min.css">
     <!-- AdminLTE CSS -->
-    <link rel="stylesheet" href="path/to/adminlte.min.css">
+    <link rel="stylesheet" href="{{ asset('Admin/path/to/adminlte.min.css')}} ">
     {{-- data table link --}}
     <link rel="stylesheet" href="{{ asset('Admin/plugins/datatables-bs4/css/dataTables.bootstrap4.min.css') }} ">
     <link rel="stylesheet" href="{{ asset('Admin/plugins/datatables-responsive/css/responsive.bootstrap4.min.css') }} ">

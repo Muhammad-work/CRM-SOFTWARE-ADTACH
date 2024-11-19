@@ -24,13 +24,15 @@ Route::controller(dashboardController::class)->group(function () {
     Route::get('/dashboard/{id}/deleteLeadCustomerDetails', 'deleteLeadCustomerDetails')->name('deleteLeadCustomerDetails')->middleware(validUser::class)->middleware(validRole::class);
     Route::get('/dashboard/{id}/deleteSaleCustomerDetails', 'deleteSaleCustomerDetails')->name('deleteSaleCustomerDetails')->middleware(validUser::class)->middleware(validRole::class);
     Route::get('/dashboard/{id}/deleteTrialCustomerDetails', 'deleteTrialCustomerDetails')->name('deleteTrialCustomerDetails')->middleware(validUser::class)->middleware(validRole::class);
+    Route::get('/dashboard/{id}/updateCustomerStatus', 'updateCustomerStatus')->name('updateCustomerStatus')->middleware(validUser::class)->middleware(validRole::class);
+    Route::get('/dashboard/{id}/deleteCustomerDetails', 'deleteCustomerDetails')->name('deleteCustomerDetails')->middleware(validUser::class)->middleware(validRole::class);
 });
 
 // User Routes
 Route::controller(userController::class)->middleware(validUser::class)->middleware(validRole::class)->group(function () {
     Route::get('/dashboard/all-user', 'viewUserTable')->name('viewUserTable');
     Route::get('/dashboard/add-user', 'addUser')->name('addUser');
-    Route::get('/dashboard/{id}/update-user', 'viewEditForm')->name('viewEditForm');
+    Route::get('/dashboard/{id}/update-user', 'viewEditForm')->name('viewEditFormUser');
     Route::post('/dashboard/storeUserdetail', 'storeUserdetail')->name('storeUserdetail');
     Route::post('/dashboard/{id}/storeUpdateUser', 'storeUpdateUser')->name('storeUpdateUser');
     Route::get('/dashboard/{id}/deleteUser', 'deleteUser')->name('deleteUser');
@@ -41,7 +43,7 @@ Route::controller(userController::class)->middleware(validUser::class)->middlewa
 Route::controller(adminController::class)->middleware(validUser::class)->middleware(validRole::class)->group(function () {
     Route::get('/dashboard/all-admin', 'viewAdminTable')->name('viewAdminTable');
     Route::get('/dashboard/add-admin', 'viewAddForm')->name('viewAddForm');
-    Route::get('/dashboard/{id}/edit-admin', 'viewEditForm')->name('viewEditForm');
+    Route::get('/dashboard/{id}/edit-admin', 'viewEditForm')->name('viewEditFormAdmin');
     Route::post('/dashboard/storeAdminDetail', 'storeAdminDetail')->name('storeAdminDetail');
     Route::post('/dashboard/{id}/storeUpdateAdmin', 'storeUpdateAdmin')->name('storeUpdateAdmin');
     Route::get('/dashboard/{id}/deleteAdmin', 'deleteAdmin')->name('deleteAdmin');
@@ -66,4 +68,8 @@ Route::controller(CustomerController::class)->group(function () {
     Route::get('/customerTrialTable', 'customerTrialTable')->name('customerTrialTable')->middleware(validUser::class); 
 });
 
+
+Route::get('/help',function(){
+  return view('front.help');
+})->name('help');
 

@@ -16,6 +16,8 @@ class customer extends Model
         'a_name',
     ];
 
+    public  $timestamps = true; 
+
     public function user(){
        return $this->belongsTo(user::class,'a_name');
     }

@@ -18,7 +18,7 @@ return new class extends Migration
             $table->string('phone')->unique();
             $table->string('password');
             $table->string('address')->default('No Address');
-            $table->enum('role',['user','admin'])->default('user');
+            $table->enum('role',['user','admin','sub_admin'])->default('user');
             $table->timestamps();
         });
     }
