@@ -9,7 +9,8 @@
                 <li class="font-normal font-xl "><a href="{{ route('customerSalesTable') }}" class="text-white">Customer Sale Page</a></li>
                 <li class="font-normal font-xl "><a href="{{ route('customerLeadTable') }}" class="text-white">Customer Lead Page</a></li>
                 <li class="font-normal font-xl "><a href="{{ route('customerTrialTable') }}" class="text-white">Customer Trial Page</a></li>
-                <li class="font-normal font-xl "><a href="{{ route('help') }}" class="text-white">Help Request</a></li>
+                <li class="font-normal font-xl "><a href="{{ route('viewHelpTable') }}" class="text-white">Help </a></li>
+                <li class="font-normal font-xl "><a href="{{ route('help')  }}" class="text-white">Help Request</a></li>
             </ul>
         </div>
         <div>

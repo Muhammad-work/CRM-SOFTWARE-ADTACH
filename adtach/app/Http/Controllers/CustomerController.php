@@ -16,18 +16,19 @@ class CustomerController extends Controller
             'customer_name' => 'required|string',
             'customer_number' => 'required|numeric|unique:customers,customer_number',
             'customer_email' => 'unique:customers,customer_email',
-            'price' => 'required|numeric',
+            // 'price' => 'numeric',
             'remarks' => 'required',
             'status' => 'required', 
         ]);
         
         $email = $req->customer_email ?: 'No Email'; 
+        $price = $req->price ?: '00.00'; 
         
         $customer = customer::create([
             'customer_name' => $req->customer_name,
             'customer_email' => $email,
             'customer_number' => $req->customer_number,
-            'price' => $req->price,
+            'price' => $price,
             'remarks' => $req->remarks,
             'status' => $req->status,  
             'a_name' => Auth::id(), 

@@ -51,7 +51,7 @@
                             @enderror
                         </td>
                         <td class="px-4 py-2 border border-gray-300">
-                            <input type="text" name="price" value="{{ old('price') }}" id="price_1"
+                            <input type="text" name="price" value="{{ old('price') }}" id="price"
                                 placeholder="Enter Price"
                                 class="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-400">
                             @error('price')
@@ -66,8 +66,8 @@
                             @enderror
                         </td>
                         <td class="px-4 py-2 border border-gray-300">
-                            <select name="status" id="status_1"
-                                class="w-full  py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-400">
+                            <select name="status" id="selectBox"
+                                class="w-full py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-400">
                                 <option value="" selected>Select</option>
                                 <option value="sale">Sale</option>
                                 <option value="lead">Lead</option>
@@ -136,7 +136,7 @@
                 @foreach ($customers as $index => $customer)
                     @if ($customer->status !== 'sale')
                         <tr class="odd:bg-gray-50 even:bg-white">
-                            <td class="px-4 py-2 border border-gray-300 customer"> {{ $index +1  }} </td>
+                            <td class="px-4 py-2 border border-gray-300 customer"> {{ $index + 1 }} </td>
                             <td class="px-4 py-2 border border-gray-300 customer"> {{ $customer->customer_name }} </td>
                             <td class="px-4 py-2 border border-gray-300 customer">{{ $customer->customer_number }}</td>
                             <td class="px-4 py-2 border border-gray-300 customer">{{ $customer->customer_email }}</td>
@@ -218,5 +218,20 @@
 
             });
         });
+
+        let selectBox = document.querySelector('#selectBox');
+        let PriceInput = document.querySelector('#price');
+
+        function checkSelectBoxValue() {
+            if (selectBox.value === 'trial') {
+                PriceInput.style.display = 'none';
+            } else {
+                PriceInput.style.display = 'block';
+            }
+        }
+
+        checkSelectBoxValue();
+
+        selectBox.addEventListener('change', checkSelectBoxValue);
     </script>
 @endsection

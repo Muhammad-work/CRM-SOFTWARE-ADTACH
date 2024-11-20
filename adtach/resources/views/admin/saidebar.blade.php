@@ -74,6 +74,16 @@
                         </a>
                     </li>
 
+                    <li class="nav-item">
+                        <a href="{{ route('viewHelpRequestTableDashboard') }}" class="nav-link">
+                            {{-- <i class="nav-icon far fa-image"></i> --}}
+                            <i class="nav-icon fa-solid fa-handshake-angle"></i>
+                            <p>
+                               Help Request
+                            </p>
+                        </a>
+                    </li>
+
                     @if (Auth::user()->role === 'admin')
                         <li class="nav-item">
                             <a href="#" class="nav-link">

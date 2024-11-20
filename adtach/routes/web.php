@@ -6,6 +6,7 @@ use App\Http\Controllers\dashboardController;
 use App\Http\Controllers\adminController;
 use App\Http\Controllers\homeController;
 use App\Http\Controllers\CustomerController;
+use App\Http\Controllers\HelpController;
 use App\Http\Middleware\validUser;
 use App\Http\Middleware\validRole;
 
@@ -26,6 +27,12 @@ Route::controller(dashboardController::class)->group(function () {
     Route::get('/dashboard/{id}/deleteTrialCustomerDetails', 'deleteTrialCustomerDetails')->name('deleteTrialCustomerDetails')->middleware(validUser::class)->middleware(validRole::class);
     Route::get('/dashboard/{id}/updateCustomerStatus', 'updateCustomerStatus')->name('updateCustomerStatus')->middleware(validUser::class)->middleware(validRole::class);
     Route::get('/dashboard/{id}/deleteCustomerDetails', 'deleteCustomerDetails')->name('deleteCustomerDetails')->middleware(validUser::class)->middleware(validRole::class);
+    Route::get('/dashboard/Help-Request', 'viewHelpRequestTableDashboard')->name('viewHelpRequestTableDashboard')->middleware(validUser::class)->middleware(validRole::class);
+    Route::get('/dashboard/{id}/downHelpRequestStatus', 'downHelpRequestStatus')->name('downHelpRequestStatus')->middleware(validUser::class)->middleware(validRole::class);
+    Route::get('/dashboard/{id}/cancelHelpRequestStatus', 'cancelHelpRequestStatus')->name('cancelHelpRequestStatus')->middleware(validUser::class)->middleware(validRole::class);
+    Route::get('/dashboard/{id}/viewTrialDaysForm', 'viewTrialDaysForm')->name('viewTrialDaysForm')->middleware(validUser::class)->middleware(validRole::class);
+    Route::post('/dashboard/{id}/storeTrialDays', 'storeTrialDays')->name('storeTrialDays')->middleware(validUser::class)->middleware(validRole::class);
+    Route::post('/dashboard/update-customer-status', 'updateStatusCustomerTrial')->name('updateStatusCustomerTrial')->middleware(validUser::class)->middleware(validRole::class);
 });
 
 // User Routes
@@ -68,8 +75,15 @@ Route::controller(CustomerController::class)->group(function () {
     Route::get('/customerTrialTable', 'customerTrialTable')->name('customerTrialTable')->middleware(validUser::class); 
 });
 
+Route::controller(HelpController::class)->group(function () {
+    Route::get('/help-Request', 'viewHelpForm')->name('help')->middleware(validUser::class); 
+    Route::get('/help-Detail', 'viewHelpTable')->name('viewHelpTable')->middleware(validUser::class); 
+    Route::post('/storeHelpRequest', 'storeHelpRequest')->name('storeHelpRequest')->middleware(validUser::class); 
+});
 
-Route::get('/help',function(){
-  return view('front.help');
-})->name('help');
+
+
+// Route::get('/help',function(){
+//   return view('front.help');
+// })->name('help');
 
