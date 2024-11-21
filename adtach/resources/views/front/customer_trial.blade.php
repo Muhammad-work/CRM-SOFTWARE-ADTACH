@@ -87,7 +87,6 @@
             for (let i = 0; i < rows.length; i++) {
                 let customerName = rows[i].getElementsByTagName("td")[1].textContent.toLowerCase();
                 let customerNumber = rows[i].getElementsByTagName("td")[2].textContent.toLowerCase();
-                console.log(customerNumber);
                 if (customerName.includes(searchInput) || customerNumber.includes(searchInput)) {
                     rows[i].style.display = "";
                 } else {

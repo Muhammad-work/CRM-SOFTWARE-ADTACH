@@ -43,13 +43,11 @@
                 error: function(error) {
                     console.error('Error updating customer status:', error);
 
-                    // Retry logic: try again after 10 seconds if error occurs
                     setTimeout(updateCustomerTrialStatus, 1000);
                 }
             });
         }
 
-        // Set a single interval of 12 hours (43200000 milliseconds)
         setInterval(updateCustomerTrialStatus, 1800000);
     </script>
 </body>
