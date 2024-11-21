@@ -20,7 +20,7 @@
                     <th class="px-4 py-2 border border-gray-300">CUSTOMER NAME</th>
                     <th class="px-4 py-2 border border-gray-300">CUSTOMER NUMBER</th>
                     <th class="px-4 py-2 border border-gray-300">CUSTOMER EMAIL</th>
-                    <th class="px-4 py-2 border border-gray-300">MAKE ADDRESS</th>
+                    <th class="px-4 py-2 border border-gray-300">MAC ADDRESS</th>
                     <th class="px-4 py-2 border border-gray-300">STATUS</th>
                     <th class="px-4 py-2 border border-gray-300">HELP REASON</th>
                     <th class="px-4 py-2 border border-gray-300">AGENT NAME</th>
@@ -52,7 +52,7 @@
                 @endforeach
                 @if ($helpRequestDetail->isEmpty())
                     <tr>
-                        <td colspan="9" class="text-center">No Sale Record Found</td>
+                        <td colspan="9" class="text-center">No Help Record Found</td>
                     </tr>
                 @endif
             </tbody>

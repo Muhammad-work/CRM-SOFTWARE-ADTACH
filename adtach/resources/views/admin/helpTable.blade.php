@@ -38,7 +38,7 @@
                                     <th>CUSTOMER NAME</th>
                                     <th>CUSTOMER EMAIL</th>
                                     <th>CUSTOMER PHONE</th>
-                                    <th>MAKE ADDRESS</th>
+                                    <th>MAC ADDRESS</th>
                                     <th>HELP REASON</th>
                                     <th>STATUS</th>
                                     <th>AGENT NAME</th>

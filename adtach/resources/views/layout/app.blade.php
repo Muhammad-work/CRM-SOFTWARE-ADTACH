@@ -33,10 +33,11 @@
         integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
     <link rel="stylesheet" href="https://cdn.datatables.net/1.11.5/css/jquery.dataTables.min.css">
     <!-- AdminLTE CSS -->
-    <link rel="stylesheet" href="{{ asset('Admin/path/to/adminlte.min.css')}} ">
+    <link rel="stylesheet" href="{{ asset('Admin/path/to/adminlte.min.css') }} ">
     {{-- data table link --}}
     <link rel="stylesheet" href="{{ asset('Admin/plugins/datatables-bs4/css/dataTables.bootstrap4.min.css') }} ">
-    <link rel="stylesheet" href="{{ asset('Admin/plugins/datatables-responsive/css/responsive.bootstrap4.min.css') }} ">
+    <link rel="stylesheet"
+        href="{{ asset('Admin/plugins/datatables-responsive/css/responsive.bootstrap4.min.css') }} ">
     <link rel="stylesheet" href="{{ asset('Admin/plugins/datatables-buttons/css/buttons.bootstrap4.min.css') }} ">
 
 </head>
@@ -45,10 +46,10 @@
     <div class="wrapper">
 
         <!-- Preloader -->
-        <div class="preloader flex-column justify-content-center align-items-center">
-            <img class="animation__shake " style="width: 80%; height: 100%;" src="{{ asset('storage/img/logo-1.png') }}" alt="AdminLTELogo"
-                height="60" width="60">
-        </div>
+        {{-- <div class="preloader flex-column justify-content-center align-items-center">
+            <img class="animation__shake " style="width: 80%; height: 100%;"
+                src="{{ asset('storage/img/logo-1.png') }}" alt="AdminLTELogo" height="60" width="60">
+        </div> --}}
 
         <!-- Navbar -->
         @yield('nav')
@@ -127,7 +128,6 @@
     <script src="{{ asset('admin/plugins/datatables-buttons/js/buttons.html5.min.js') }}"></script>
     <script src="{{ asset('admin/plugins/datatables-buttons/js/buttons.print.min.js') }}"></script>
     <script src="{{ asset('admin/plugins/datatables-buttons/js/buttons.colVis.min.js') }}"></script>
-
     <script>
         $(function() {
             $("#example1").DataTable({
@@ -146,8 +146,30 @@
                 "responsive": true,
             });
         });
-    </script>
 
+        function updateCustomerTrialStatus() {
+            $.ajax({
+                url: '/dashboard/update-customer-status',
+                type: 'POST',
+                dataType: 'json',
+                data: {
+                    _token: '{{ csrf_token() }}',
+                },
+                success: function(response) {
+                    console.log('DashBoard Customer status updated:', response);
+                },
+                error: function(error) {
+                    console.error('Error updating customer status:', error);
+                }
+            });
+        }
+
+        // Set a single interval of 12 hours (43200000 milliseconds)
+        // setInterval(updateCustomerTrialStatus, 1000);
+
+        // Call it immediately on page load as well
+        // updateCustomerTrialStatus();
+    </script>
 </body>
 
 </html>

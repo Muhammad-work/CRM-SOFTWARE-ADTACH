@@ -13,16 +13,9 @@
                 <li class="font-normal font-xl "><a href="{{ route('help')  }}" class="text-white">Help Request</a></li>
             </ul>
         </div>
-        <div>
-            <div class="dropdown">
-                <button class="btn btn-light dropdown-toggle" type="button" id="dropdownMenuButton1"
-                    data-bs-toggle="dropdown" aria-expanded="false">
-                    {{ Auth::user()->name  }}
-                </button>
-                <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
-                    <li><a class="dropdown-item" href="{{ route('logout') }}">Logout</a></li>
-                </ul>
-            </div>
+        <div> 
+            <a href="{{ route('logout') }}" class="btn btn-light">Logout</a>
         </div>
     </nav>
+    
 @endsection

@@ -11,11 +11,11 @@
                 <div class="col-12   mt-4">
                     <div class="card card-primary">
                         <div class="card-header">
-                            <h3 class="text-center">Add Customer Trial Days</h3>
+                            <h3 class="text-center">Update Customer Sale Days</h3>
                         </div>
                         <!-- /.card-header -->
                         <!-- form start -->
-                        <form action="{{ route('storeTrialDays', $customer->id) }}" method="POST"
+                        <form action="{{ route('updateSaleCustomerStatus', $customer->id) }}" method="POST"
                             enctype="multipart/form-data" autocomplete="off">
                             @csrf
                             <div class="card-body">
@@ -25,7 +25,7 @@
                                         <label for="exampleInputEmail1">Mac Address</label>
                                         <input type="text" class="form-control" name="make_address"
                                             id="exampleInputEmail1" placeholder="Enter Customer Make Address"
-                                            value="00:177:79:">
+                                            value="{{$customer->make_address}}">
                                         @error('make_address')
                                             <span class="text-danger">{{ $message }}</span>
                                         @enderror
@@ -53,7 +53,7 @@
                             <!-- /.card-body -->
                             <div class="card-footer">
                                 <a href="{{ route('viewAgentTrialTable') }}" class="btn btn-primary">Back</a>
-                                <button class="btn btn-primary">Submit</button>
+                                <button class="btn btn-primary">Update</button>
                             </div>
                         </form>
                     </div>

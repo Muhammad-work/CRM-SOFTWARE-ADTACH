@@ -32,7 +32,11 @@ Route::controller(dashboardController::class)->group(function () {
     Route::get('/dashboard/{id}/cancelHelpRequestStatus', 'cancelHelpRequestStatus')->name('cancelHelpRequestStatus')->middleware(validUser::class)->middleware(validRole::class);
     Route::get('/dashboard/{id}/viewTrialDaysForm', 'viewTrialDaysForm')->name('viewTrialDaysForm')->middleware(validUser::class)->middleware(validRole::class);
     Route::post('/dashboard/{id}/storeTrialDays', 'storeTrialDays')->name('storeTrialDays')->middleware(validUser::class)->middleware(validRole::class);
-    Route::post('/dashboard/update-customer-status', 'updateStatusCustomerTrial')->name('updateStatusCustomerTrial')->middleware(validUser::class)->middleware(validRole::class);
+    Route::post('/dashboard/update-customer-status', 'updateStatusCustomerTrial')->name('updateStatusCustomerTrial')->middleware(validUser::class);
+    Route::get('/dashboard/{id}/view-update-customer-status', 'viewupdateSaleCustomerStatus')->name('viewupdateSaleCustomerStatus')->middleware(validUser::class)->middleware(validRole::class);
+    Route::post('/dashboard/{id}/update-customer-sale-status', 'updateSaleCustomerStatus')->name('updateSaleCustomerStatus')->middleware(validUser::class)->middleware(validRole::class);
+    Route::get('/dashboard/{id}/add-customer-sale-day', 'viewSaleDaysForm')->name('viewSaleDaysForm')->middleware(validUser::class)->middleware(validRole::class);
+    Route::post('/dashboard/{id}/addSaleCustomerStatus', 'addSaleCustomerStatus')->name('addSaleCustomerStatus')->middleware(validUser::class)->middleware(validRole::class);
 });
 
 // User Routes

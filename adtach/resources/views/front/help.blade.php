@@ -41,7 +41,7 @@
                     </div>
 
                     <div class="mb-3">
-                        <label for="exampleInputPassword1" class="form-label">Make Address</label>
+                        <label for="exampleInputPassword1" class="form-label">Mac Address</label>
                         <input type="text" class="form-control" name="m_address" placeholder="Enter Make Address"
                             value="00:177:79:" id="exampleInputPassword1">
                         @error('m_address')

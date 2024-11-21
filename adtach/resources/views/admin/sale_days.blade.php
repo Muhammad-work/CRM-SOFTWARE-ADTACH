@@ -11,11 +11,11 @@
                 <div class="col-12   mt-4">
                     <div class="card card-primary">
                         <div class="card-header">
-                            <h3 class="text-center">Add Customer Trial Days</h3>
+                            <h3 class="text-center">Add Customer Sale Days</h3>
                         </div>
                         <!-- /.card-header -->
                         <!-- form start -->
-                        <form action="{{ route('storeTrialDays', $customer->id) }}" method="POST"
+                        <form action="{{ route('addSaleCustomerStatus', $customer->id) }}" method="POST"
                             enctype="multipart/form-data" autocomplete="off">
                             @csrf
                             <div class="card-body">
@@ -52,7 +52,7 @@
                             </div>
                             <!-- /.card-body -->
                             <div class="card-footer">
-                                <a href="{{ route('viewAgentTrialTable') }}" class="btn btn-primary">Back</a>
+                                <a href="{{ route('viewAgentSaleTable') }}" class="btn btn-primary">Back</a>
                                 <button class="btn btn-primary">Submit</button>
                             </div>
                         </form>

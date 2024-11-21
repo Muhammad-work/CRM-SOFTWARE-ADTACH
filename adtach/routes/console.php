@@ -9,4 +9,4 @@ Artisan::command('inspire', function () {
 })->purpose('Display an inspiring quote')->hourly();
 
  
-Schedule::command(UpdateCustomerDuration::class)->everySecond();
+// Schedule::command(UpdateCustomerDuration::class)->everySecond()->runInBackground();

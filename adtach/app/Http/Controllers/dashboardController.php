@@ -18,7 +18,8 @@ class dashboardController extends Controller
         $lead = customer::where('status','lead')->count();
         $help = help::where('status','pending')->count();
         $price = Customer::sum('price');
-        return  view('admin.dashbord',compact(['userCount','sale','trial','lead','price','help']));
+        $customerExpriDate = customer::where('active_status','inactive')->get();
+        return  view('admin.dashbord',compact(['userCount','sale','trial','lead','price','help','customerExpriDate']));
      }
 
      public function  viewAgentSaleTable(){
@@ -151,6 +152,11 @@ public function cutomerUPdateDetailTrialStore(Request $req, string $id){
     public function updateCustomerStatus(string $id){
         $customer = customer::find($id);
         $customer->status = 'sale';
+        $customer->active_status = null;
+        $customer->make_address = null;
+        $customer->start_date = null;
+        $customer->end_date = null;
+        $customer->date_count = null;
         $customer->save();
         return  redirect()->route('viewAgentTrialTable')->with(['success' => 'Customer Detail Updated Successfuly']);
       }
@@ -193,14 +199,12 @@ public function cutomerUPdateDetailTrialStore(Request $req, string $id){
            'end_date' => 'required|date|after_or_equal:start_date',
          ]);
 
-    // Parse the start_date and end_date using PHP's DateTime class
          $startDate = new \DateTime($req->start_date);
          $endDate = new \DateTime($req->end_date);
 
-    // Calculate the difference in days between start_date and end_date
+  
          $interval = $startDate->diff($endDate);
-         $daysDifference = $interval->days; // Number of days difference
-    // Fetch the customer and update details
+         $daysDifference = $interval->days; 
          $customer = Customer::find($id);
          $customer->active_status = 'active';
          $customer->make_address = $req->make_address;
@@ -218,21 +222,69 @@ public function cutomerUPdateDetailTrialStore(Request $req, string $id){
 
       foreach ($customers as $customer) {
           if ($customer->date_count > 0) {
-              // Decrement the date_count
               $customer->date_count = (int) $customer->date_count - 1;
 
-              // If date_count reaches 0, set the status to inactive
               if ($customer->date_count == 0) {
                   $customer->active_status = 'inactive';
               }
 
-              // Save the updated customer record
               $customer->save();
           }
       }
 
-      // Return a response indicating the update is complete
       return response()->json(['status' => 'Update complete']);
     }
 
+    public function viewupdateSaleCustomerStatus(string $id){
+      $customer = customer::find($id);
+      return view('admin.update_sale_days',compact('customer'));
+    }
+     public function updateSaleCustomerStatus(Request $req,string $id){
+      $req->validate([
+        'make_address' => 'required',
+        'start_date' => 'required|date',
+        'end_date' => 'required|date|after_or_equal:start_date',
+      ]);
+
+      $startDate = new \DateTime($req->start_date);
+      $endDate = new \DateTime($req->end_date);
+
+      $interval = $startDate->diff($endDate);
+      $daysDifference = $interval->days; 
+      $customer = Customer::find($id);
+      $customer->active_status = 'active';
+      $customer->make_address = $req->make_address;
+      $customer->start_date = $req->start_date;
+      $customer->end_date = $req->end_date;
+      $customer->date_count = $daysDifference;
+      $customer->save();
+      return redirect()->route('viewAgentSaleTable')->with(['success' => 'Customer Sale Days Is Start Now']);
+     }
+
+     public function viewSaleDaysForm(string $id){
+      $customer = customer::find($id);
+      return view('admin.sale_days',compact('customer'));
+    }
+
+    public function addSaleCustomerStatus(Request $req,string $id){
+      $req->validate([
+        'make_address' => 'required',
+        'start_date' => 'required|date',
+        'end_date' => 'required|date|after_or_equal:start_date',
+      ]);
+
+      $startDate = new \DateTime($req->start_date);
+      $endDate = new \DateTime($req->end_date);
+
+      $interval = $startDate->diff($endDate);
+      $daysDifference = $interval->days; 
+      $customer = Customer::find($id);
+      $customer->active_status = 'active';
+      $customer->make_address = $req->make_address;
+      $customer->start_date = $req->start_date;
+      $customer->end_date = $req->end_date;
+      $customer->date_count = $daysDifference;
+      $customer->save();
+      return redirect()->route('viewAgentSaleTable')->with(['success' => 'Customer Sale Days Is Start Now']);
+     }
 }

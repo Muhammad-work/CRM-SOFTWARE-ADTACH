@@ -6,7 +6,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\help;
 use Illuminate\Support\Facades\Auth;
-
+use Carbon\Carbon;
 class HelpController extends Controller
 {
     public function viewHelpForm(){
@@ -14,6 +14,7 @@ class HelpController extends Controller
     }
 
     public function storeHelpRequest(Request $req){
+        
        $req->validate([
           'customer_name' => 'required|string',
           'customer_number' => 'required|max:11',
@@ -21,8 +22,8 @@ class HelpController extends Controller
           'help_reason' => 'required',
        ]);
 
-       $email = $req->customer_email ?: 'No Email'; 
-
+        $email = $req->customer_email ?: 'No Email'; 
+      
        help::create([
          'c_name' => $req->customer_name,
          'c_number' => $req->customer_number,
@@ -31,7 +32,7 @@ class HelpController extends Controller
          'help_reason' => $req->help_reason,
          'user_id' => Auth::id(),
          'user_name' => Auth::user()->name,
-         'created_at' => now(),
+         'created_at' =>  now(),
          'updated_at' => now(),
        ]);
 

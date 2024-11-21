@@ -42,8 +42,10 @@
                                     <th>REMARKS</th>
                                     <th>STATUS</th>
                                     <th>AGENT NAME</th>
+                                    <th>MAC ADDRESS</th>
                                     <th>DATE</th>
                                     <th>Trial Status</th>
+                                    <th>Trial Expri Days</th>
                                     <th>ACTION</th>
                                 </tr>
                             </thead>
@@ -60,6 +62,13 @@
                                                 class="bg-danger py-1 px-2 rounded block mt-5 cursor-pointer">{{ $customer->status }}</span>
                                         </td>
                                         <td> {{ $customer->user_name }}</td>
+                                        <td>
+                                            @if ($customer->make_address)
+                                                {{ $customer->make_address }}
+                                            @else
+                                                No Mac Address
+                                            @endif
+                                        </td>
                                         <td>{{ \Carbon\Carbon::parse($customer->created_at)->format('d M, Y') }}</td>
                                         <td>
                                             @if ($customer->active_status !== null)
@@ -70,13 +79,26 @@
                                                 @endif
                                             @endif
                                         </td>
-
+                                        <td>
+                                            @if ($customer->date_count !== null)
+                                                @if ($customer->date_count > 0)
+                                                    {{ $customer->date_count }}
+                                                @else
+                                                    <span class="bg-danger py-1 px-2 rounded">Expried</span>
+                                                @endif
+                                            @endif
+                                        </td>
                                         @if (Auth::user()->role === 'admin')
                                             <td>
                                                 <a href="{{ route('cutomerUPdateTrialDetailFormVIew', $customer->id) }}"
                                                     class="btn btn-primary"><i class="fa-solid fa-pen-to-square"></i></a>
                                                 <a href="{{ route('deleteTrialCustomerDetails', $customer->id) }}"
                                                     class="btn btn-danger"><i class="fa-solid fa-trash"></i></a>
+                                                @if ($customer->active_status !== 'active' && $customer->active_status !== 'inactive')
+                                                    <a
+                                                        href="{{ route('viewTrialDaysForm', $customer->id) }}"class="btn btn-primary ">Trial
+                                                        Days</a>
+                                                @endif
                                             </td>
                                         @else
                                             <td>
@@ -84,11 +106,12 @@
                                                     class="btn btn-success">Sale</a>
                                                 <a href="{{ route('deleteCustomerDetails', $customer->id) }}"
                                                     class="btn btn-danger">Cancel</a>
-                                                @if ($customer->active_status !== 'active')
+                                                @if ($customer->active_status !== 'active' && $customer->active_status !== 'inactive')
                                                     <a
-                                                        href="{{ route('viewTrialDaysForm', $customer->id) }}"class="btn btn-primary">Trial
+                                                        href="{{ route('viewTrialDaysForm', $customer->id) }}"class="btn btn-primary ">Trial
                                                         Days</a>
                                                 @endif
+
                                             </td>
                                         @endif
                                     </tr>
@@ -100,29 +123,4 @@
                 <div>
                 </div>
             </div>
-            <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-
-            <script>
-                function updateCustomerTrialStatus() {
-                    $.ajax({
-                        url: '/dashboard/update-customer-status', // The API route we defined in routes/api.php
-                        type: 'POST', // POST request
-                        dataType: 'json', // Expecting a JSON response
-                        data: {
-                            _token: '{{ csrf_token() }}', // CSRF token for security
-                        },
-                        success: function(response) {
-                            console.log('Customer status updated:', response);
-                            // You can show a message to the user or update the UI here
-                        },
-                        error: function(error) {
-                            console.error('Error updating customer status:', error);
-                            // Handle error if any
-                        }
-                    });
-                }
-
-                // Call the function every 10 seconds (for example)
-                setInterval(updateCustomerTrialStatus, 10000);
-            </script>
         @endsection
