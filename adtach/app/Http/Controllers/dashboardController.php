@@ -54,7 +54,8 @@ public function cutomerUPdateDetailSaleStore(Request $req, string $id){
       'remarks' => $req->remarks,
       'status' => $req->status,  
     ]);
-
+    $customer->make_address = $req->make_address;
+    $customer->save();
     return  redirect()->route('viewAgentSaleTable')->with(['success' => 'Customer Detail Update Successfuly']);
  }
 
@@ -78,6 +79,7 @@ public function cutomerUPdateDetailSaleStore(Request $req, string $id){
  }
 
    public function cutomerUPdateDetailStore(Request $req, string $id){
+  
     $req->validate([
       'customer_name' => 'required|string',
       'customer_number' => 'required|numeric',
@@ -96,6 +98,8 @@ public function cutomerUPdateDetailSaleStore(Request $req, string $id){
         'remarks' => $req->remarks,
         'status' => $req->status,  
       ]);
+      $customer->make_address = $req->make_address;
+      $customer->save();
 
       return  redirect()->route('viewAgentLeadlTable')->with(['success' => 'Customer Detail Updated Successfuly']);
    }
@@ -137,6 +141,9 @@ public function cutomerUPdateDetailTrialStore(Request $req, string $id){
       'remarks' => $req->remarks,
       'status' => $req->status,  
     ]);
+
+    $customer->make_address = $req->make_address;
+    $customer->save();
 
     return  redirect()->route('viewAgentTrialTable')->with(['success' => 'Customer Detail Update Successfuly']);
  }

@@ -121,7 +121,7 @@
 
         {{-- <div class="content-wrapper"> --}}
 
-        @if ($customerExpriDate->isEmpty())
+        {{-- @if ($customerExpriDate->isEmpty())
         @else
             <div class="content-header">
                 <div class="container-fluid">
@@ -240,7 +240,7 @@
                     </div>
                 </div>
             </div>
-        @endif
+        @endif --}}
 
         {{-- @endif --}}
     @endsection

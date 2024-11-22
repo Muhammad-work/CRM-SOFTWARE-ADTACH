@@ -84,6 +84,15 @@
                                         @enderror
                                     </div>
 
+                                    <div class="col-6 mt-2">
+                                        <label for="floatingTextarea">Mac Address</label>
+                                        <input type="text" class="form-control" name="make_address" id="exampleInputEmail1"
+                                        placeholder="Enter Mac Address" value="{{ $customer->make_address }}">
+                                        @error('make_address')
+                                            <span class="text-danger">{{ $message }}</span>
+                                        @enderror
+                                    </div>
+
                                 </div>
                             </div>
                             <!-- /.card-body -->

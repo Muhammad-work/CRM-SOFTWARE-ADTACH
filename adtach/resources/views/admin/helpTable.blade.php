@@ -84,9 +84,9 @@
                                                 @if ($data->status === 'pending')
                                                     <span class="bg-warning py-1 px-2 rounded text-white">Pending</span>
                                                 @elseif($data->status === 'down')
-                                                    <span class="bg-success py-1 px-2 rounded text-white">Down</span>
+                                                    <span class="bg-success py-1 px-2 rounded text-white">Resolve</span>
                                                 @else
-                                                    <span class="bg-danger py-1 px-2 rounded text-white">Cancel</span>
+                                                    <span class="bg-danger py-1 px-2 rounded text-white">Refund</span>
                                                 @endif
                                             </td>
                                             <td> {{ $data->user_name }}</td>
@@ -94,9 +94,9 @@
                                             <td>
                                                 @if ($data->status === 'pending')
                                                     <a href="{{ route('downHelpRequestStatus', $data->id) }}"
-                                                        class="btn btn-success staus">Down</a>
+                                                        class="btn btn-success staus">Resolve</a>
                                                     <a href="{{ route('cancelHelpRequestStatus', $data->id) }}"
-                                                        class="btn btn-danger staus">Cancel</a>
+                                                        class="btn btn-danger staus">Refund</a>
                                                 @endif
                                             </td>
                                         </tr>

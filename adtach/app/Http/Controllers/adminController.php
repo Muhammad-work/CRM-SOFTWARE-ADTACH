@@ -6,7 +6,9 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\user;
 use Illuminate\Support\Facades\Hash;
-
+use App\Mail\sendAgentMail;
+use Illuminate\Support\Facades\Mail;
+use Illuminate\Support\Facades\Auth;
 class adminController extends Controller
 {
      public function viewAdminTable(){
@@ -34,7 +36,13 @@ class adminController extends Controller
         }else{
             $address = 'No Address';
         }
-         
+
+        $toSendMail = $req->user_email;
+        $subject ='Hello ' . $req->user_name . ' Login Now';
+        $message ='Email : ' . $req->user_email . ' Password : ' . $req->user_password;
+        
+        Mail::to( $toSendMail)->send(new sendAgentMail($subject,$message));
+
         user::insert([
           'name' => $req->user_name,
           'email' => $req->user_email,
@@ -95,5 +103,24 @@ class adminController extends Controller
         $user->delete();
         return redirect()->route('viewAdminTable')->with(['success' => 'Admin Deleted Successfuly']);
     }
+
+
+    public function viewAdminUpdatePasswordForm(){
+        $admin = Auth::id();
+        return view('admin.changePassword',compact('admin'));
+    }
+
+   public function  changePasswordStore(Request $req,string $id){
+        $req->validate([
+            'password' => 'required|min:8|max:12|confirmed',
+         ]);
+
+       $admin = user::find($id);
+
+       $admin->password = Hash::make($req->password);
+       $admin->save();
+
+     return back()->with(['success' => 'Password Change Successfuly']);
+   }
 
 }

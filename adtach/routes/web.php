@@ -47,6 +47,7 @@ Route::controller(userController::class)->middleware(validUser::class)->middlewa
     Route::post('/dashboard/storeUserdetail', 'storeUserdetail')->name('storeUserdetail');
     Route::post('/dashboard/{id}/storeUpdateUser', 'storeUpdateUser')->name('storeUpdateUser');
     Route::get('/dashboard/{id}/deleteUser', 'deleteUser')->name('deleteUser');
+    Route::get('/dashboard/sendMail', 'sendMail')->name('sendMail');
    
 });
 
@@ -58,6 +59,8 @@ Route::controller(adminController::class)->middleware(validUser::class)->middlew
     Route::post('/dashboard/storeAdminDetail', 'storeAdminDetail')->name('storeAdminDetail');
     Route::post('/dashboard/{id}/storeUpdateAdmin', 'storeUpdateAdmin')->name('storeUpdateAdmin');
     Route::get('/dashboard/{id}/deleteAdmin', 'deleteAdmin')->name('deleteAdmin');
+    Route::get('/dashboard/change-password', 'viewAdminUpdatePasswordForm')->name('viewAdminUpdatePasswordForm');
+    Route::post('/dashboard/{id}/changePasswordStore', 'changePasswordStore')->name('changePasswordStore');
 });
 
 // Login Routes (No middleware needed for login routes)
@@ -84,10 +87,4 @@ Route::controller(HelpController::class)->group(function () {
     Route::get('/help-Detail', 'viewHelpTable')->name('viewHelpTable')->middleware(validUser::class); 
     Route::post('/storeHelpRequest', 'storeHelpRequest')->name('storeHelpRequest')->middleware(validUser::class); 
 });
-
-
-
-// Route::get('/help',function(){
-//   return view('front.help');
-// })->name('help');
 

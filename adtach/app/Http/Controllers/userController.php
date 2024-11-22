@@ -10,6 +10,8 @@ use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Str;
+use App\Mail\sendAgentMail;
+use Illuminate\Support\Facades\Mail;
 
 class userController extends Controller
 {
@@ -32,7 +34,6 @@ class userController extends Controller
     }
 
     public function storeUserdetail(Request $req){
-
         $req->validate([
             'user_name' => 'required|string',
             'user_email' => 'required|email|unique:users,email',
@@ -40,14 +41,15 @@ class userController extends Controller
             'user_password' => 'required|min:8|max:12|confirmed',
         ]);
 
-        $address = '';
 
-        if($req->user_address){
-            $address = $req->user_address;
-        }else{
-            $address = 'No Address';
-        }
-         
+        $address = $req->user_address ?: 'No Address';
+
+        $toSendMail = $req->user_email;
+        $subject ='Hello ' . $req->user_name . ' Login Now';
+        $message ='Email : ' . $req->user_email . ' Password : ' . $req->user_password;
+        
+        Mail::to( $toSendMail)->send(new sendAgentMail($subject,$message));
+        
         user::insert([
           'name' => $req->user_name,
           'email' => $req->user_email,
@@ -57,9 +59,8 @@ class userController extends Controller
           'created_at' => now(),
           'updated_at' => now(),
         ]);
-        
-        return redirect()->route('viewUserTable')->with(['success' => 'User Created Successfuly']);
 
+        return redirect()->route('viewUserTable')->with(['success' => 'User Created Successfuly']);
     }
 
     public function viewEditForm(string $id){
@@ -151,6 +152,10 @@ class userController extends Controller
     public function logout(){
         Session::flush();
         return redirect()->route('login');
+    }
+
+    public function sendMail(){
+        Mail::to('balochmuhammad817@gmail.com')->send(new sendAgentMail('Hello Muhammad', 'kdmflaksmdflkmslkdmflksm'));
     }
 
 }
