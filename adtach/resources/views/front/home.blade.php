@@ -84,7 +84,7 @@
                                 <span class="text-danger"> {{ $message }} </span>
                             @enderror
                         </td> --}}
-                        <input type="hidden" name="u_id" value="{{ Auth::id() }}" id="">
+                        {{-- <input type="hidden" name="u_id" value="{{ Auth::id() }}" id=""> --}}
                     </tr>
                 </tbody>
             </table>

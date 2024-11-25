@@ -18,10 +18,18 @@ class validRole
      */
     public function handle(Request $request, Closure $next): Response
     {
-        if (Auth::check() && Auth::user()->role !== 'user' ) {
-            return $next($request);
+        if (session()->has('user')) {
+            $user = session('user');  // Get user from session
+            
+            // Check if the user role is not 'user'
+            if ($user->role !== 'user') {
+                return $next($request);  // Continue the request if the user role is not 'user'
+            } else {
+                return redirect()->route('viewHome');  // Redirect to 'viewHome' if the role is 'user'
+            }
         } else {
-            return redirect()->route('viewHome');
+            // If the user is not logged in (session does not exist), redirect to login
+            return redirect()->route('login');
         }
     }
 }

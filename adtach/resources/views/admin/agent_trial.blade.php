@@ -88,7 +88,7 @@
                                                 @endif
                                             @endif
                                         </td> --}}
-                                        @if (Auth::user()->role === 'admin')
+                                        @if (session('user')->role === 'admin')
                                             <td>
                                                 <a href="{{ route('cutomerUPdateTrialDetailFormVIew', $customer->id) }}"
                                                     class="btn btn-primary"><i class="fa-solid fa-pen-to-square"></i></a>

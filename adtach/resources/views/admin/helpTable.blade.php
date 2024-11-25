@@ -48,7 +48,7 @@
                             </thead>
                             <tbody>
                                 @foreach ($helpRequest as $index => $data)
-                                    @if (Auth::user()->role === 'sub_admin' && $data->status === 'pending')
+                                    @if (session('user')->role === 'sub_admin' && $data->status === 'pending')
                                         <tr>
                                             <td> {{ $index + 1 }} </td>
                                             <td> {{ $data->c_name }} </td>
@@ -66,13 +66,13 @@
                                             <td>{{ \Carbon\Carbon::parse($data->created_at)->format('d M, Y') }}</td>
                                             <td>
                                                 <a href="{{ route('downHelpRequestStatus', $data->id) }}"
-                                                    class="btn btn-success staus">Down</a>
+                                                    class="btn btn-success staus">Resolve</a>
                                                 <a href="{{ route('cancelHelpRequestStatus', $data->id) }}"
-                                                    class="btn btn-danger staus">Cancel</a>
+                                                    class="btn btn-danger staus">Refund</a>
                                             </td>
                                         </tr>
                                     @endif
-                                    @if (Auth::user()->role === 'admin')
+                                    @if (session('user')->role === 'admin')
                                         <tr>
                                             <td> {{ $index + 1 }} </td>
                                             <td> {{ $data->c_name }} </td>

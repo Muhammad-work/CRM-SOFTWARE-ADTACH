@@ -12,7 +12,7 @@
             <!-- Sidebar user panel (optional) -->
             <div class="user-panel mt-3 pb-3 mb-3 d-flex">
                 <div class="info">
-                    <span class="d-block ms-5 text-white">Hello {{ Auth::user()->name }}</span>
+                    <span class="d-block ms-5 text-white">Hello {{ session('user')->name }}</span>
                 </div>
             </div>
 
@@ -31,7 +31,7 @@
                         </a>
                     </li>
 
-                    @if (Auth::user()->role === 'admin')
+                    @if (session('user')->role === 'admin')
                         <li class="nav-item">
                             <a href="{{ route('viewUserTable') }}" class="nav-link">
                                 <i class="nav-icon fa-solid fa-users"></i>
@@ -84,7 +84,7 @@
                         </a>
                     </li>
 
-                    @if (Auth::user()->role === 'admin')
+                    @if (session('user')->role === 'admin')
                         <li class="nav-item">
                             <a href="#" class="nav-link">
                                 <i class="nav-icon fa-solid fa-gear"></i>

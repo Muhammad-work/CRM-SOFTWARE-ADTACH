@@ -31,13 +31,13 @@ class CustomerController extends Controller
             'price' => $price,
             'remarks' => $req->remarks,
             'status' => $req->status,  
-            'a_name' => Auth::id(), 
+            'a_name' => session('user')->id, 
         ]);
         $customer->created_at = now();
         $customer->updated_at = now();
         $customer->save();
 
-        $customer->user_name = Auth::user()->name;
+        $customer->user_name = session('user')->name;
         $customer->save();
         
         return back()->with(['success' => 'Customer Created Successfully']);
@@ -55,15 +55,15 @@ class CustomerController extends Controller
 
     public function customerSalesTable(){
 
-        $customers = Customer::where('a_name', Auth::id())->where('status','sale')->get();
-        $user = user::where('id', Auth::id())->first();
+        $customers = Customer::where('a_name', session('user')->id)->where('status','sale')->get();
+        $user = user::where('id', session('user')->id)->first();
         return view('front.customer_sale',compact(['user','customers']));
     }
 
     public function customerLeadTable(){
 
-        $customers = Customer::where('a_name', Auth::id())->where('status','lead')->get();
-        $user = user::where('id', Auth::id())->first();
+        $customers = Customer::where('a_name', session('user')->id)->where('status','lead')->get();
+        $user = user::where('id', session('user')->id)->first();
         return view('front.customer_lead',compact(['user','customers']));
     }
 
@@ -71,8 +71,8 @@ class CustomerController extends Controller
 
     public function customerTrialTable(){
 
-        $customers = Customer::where('a_name', Auth::id())->where('status','trial')->get();
-        $user = user::where('id', Auth::id())->first();
+        $customers = Customer::where('a_name',session('user')->id)->where('status','trial')->get();
+        $user = user::where('id',session('user')->id)->first();
         return view('front.customer_trial',compact(['user','customers']));
     }
 }

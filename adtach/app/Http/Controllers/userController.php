@@ -121,25 +121,33 @@ class userController extends Controller
         'password' => 'required|min:8',
     ]);
 
-    if (Auth::attempt(['email' => $request->email, 'password' => $request->password])) {
-        $user = Auth::user();
+    $user = User::where('email', $request->email)->first();
 
+    // Check if user exists and password matches
+    if ($user && Hash::check($request->password, $user->password)) {
+
+        // Manually store user in session
+        session(['user' => $user]);  // Store the entire user object in session
+
+        // Check the user's IP address
         if ($user->ip_address === null) {
             $user->ip_address = $request->ip();  
             $user->save();  
         } else {
+            // Compare stored IP address with current IP address
             if ($user->ip_address !== $request->ip()) {
-                Auth::logout();
+                session()->flush(); // Clear session
                 return back()->withErrors([
                     'email' => 'You cannot log in from this device or location.',
                 ]);
             }
         }
 
+        // Redirect based on the user's role
         if ($user->role === 'admin' || $user->role === 'sub_admin') {
-            return redirect()->route('dashboard'); 
+            return redirect()->route('dashboard');
         } else {
-            return redirect()->route('viewHome'); 
+            return redirect()->route('viewHome');
         }
     } else {
         return back()->withErrors([

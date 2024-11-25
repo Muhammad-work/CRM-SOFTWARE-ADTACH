@@ -106,7 +106,7 @@ class adminController extends Controller
 
 
     public function viewAdminUpdatePasswordForm(){
-        $admin = Auth::id();
+        $admin = session('user')->id;
         return view('admin.changePassword',compact('admin'));
     }
 

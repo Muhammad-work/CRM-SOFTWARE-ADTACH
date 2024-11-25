@@ -12,7 +12,7 @@
             <div class="dropdown me-5">
                 <button class="btn btn-sm btn-secondary dropdown-toggle " type="button" id="dropdownMenuButton1"
                     data-bs-toggle="dropdown" aria-expanded="false">
-                    {{ Auth::user()->name }}
+                    {{session('user')->name }}
                 </button>
                 <ul class="dropdown-menu me-5" aria-labelledby="dropdownMenuButton1">
                     <li><a class="dropdown-item" href="{{ route('logout') }}">Logout</a></li>
