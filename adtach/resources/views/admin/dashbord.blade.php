@@ -121,126 +121,76 @@
 
         {{-- <div class="content-wrapper"> --}}
 
-        {{-- @if ($customerExpriDate->isEmpty())
+        @if ($customerExpriDate->isEmpty())
         @else
-            <div class="content-header">
-                <div class="container-fluid">
-                    <div class="row mb-2">
-                        <div class="col-sm-3 ">
-                            <h1 class="m-0 d-inline">Customer Expri Days Report</h1>
-                        </div><!-- /.col -->
+          
+          <div class="content-header">
+            <div class="container-fluid">
+                <div class="row mb-2">
+                    <div class="col-sm-3 ">
+                        <h1 class="m-0 d-inline">Today Agent Sale Report</h1>
+                    </div><!-- /.col -->
 
-                    </div><!-- /.row -->
-                </div><!-- /.container-fluid -->
-            </div>
-            <div class='container-fluid'>
-                <div class="row">
-                    <div class="col-md-12">
-                        <div class="card-body">
-                            <table id="example1" class="table table-bordered table-striped">
-                                <thead>
+                </div><!-- /.row -->
+            </div><!-- /.container-fluid -->
+        </div>
+        <div class='container-fluid'>
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="card-body">
+                        <table id="example1" class="table table-bordered table-striped">
+                            <thead>
+                                <tr>
+                                    <th>S.No</th>
+                                    <th>CUSTOMER NAME</th>
+                                    <th>CUSTOMER NUMBER</th>
+                                    <th>CUSTOMER EMAIL</th>
+                                    <th>REMARKS</th>
+                                    <th>STATUS</th>
+                                    <th>MAC ADDRESS</th>
+                                    <th>AGENT NAME</th>
+                                    <th>DATE</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach ($customerExpriDate as $index => $customer)
                                     <tr>
-                                        <th>S.No</th>
-                                        <th>CUSTOMER NAME</th>
-                                        <th>CUSTOMER NUMBER</th>
-                                        <th>CUSTOMER EMAIL</th>
-                                        <th>REMARKS</th>
-                                        <th>STATUS</th>
-                                        <th>MAC ADDRESS</th>
-                                        <th>Expri STATUS</th>
-                                        <th>AGENT NAME</th>
-                                        <th>ACTIOLN</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    @foreach ($customerExpriDate as $index => $customer)
-                                        @if (Auth::user()->role === 'admin')
-                                            <tr>
-                                                <td>{{ $index + 1 }}</td>
-                                                <td> {{ $customer->customer_name }} </td>
-                                                <td>{{ $customer->customer_number }}</td>
-                                                <td>{{ $customer->customer_email }}</td>
-                                                <td>{{ $customer->remarks }}</td>
-                                                <td>
-                                                    @if ($customer->status === 'sale')
-                                                        <span class="bg-success py-1 px-2 rounded">Sale</span>
-                                                    @elseif($customer->status === 'trial')
-                                                        <span class="bg-danger py-1 px-2 rounded">Trial</span>
-                                                    @endif
-                                                </td>
-                                                <td> {{ $customer->make_address }} </td>
-                                                <td><span class="bg-danger py-1 px-2 rounded">
-                                                        {{ $customer->active_status }}
-                                                    </span></td>
-                                                <td> {{ $customer->user_name }} </td>
-                                                <td>
-                                                    @if ($customer->status !== 'sale')
-                                                        <a href="{{ route('updateCustomerStatus', $customer->id) }}"
-                                                            class="btn btn-success">Sale</a>
-                                                    @endif
-
-                                                    <a href="{{ route('deleteCustomerDetails', $customer->id) }}"
-                                                        class="btn btn-danger">Cancel</a>
-                                                    @if (Auth::user()->role === 'admin')
-                                                        @if ($customer->status === 'sale')
-                                                            <a
-                                                                href="{{ route('viewupdateSaleCustomerStatus', $customer->id) }}"class="btn btn-primary ">Update
-                                                                Sale
-                                                                Days</a>
-                                                        @endif
-                                                    @endif
-                                                </td>
-                                            </tr>
-                                        @else
-                                            @if ($customer->status !== 'sale')
-                                                <tr>
-                                                    <td>{{ $index + 1 }}</td>
-                                                    <td> {{ $customer->customer_name }} </td>
-                                                    <td>{{ $customer->customer_number }}</td>
-                                                    <td>{{ $customer->customer_email }}</td>
-                                                    <td>{{ $customer->remarks }}</td>
-                                                    <td>
-                                                        @if ($customer->status === 'sale')
-                                                            <span class="bg-success py-1 px-2 rounded">Sale</span>
-                                                        @elseif($customer->status === 'trial')
-                                                            <span class="bg-danger py-1 px-2 rounded">Trial</span>
-                                                        @endif
-                                                    </td>
-                                                    <td> {{ $customer->make_address }} </td>
-                                                    <td><span class="bg-danger py-1 px-2 rounded">
-                                                            {{ $customer->active_status }}
-                                                        </span></td>
-                                                    <td> {{ $customer->user_name }} </td>
-                                                    <td>
-                                                        @if ($customer->status !== 'sale')
-                                                            <a href="{{ route('updateCustomerStatus', $customer->id) }}"
-                                                                class="btn btn-success">Sale</a>
-                                                        @endif
-
-                                                        <a href="{{ route('deleteCustomerDetails', $customer->id) }}"
-                                                            class="btn btn-danger">Cancel</a>
-                                                        @if (Auth::user()->role === 'admin')
-                                                            @if ($customer->status === 'sale')
-                                                                <a
-                                                                    href="{{ route('viewupdateSaleCustomerStatus', $customer->id) }}"class="btn btn-primary ">Update
-                                                                    Sale
-                                                                    Days</a>
-                                                            @endif
-                                                        @endif
-                                                    </td>
-                                                </tr>
+                                        <td>{{ $index + 1 }}</td>
+                                        <td> {{ $customer->customer_name }} </td>
+                                        <td>{{ $customer->customer_number }}</td>
+                                        <td>{{ $customer->customer_email }}</td>
+                                        <td>{{ $customer->remarks }}</td>
+                                        <td>
+                                            @if ($customer->status === 'sale')
+                                                <span class="bg-success py-1 px-2 rounded">Sale</span>
+                                            @elseif($customer->status === 'trial')
+                                                <span class="bg-danger py-1 px-2 rounded">Trial</span>
                                             @endif
-                                        @endif
-                                    @endforeach
-                                </tbody>
-                            </table>
-                        </div>
-                    </div>
-                    <div>
+                                        </td>
+                                        <td>
+                                            @if ($customer->make_address)
+                                                {{ $customer->make_address }}
+                                            @else
+                                                No Mac Address
+                                            @endif
+
+                                            {{ $customer->active_status }}
+                                            </span>
+                                        </td>
+                                        <td> {{ $customer->user_name }} </td>
+                                        <td>{{ \Carbon\Carbon::parse($customer->created_at)->format('d M, Y') }}</td>
+                                    </tr>
+                                @endforeach
+                            </tbody>
+                        </table>
                     </div>
                 </div>
+                <div>
+                </div>
             </div>
-        @endif --}}
+        </div>
+
+        @endif
 
         {{-- @endif --}}
     @endsection

@@ -18,7 +18,7 @@ class dashboardController extends Controller
         $lead = customer::where('status','lead')->count();
         $help = help::where('status','pending')->count();
         $price = Customer::sum('price');
-        $customerExpriDate = customer::where('active_status','inactive')->get();
+        $customerExpriDate = customer::whereDate('created_at',today())->get();
         return  view('admin.dashbord',compact(['userCount','sale','trial','lead','price','help','customerExpriDate']));
      }
 
