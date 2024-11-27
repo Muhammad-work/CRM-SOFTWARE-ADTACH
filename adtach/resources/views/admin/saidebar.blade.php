@@ -84,6 +84,7 @@
                         </a>
                     </li>
 
+
                     @if (session('user')->role === 'admin')
                         <li class="nav-item">
                             <a href="#" class="nav-link">

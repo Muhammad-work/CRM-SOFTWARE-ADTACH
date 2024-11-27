@@ -21,6 +21,7 @@
                         <th class="px-4 py-2 border border-gray-300">PRICE</th>
                         <th class="px-4 py-2 border border-gray-300">REMARKS</th>
                         <th class="px-4 py-2 border border-gray-300">STATUS</th>
+                        <th class="px-4 py-2 border border-gray-300">CUSTOMER REGISTRATION DATE</th>
                         {{-- <th class="px-4 py-2 border border-gray-300">AGENT NAME</th> --}}
                     </tr>
                 </thead>
@@ -76,6 +77,14 @@
                             @error('status')
                                 <span class="text-danger"> {{ $message }} </span>
                             @enderror
+                        <td class="px-4 py-2 border border-gray-300">
+                            <input type="date" name="date" value="{{ old('date') }}" id="price"
+                                placeholder="Enter Price"
+                                class="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-400">
+                            @error('date')
+                                <span class="text-danger"> {{ $message }} </span>
+                            @enderror
+                        </td>
                         </td>
                         {{-- <td class="px-4 py-2 border border-gray-300">
                             <input type="text" name="agent_name" id="agent_name_1" placeholder="Enter Agent Name"
@@ -111,75 +120,90 @@
 
     {{-- Show Customer Details --}}
 
-    <div class="w-[90%] mx-auto mt-5 mb-5">
-        <table class="min-w-full table-auto border-collapse border border-gray-200">
-            @if (session('update'))
-                <div class="alert alert-success" role="alert">
-                    {{ session('update') }}
-                </div>
-            @endif
-            <thead>
-                <tr class="bg-gray-100 text-gray-700">
-                    <th class="px-4 py-2 border border-gray-300">S.NO</th>
-                    <th class="px-4 py-2 border border-gray-300">CUSTOMER NAME</th>
-                    <th class="px-4 py-2 border border-gray-300">CUSTOMER NUMBER</th>
-                    <th class="px-4 py-2 border border-gray-300">CUSTOMER EMAIL</th>
-                    <th class="px-4 py-2 border border-gray-300">PRICE</th>
-                    <th class="px-4 py-2 border border-gray-300">REMARKS</th>
-                    <th class="px-4 py-2 border border-gray-300">STATUS</th>
-                    <th class="px-4 py-2 border border-gray-300">AGENT NAME</th>
-                    <th class="px-4 py-2 border border-gray-300">DATE</th>
-                    <th class="px-4 py-2 border border-gray-300">ACTION</th>
-                </tr>
-            </thead>
-            <tbody id="tableBody">
-                @foreach ($customers as $index => $customer)
-                    @if ($customer->status !== 'sale')
-                        <tr class="odd:bg-gray-50 even:bg-white">
-                            <td class="px-4 py-2 border border-gray-300 customer"> {{ $index + 1 }} </td>
-                            <td class="px-4 py-2 border border-gray-300 customer"> {{ $customer->customer_name }} </td>
-                            <td class="px-4 py-2 border border-gray-300 customer">{{ $customer->customer_number }}</td>
-                            <td class="px-4 py-2 border border-gray-300 customer">{{ $customer->customer_email }}</td>
-                            <td class="px-4 py-2 border border-gray-300 customer">${{ $customer->price }}</td>
-                            <td class="px-4 py-2 border border-gray-300 customer">{{ $customer->remarks }}</td>
-                            <td class="px-4 py-2 border border-gray-300 customer">
+    <div class="w-full h-auto overflow-x-auto">
+        <div class="w-full mx-auto mt-5 ">
+            <table class="w-full min-w-[600px] table-auto border-collapse border border-gray-200 ">
+                @if (session('update'))
+                    <div class="alert alert-success" role="alert">
+                        {{ session('update') }}
+                    </div>
+                @endif
+                <thead>
+                    <tr class="bg-gray-100 text-gray-700">
+                        <th class="px-4 py-2 border border-gray-300">S.NO</th>
+                        <th class="px-4 py-2 border border-gray-300">CUSTOMER NAME</th>
+                        <th class="px-4 py-2 border border-gray-300">CUSTOMER NUMBER</th>
+                        <th class="px-4 py-2 border border-gray-300">CUSTOMER EMAIL</th>
+                        <th class="px-4 py-2 border border-gray-300">PRICE</th>
+                        <th class="px-4 py-2 border border-gray-300">REMARKS</th>
+                        <th class="px-4 py-2 border border-gray-300">STATUS</th>
+                        <th class="px-4 py-2 border border-gray-300">CUSTOMER REGISTRATION DATE</th>
+                        <th class="px-4 py-2 border border-gray-300">AGENT NAME</th>
+                        <th class="px-4 py-2 border border-gray-300">DATE</th>
+                        <th class="px-4 py-2 border border-gray-300">ACTION</th>
+                    </tr>
+                </thead>
+                <tbody id="tableBody">
+                    @foreach ($customers as $index => $customer)
+                        @if ($customer->status !== 'sale')
+                            <tr class="odd:bg-gray-50 even:bg-white">
+                                <td class="px-4 py-2 border border-gray-300 customer"> {{ $index + 1 }} </td>
+                                <td class="px-4 py-2 border border-gray-300 customer"> {{ $customer->customer_name }}
+                                </td>
+                                <td class="px-4 py-2 border border-gray-300 customer">{{ $customer->customer_number }}
+                                </td>
+                                <td class="px-4 py-2 border border-gray-300 customer">{{ $customer->customer_email }}</td>
+                                <td class="px-4 py-2 border border-gray-300 customer">${{ $customer->price }}</td>
+                                <td class="px-4 py-2 border border-gray-300 customer hidden md:table-cell">
+                                    {{ $customer->remarks }}</td>
+                                <td class="px-4 py-2 border border-gray-300 customer">
+                                    @if ($customer->status === 'lead')
+                                        <span class="bg-warning py-1 px-2 rounded font-bold text-xl text-white">Lead</span>
+                                    @elseif($customer->status === 'trial')
+                                        <span class="bg-danger py-1 px-2 rounded font-bold text-xl text-white">Trial</span>
+                                    @endif
+                                </td>
+                                <td class="px-4 py-2 border border-gray-300 customer hidden sm:table-cell">
+                                    @if ($customer->regitr_date)
+                                        {{ \Carbon\Carbon::parse($customer->regitr_date)->format('d M, Y') }}
+                                    @else
+                                        No Registration Date
+                                    @endif
+                                </td>
+                                <td class="px-4 py-2 border border-gray-300 customer hidden md:table-cell">
+                                    {{ $user->name }}</td>
+                                <td class="px-4 py-2 border border-gray-300 customer hidden sm:table-cell">
+                                    {{ \Carbon\Carbon::parse($customer->created_at)->format('d M, Y') }}</td>
+
                                 @if ($customer->status === 'lead')
-                                    <span class="bg-warning py-1 px-2 rounded font-bold text-xl text-white">Lead</span>
+                                    <form action="{{ route('customerStatus', $customer->id) }}" method="POST">
+                                        @csrf
+                                        <td class="flex gap-1 mt-4">
+                                            <input type="hidden" name="status" id="input">
+                                            <button class="btn btn-success" id="statusBtn">sale</button>
+                                            <button class="btn btn-danger" id="statusBtn">trial</button>
+                                        </td>
+                                    </form>
                                 @elseif($customer->status === 'trial')
-                                    <span class="bg-danger py-1 px-2 rounded font-bold text-xl text-white">Trial</span>
+                                    <form action="{{ route('customerStatus', $customer->id) }}" method="POST">
+                                        @csrf
+                                        <td class="flex gap-1 mt-4">
+                                            <input type="hidden" name="status" id="input">
+                                            <button class="btn btn-warning" id="statusBtn">lead</button>
+                                            <button class="btn btn-success" id="statusBtn">sale</button>
+                                        </td>
+                                    </form>
+                                @else
                                 @endif
-                            </td>
-                            <td class="px-4 py-2 border border-gray-300 customer">{{ $user->name }}</td>
-                            <td class="px-4 py-2 border border-gray-300 customer">
-                                {{ \Carbon\Carbon::parse($customer->created_at)->format('d M, Y') }}</td>
 
-                            @if ($customer->status === 'lead')
-                                <form action="{{ route('customerStatus', $customer->id) }}" method="POST">
-                                    @csrf
-                                    <td class="flex gap-1 mt-4">
-                                        <input type="hidden" name="status" id="input">
-                                        <button class="btn btn-success" id="statusBtn">sale</button>
-                                        <button class="btn btn-danger" id="statusBtn">trial</button>
-                                    </td>
-                                </form>
-                            @elseif($customer->status === 'trial')
-                                <form action="{{ route('customerStatus', $customer->id) }}" method="POST">
-                                    @csrf
-                                    <td class="flex gap-1 mt-4">
-                                        <input type="hidden" name="status" id="input">
-                                        <button class="btn btn-warning" id="statusBtn">lead</button>
-                                        <button class="btn btn-success" id="statusBtn">sale</button>
-                                    </td>
-                                </form>
-                            @else
-                            @endif
-
-                        </tr>
-                    @endif
-                @endforeach
-            </tbody>
-        </table>
+                            </tr>
+                        @endif
+                    @endforeach
+                </tbody>
+            </table>
+        </div>
     </div>
+
 
     {{-- Show Customer Details --}}
 
@@ -216,19 +240,19 @@
             });
         });
 
-        let selectBox = document.querySelector('#selectBox');
-        let PriceInput = document.querySelector('#price');
+        // let selectBox = document.querySelector('#selectBox');
+        // let PriceInput = document.querySelector('#price');
 
-        function checkSelectBoxValue() {
-            if (selectBox.value === 'trial') {
-                PriceInput.style.display = 'none';
-            } else {
-                PriceInput.style.display = 'block';
-            }
-        }
+        // function checkSelectBoxValue() {
+        //     if (selectBox.value === 'trial') {
+        //         PriceInput.style.display = 'none';
+        //     } else {
+        //         PriceInput.style.display = 'block';
+        //     }
+        // }
 
-        checkSelectBoxValue();
+        // checkSelectBoxValue();
 
-        selectBox.addEventListener('change', checkSelectBoxValue);
+        // selectBox.addEventListener('change', checkSelectBoxValue);
     </script>
 @endsection

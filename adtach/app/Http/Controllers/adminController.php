@@ -50,9 +50,12 @@ class adminController extends Controller
           'address' => $address,
           'password' => Hash::make($req->user_password),
           'role' => $req->role,
+          'ip_address' => '1',
           'created_at' => now(),
           'updated_at' => now(),
         ]);
+
+        
         
         return redirect()->route('viewAdminTable')->with(['success' => 'Admin Created Successfuly']);
      }

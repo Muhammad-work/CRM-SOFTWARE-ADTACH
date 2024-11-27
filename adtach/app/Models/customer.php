@@ -21,4 +21,15 @@ class customer extends Model
     public function user(){
        return $this->belongsTo(user::class,'a_name');
     }
+
+        // Get sales for a specific agent with status 'sale' in a given month
+        public static function getSalesByAgentAndMonth($agent_id, $month, $year)
+        {
+            return self::where('a_name', $agent_id)
+                        ->where('status', 'sale') // Filter only successful sales
+                        ->whereMonth('created_at', $month)
+                        ->whereYear('created_at', $year)
+                        ->count();
+        }
+    
 }

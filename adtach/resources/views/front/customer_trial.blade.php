@@ -13,8 +13,8 @@
 
     {{-- Show Customer Details --}}
 
-    <div class="w-[90%] mx-auto mt-5 mb-5">
-        <table class="min-w-full table-auto border-collapse border border-gray-200">
+    <div class="w-full mx-auto mt-5 mb-5 overflow-x-auto">
+        <table class="min-w-[600px] table-auto border-collapse border border-gray-200">
             <thead>
                 <tr class="bg-gray-100 text-gray-700">
                     <th class="px-4 py-2 border border-gray-300">S.NO</th>
@@ -22,8 +22,9 @@
                     <th class="px-4 py-2 border border-gray-300">CUSTOMER NUMBER</th>
                     <th class="px-4 py-2 border border-gray-300">CUSTOMER EMAIL</th>
                     <th class="px-4 py-2 border border-gray-300">PRICE</th>
-                    <th class="px-4 py-2 border border-gray-300">REMARKS</th>
+                    <th class="px-4 py-2 border border-gray-300 hidden sm:table-cell">REMARKS</th>
                     <th class="px-4 py-2 border border-gray-300">STATUS</th>
+                    <th class="px-4 py-2 border border-gray-300 hidden sm:table-cell">CUSTOMER REGISTRATION DATE</th>
                     <th class="px-4 py-2 border border-gray-300">AGENT NAME</th>
                     <th class="px-4 py-2 border border-gray-300">DATE</th>
                     <th class="px-4 py-2 border border-gray-300">Action</th>
@@ -32,18 +33,26 @@
             <tbody id="tableBody">
                 @foreach ($customers as $index => $customer)
                     <tr class="odd:bg-gray-50 even:bg-white">
-                        <td class="px-4 py-2 border border-gray-300 customer"> {{ $index + 1 }} </td>
-                        <td class="px-4 py-2 border border-gray-300 customer"> {{ $customer->customer_name }} </td>
+                        <td class="px-4 py-2 border border-gray-300 customer">{{ $index + 1 }}</td>
+                        <td class="px-4 py-2 border border-gray-300 customer">{{ $customer->customer_name }}</td>
                         <td class="px-4 py-2 border border-gray-300 customer">{{ $customer->customer_number }}</td>
                         <td class="px-4 py-2 border border-gray-300 customer">{{ $customer->customer_email }}</td>
                         <td class="px-4 py-2 border border-gray-300 customer">${{ $customer->price }}</td>
-                        <td class="px-4 py-2 border border-gray-300 customer">{{ $customer->remarks }}</td>
-                        <td class="px-4 py-2 border border-gray-300 customer"><span
-                                class="bg-danger py-1 px-2 rounded font-bold text-xl text-white"> {{ $customer->status }}
-                            </span></td>
+                        <td class="px-4 py-2 border border-gray-300 customer hidden sm:table-cell">{{ $customer->remarks }}</td>
+                        <td class="px-4 py-2 border border-gray-300 customer">
+                            <span class="bg-danger py-1 px-2 rounded font-bold text-xl text-white">{{ $customer->status }}</span>
+                        </td>
+                        <td class="px-4 py-2 border border-gray-300 customer hidden sm:table-cell">
+                            @if ($customer->regitr_date)
+                                {{ \Carbon\Carbon::parse($customer->regitr_date)->format('d M, Y') }}
+                            @else
+                                No Registration Date
+                            @endif
+                        </td>
                         <td class="px-4 py-2 border border-gray-300 customer">{{ $user->name }}</td>
                         <td class="px-4 py-2 border border-gray-300 customer">
-                            {{ \Carbon\Carbon::parse($customer->created_at)->format('d M, Y') }}</td>
+                            {{ \Carbon\Carbon::parse($customer->created_at)->format('d M, Y') }}
+                        </td>
                         @if ($customer->status === 'lead')
                             <form action="{{ route('customerStatus', $customer->id) }}" method="POST">
                                 @csrf
@@ -68,12 +77,13 @@
                 @endforeach
                 @if ($customers->isEmpty())
                     <tr>
-                        <td colspan="9" class="text-center">No Trial Record Found</td>
+                        <td colspan="11" class="text-center">No Trial Record Found</td>
                     </tr>
                 @endif
             </tbody>
         </table>
     </div>
+    
 
     {{-- Show Customer Details --}}
 

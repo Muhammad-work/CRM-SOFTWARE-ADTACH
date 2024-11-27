@@ -7,7 +7,7 @@ use Illuminate\Http\Request;
 use App\Models\customer;
 use App\Models\user;
 use Illuminate\Support\Facades\Auth;
-
+use Carbon\Carbon;
 class CustomerController extends Controller
 {
     public function storeCustomerDetail(Request $req){
@@ -16,25 +16,27 @@ class CustomerController extends Controller
             'customer_name' => 'required|string',
             'customer_number' => 'required|numeric|unique:customers,customer_number',
             'customer_email' => 'unique:customers,customer_email',
-            // 'price' => 'numeric',
+            'price' => 'required|numeric',
             'remarks' => 'required',
             'status' => 'required', 
+            'date' => 'required'
         ]);
         
         $email = $req->customer_email ?: 'No Email'; 
-        $price = $req->price ?: '00.00'; 
         
         $customer = customer::create([
             'customer_name' => $req->customer_name,
             'customer_email' => $email,
             'customer_number' => $req->customer_number,
-            'price' => $price,
+            'price' => $req->price,
             'remarks' => $req->remarks,
             'status' => $req->status,  
             'a_name' => session('user')->id, 
+            'regitr_date' => $req->date
         ]);
         $customer->created_at = now();
         $customer->updated_at = now();
+        $customer->regitr_date = $req->date;
         $customer->save();
 
         $customer->user_name = session('user')->name;
@@ -55,8 +57,15 @@ class CustomerController extends Controller
 
     public function customerSalesTable(){
 
-        $customers = Customer::where('a_name', session('user')->id)->where('status','sale')->get();
-        $user = user::where('id', session('user')->id)->first();
+                $customers = Customer::where('a_name',session('user')->id)
+                                   ->where('status', 'sale')
+                                   ->orderByRaw('MONTH(regitr_date) asc')
+                                   ->get();
+                                   
+
+        $user = User::where('id', session('user')->id)->first();
+        // $customers = Customer::where('a_name', session('user')->id)->where('status','sale')->get();
+        // $user = user::where('id', session('user')->id)->first();
         return view('front.customer_sale',compact(['user','customers']));
     }
 

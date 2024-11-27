@@ -7,6 +7,7 @@ use App\Http\Controllers\adminController;
 use App\Http\Controllers\homeController;
 use App\Http\Controllers\CustomerController;
 use App\Http\Controllers\HelpController;
+use App\Http\Controllers\saleContoller;
 use App\Http\Middleware\validUser;
 use App\Http\Middleware\validRole;
 
@@ -39,7 +40,7 @@ Route::controller(dashboardController::class)->group(function () {
     Route::post('/dashboard/{id}/addSaleCustomerStatus', 'addSaleCustomerStatus')->name('addSaleCustomerStatus')->middleware(validUser::class)->middleware(validRole::class);
 });
 
-// User Routes
+
 Route::controller(userController::class)->middleware(validUser::class)->middleware(validRole::class)->group(function () {
     Route::get('/dashboard/all-user', 'viewUserTable')->name('viewUserTable');
     Route::get('/dashboard/add-user', 'addUser')->name('addUser');
@@ -48,8 +49,14 @@ Route::controller(userController::class)->middleware(validUser::class)->middlewa
     Route::post('/dashboard/{id}/storeUpdateUser', 'storeUpdateUser')->name('storeUpdateUser');
     Route::get('/dashboard/{id}/deleteUser', 'deleteUser')->name('deleteUser');
     Route::get('/dashboard/sendMail', 'sendMail')->name('sendMail');
+    // Route::get('/dashboard/activateUser', 'activateUser')->name('activateUser');
+    // Route::get('/dashboard/curront-mont-sale', 'viewAgentSaleCountCurrontMont')->name('viewAgentSaleCountCurrontMont');
+    // Route::get('/dashboard/lastmontsale', 'lastmontsale')->name('lastmontsale');
    
 });
+// Correct route to activate a user (with user ID parameter)
+Route::get('/user/{id}/activate', [UserController::class, 'activateUser'])->name('activateUser');
+Route::get('/user/{id}/deactivateUser', [UserController::class, 'deactivateUser'])->name('deactivateUser');
 
 // Admin Routes
 Route::controller(adminController::class)->middleware(validUser::class)->middleware(validRole::class)->group(function () {

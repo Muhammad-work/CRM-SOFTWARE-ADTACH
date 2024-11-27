@@ -51,4 +51,9 @@ class User extends Authenticatable
     public function customer(){
         return $this->hasMany(customer::class);
      }
+
+     public function getSalesCountForMonth($month, $year)
+    {
+        return customer::getSalesByAgentAndMonth($this->id, $month, $year);
+    }
 }

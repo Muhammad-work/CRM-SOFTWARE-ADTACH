@@ -93,6 +93,16 @@
                                         @enderror
                                     </div>
 
+                                    <div class="col-6 mt-2">
+                                        <label for="exampleInputEmail1">CUSTOMER REGISTRATION DATE</label>
+                                        <input type="date" class="form-control" name="date" id="exampleInputEmail1"
+                                            placeholder="Enter Mac Address" value="{{ $customer->regitr_date }}">
+                                        @error('date')
+                                            <span class="text-danger">{{ $message }}</span>
+                                        @enderror
+                                    </div>
+
+
                                 </div>
                             </div>
                             <!-- /.card-body -->
