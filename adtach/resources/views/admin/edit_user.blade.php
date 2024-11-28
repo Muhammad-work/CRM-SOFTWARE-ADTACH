@@ -51,7 +51,7 @@
                                     </div>
 
                                     <div class="col-12 mt-2">
-                                        <label for="exampleInputEmail1"> Address</label>
+                                        <label for="exampleInputEmail1">Address</label>
                                         <input type="text" class="form-control" name="user_address"
                                             id="exampleInputEmail1" placeholder="Enter User Address"
                                             value="{{ $user->address }}">

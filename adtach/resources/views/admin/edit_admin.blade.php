@@ -80,9 +80,13 @@
 
                                     <div class="col-12 mt-2">
                                         <label for="exampleInputEmail1">Enter Ip Address</label>
-                                        <input type="text" class="form-control" name="ip"
-                                            id="exampleInputEmail1" placeholder="Enter IP Address"
-                                            value="{{ $user->ip_address }}">
+                                        <select class="form-select"  name="ip" aria-label="Default select example">
+                                            @if ($user->ip_address === '1')
+                                                <option selected value="{{ $user->ip_address }}">Active</option>
+                                            @endif
+                                            <option value="0">Deactivate</option>
+                                            <option value="1">Active</option>
+                                        </select>
                                         @error('ip')
                                             <span class="text-danger">{{ $message }}</span>
                                         @enderror
