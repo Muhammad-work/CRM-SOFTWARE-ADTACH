@@ -19,7 +19,8 @@ class validUser
      */
     public function handle(Request $request, Closure $next): Response
     {
-        if (session()->has('user')) {
+
+        if (Auth::check()) {
             return $next($request);  // Continue the request if the user session exists
         } else {
             // If the user is not logged in, redirect to the login page

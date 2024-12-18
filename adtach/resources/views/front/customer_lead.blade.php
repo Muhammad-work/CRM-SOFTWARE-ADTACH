@@ -14,7 +14,7 @@
 
     {{-- Show Customer Details --}}
 
-    <div class="w-full mx-auto mt-5 mb-5 overflow-x-auto">
+<div class="w-full mx-auto mt-5 mb-5 overflow-x-auto">
         <table class="min-w-[600px] table-auto border-collapse border border-gray-200">
             <thead>
                 <tr class="bg-gray-100 text-gray-700">
@@ -84,7 +84,7 @@
             </tbody>
         </table>
     </div>
-    
+
     {{-- Show Customer Details --}}
 
 

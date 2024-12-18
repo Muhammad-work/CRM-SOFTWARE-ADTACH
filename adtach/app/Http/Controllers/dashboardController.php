@@ -13,22 +13,20 @@ class dashboardController extends Controller
 {
      public function viewDashboard(){
         $userCount = user::where('role','user')->count();
-        $sale = customer::where('status','sale')->count();
-        $trial = customer::where('status','trial')->count();
-        $lead = customer::where('status','lead')->count();
+        $sale = customer::whereMonth('created_at',now())->where('status','sale')->count();
+        $trial = customer::whereMonth('created_at',now())->where('status','trial')->count();
+        $lead = customer::whereMonth('created_at',now())->where('status','lead')->count();
         $help = help::where('status','pending')->count();
-        $price = Customer::sum('price');
-        $customerExpriDate = customer::whereDate('created_at',today())->get();
-
-       
+        $price = Customer::whereMonth('created_at',now())->sum('price');
+        $customerExpriDate = customer::whereDate('regitr_date',today())->get();
         return  view('admin.dashbord',compact(['userCount','sale','trial','lead','price','help','customerExpriDate']));
      }
 
      public function  viewAgentSaleTable(){
       
-      $customers = Customer::with('user')
+       $customers = Customer::with('user')
       ->where('status', 'sale')
-      ->orderByRaw('MONTH(regitr_date) asc')  // Sorting by the month part of 'registration_date'
+      ->orderByRaw('MONTH(regitr_date) desc')  // Sorting by the month part of 'registration_date'
       ->get();
 
        return view('admin.agent_sale',compact('customers'));
@@ -58,10 +56,10 @@ public function cutomerUPdateDetailSaleStore(Request $req, string $id){
       'price' => $req->price,
       'remarks' => $req->remarks,
       'status' => $req->status,  
-      'regitr_date' => $req->date,  
+        'regitr_date' => $req->date,  
     ]);
     $customer->make_address = $req->make_address;
-    $customer->regitr_date = $req->date;
+     $customer->regitr_date = $req->date;
     $customer->save();
     return  redirect()->route('viewAgentSaleTable')->with(['success' => 'Customer Detail Update Successfuly']);
  }
@@ -73,8 +71,8 @@ public function cutomerUPdateDetailSaleStore(Request $req, string $id){
 }
 
      public function  viewAgentLeadlTable(){
-      
-      $customers = Customer::with('user')
+
+       $customers = Customer::with('user')
       ->where('status', 'lead')
       ->orderByRaw('MONTH(regitr_date) asc')  // Sorting by the month part of 'registration_date'
       ->get();
@@ -96,6 +94,7 @@ public function cutomerUPdateDetailSaleStore(Request $req, string $id){
       'price' => 'required|numeric',
       'remarks' => 'required',
       'status' => 'required', 
+      
   ]);
   
       $customer = customer::find($id);
@@ -107,10 +106,10 @@ public function cutomerUPdateDetailSaleStore(Request $req, string $id){
         'price' => $req->price,
         'remarks' => $req->remarks,
         'status' => $req->status,  
-        'regitr_date' => $req->date,  
+         'regitr_date' => $req->date, 
       ]);
       $customer->make_address = $req->make_address;
-      $customer->regitr_date = $req->date;
+       $customer->regitr_date = $req->date;
       $customer->save();
 
       return  redirect()->route('viewAgentLeadlTable')->with(['success' => 'Customer Detail Updated Successfuly']);
@@ -124,7 +123,6 @@ public function cutomerUPdateDetailSaleStore(Request $req, string $id){
 
      public function  viewAgentTrialTable(){
       
-      //  $customers = Customer::with('user')->where('status','trial')->get();
        $customers = Customer::with('user')
       ->where('status', 'trial')
       ->orderByRaw('MONTH(regitr_date) asc')  // Sorting by the month part of 'registration_date'
@@ -156,11 +154,11 @@ public function cutomerUPdateDetailTrialStore(Request $req, string $id){
       'price' => $req->price,
       'remarks' => $req->remarks,
       'status' => $req->status,  
-      'regitr_date' => $req->date,  
+        'regitr_date' => $req->date,  
     ]);
 
     $customer->make_address = $req->make_address;
-    $customer->regitr_date = $req->date;
+     $customer->regitr_date = $req->date;
     $customer->save();
 
     return  redirect()->route('viewAgentTrialTable')->with(['success' => 'Customer Detail Update Successfuly']);
@@ -312,7 +310,4 @@ public function cutomerUPdateDetailTrialStore(Request $req, string $id){
       $customer->save();
       return redirect()->route('viewAgentSaleTable')->with(['success' => 'Customer Sale Days Is Start Now']);
      }
-
-
-
 }

@@ -39,9 +39,9 @@
                             @if ($data->status === 'pending')
                                 <span class="bg-warning py-1 px-2 rounded text-white">Pending</span>
                             @elseif($data->status === 'down')
-                                <span class="bg-success py-1 px-2 rounded text-white">Down</span>
+                                <span class="bg-success py-1 px-2 rounded text-white">Resolved</span>
                             @else
-                                <span class="bg-danger py-1 px-2 rounded text-white">Cancel</span>
+                                <span class="bg-danger py-1 px-2 rounded text-white">Refund</span>
                             @endif
                         </td>
                         <td class="px-4 py-2 border border-gray-300 customer">{{ $data->help_reason }}</td>

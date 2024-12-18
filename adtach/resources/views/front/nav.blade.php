@@ -13,7 +13,8 @@
                 <li class="font-normal font-xl "><a href="{{ route('help')  }}" class="text-white">Help Request</a></li>
             </ul>
         </div>
-        <div> 
+        <div class="flex place-items-center gap-6"> 
+            <span class="font-bold text-white text-xl">{{ Auth::user()->name }} </span>
             <a href="{{ route('logout') }}" class="btn btn-light">Logout</a>
         </div>
     </nav>

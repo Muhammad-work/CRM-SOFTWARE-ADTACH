@@ -30,8 +30,8 @@ class HelpController extends Controller
          'c_email' => $email,
          'make_address' => $req->m_address,
          'help_reason' => $req->help_reason,
-         'user_id' => session('user')->id,
-         'user_name' => session('user')->name,
+         'user_id' => Auth::user()->id,
+         'user_name' => Auth::user()->name,
          'created_at' =>  now(),
          'updated_at' => now(),
        ]);
@@ -41,7 +41,7 @@ class HelpController extends Controller
 
     public function viewHelpTable(){
 
-        $helpRequestDetail = help::where('user_id',session('user')->id)->get();
+        $helpRequestDetail = help::where('user_id',Auth::id())->get();
         return view('front.help_view',compact('helpRequestDetail'));
     }
 }

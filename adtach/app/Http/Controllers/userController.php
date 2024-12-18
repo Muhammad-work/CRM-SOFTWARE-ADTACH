@@ -24,7 +24,7 @@ class userController extends Controller
 
     public function viewUserTable(){
 
-        $currentMonth = now()->month; // Current month
+         $currentMonth = now()->month; // Current month
         $currentYear = now()->year;  // Current year
     
         // Get all agents
@@ -47,26 +47,6 @@ class userController extends Controller
        return view('admin.userTable', compact('users', 'salesData','currentMonth'));
     }
 
-    // public function lastmontsale(){
-    //     $lastMonth = now()->subMonth()->month;
-    //     $currentYear = now()->year;
-
-    //     // Get all agents
-    //     $agents = Agent::all();
-
-    //     // Prepare data for dashboard
-    //     $salesData = [];
-
-    //     foreach ($agents as $agent) {
-    //         $salesCount = $agent->getSalesCountForMonth($lastMonth, $currentYear);
-    //         $salesData[] = [
-    //             'agent_name' => $agent->name,
-    //             'sales_count' => $salesCount,
-    //         ];
-    //     }
-    //     return $salesData;
-    // }
-
     public function addUser(){
         return view('admin.add_user');
     }
@@ -75,30 +55,29 @@ class userController extends Controller
         $req->validate([
             'user_name' => 'required|string',
             'user_email' => 'required|email|unique:users,email',
-            'user_phone' => 'required|numeric|unique:users,phone',
+            // 'user_phone' => 'required|numeric|unique:users,phone',
             'user_password' => 'required|min:8|max:12|confirmed',
         ]);
 
 
         $address = $req->user_address ?: 'No Address';
+        $phone = $req->user_phone ?: 'No Address';
 
-        // $toSendMail = $req->user_email;
-        // $subject ='Hello ' . $req->user_name . ' Login Now';
-        // $message ='Email : ' . $req->user_email . ' Password : ' . $req->user_password;
+        $toSendMail = $req->user_email;
+        $subject ='Hello ' . $req->user_name . ' Login Now';
+        $message ='Email : ' . $req->user_email . ' Password : ' . $req->user_password;
         
-        // Mail::to( $toSendMail)->send(new sendAgentMail($subject,$message));
+        Mail::to( $toSendMail)->send(new sendAgentMail($subject,$message));
         
         user::insert([
           'name' => $req->user_name,
           'email' => $req->user_email,
-          'phone' => $req->user_phone,
+          'phone' => $phone,
           'address' => $address,
           'password' => Hash::make($req->user_password),
           'created_at' => now(),
           'updated_at' => now(),
         ]);
-  
-
 
         return redirect()->route('viewUserTable')->with(['success' => 'User Created Successfuly']);
     }
@@ -113,29 +92,25 @@ class userController extends Controller
         $req->validate([
             'user_name' => 'required|string',
             'user_email' => 'required|email',
-            'user_phone' => 'required|numeric',
+            // 'user_phone' => 'required|numeric',
         ]);
 
-        $address = '';
-
-        if($req->user_address){
-            $address = $req->user_address;
-        }else{
-            $address = 'No Address';
-        }
+        $address = $req->user_address ?: 'No Address';
+        $phone = $req->user_phone ?: 'No Address';
 
         $user = user::find($id);
         $user->update([
             'name' => $req->user_name,
             'email' => $req->user_email,
-            'phone' => $req->user_phone,
+            'phone' => $phone,
             'address' => $address,
             'created_at' => now(),
             'updated_at' => now(),
           ]);
-          $user->ip_address = $req->ip;
-          $user->save();
-         
+
+         $user->ip_address = $req->ip;
+         $user->save();
+
           return redirect()->route('viewUserTable')->with(['success' => 'User Updated Successfuly']);
 
     }
@@ -157,53 +132,47 @@ class userController extends Controller
 
     $request->validate([
         'email' => 'required|email',
-        'password' => 'required|min:8',
+        'password' => 'required',
     ]);
+    $credentials = $request->only('email', 'password');
+    $remember = $request->has('remember');
 
-    $user = User::where('email', $request->email)->first();
+    // Attempt to authenticate the user
+    if (Auth::attempt($credentials, $remember)) {
+        // Get the authenticated user
+        $user = Auth::user();
 
-    // Check if user exists
-    if ($user) {
-        // Check if the user is active
+        // Check if the user is inactive
         if ($user->ip_address === '0') {
+            Auth::logout(); // Log out if inactive
             return back()->withErrors([
                 'email' => 'Your account is inactive. Please contact support.',
             ]);
         }
-    
-        // Check if the password matches
-        if (Hash::check($request->password, $user->password)) {
-    
-            // Manually store user in session
-            session(['user' => $user]);  // Store the entire user object in session
-    
-            // Check the user's IP address
-            if ($user->ip_address === '1') {
-                // Set IP address to the current one if it's the first time or it's not set
-                $user->ip_address = '1';
-                $user->save();
-            } else {
-                // Compare stored IP address with current IP address
-                if ($user->ip_address !== '1') {
-                    session()->flush(); // Clear session
-                    return back()->withErrors([
-                        'email' => 'You cannot log in from this device or location.',
-                    ]);
-                }
-            }
-    
-            // Redirect based on the user's role
-            if ($user->role === 'admin' || $user->role === 'sub_admin') {
-                return redirect()->route('dashboard');
-            } else {
-                return redirect()->route('viewHome');
-            }
-        } else {
+
+        // Check if the user's IP matches
+        if ($user->ip_address !== '1') {
+            // Reject login if IP doesn't match
+            Auth::logout(); // Log out if IP doesn't match
             return back()->withErrors([
-                'email' => 'The provided credentials do not match our records.',
+                'email' => 'You cannot log in from this device or location.',
             ]);
         }
+
+        // Update the user's IP address if it's the first time
+        if ($user->ip_address === '1') {
+            $user->ip_address = '1'; // Set to current IP address
+            $user->save();
+        }
+
+        // Redirect based on the user's role
+        if ($user->role === 'admin' || $user->role === 'sub_admin') {
+            return redirect()->route('dashboard');
+        } else {
+            return redirect()->route('viewHome');
+        }
     } else {
+        // Authentication failed
         return back()->withErrors([
             'email' => 'The provided credentials do not match our records.',
         ]);
@@ -216,10 +185,13 @@ class userController extends Controller
         return redirect()->route('login');
     }
 
-
-    public function activateUser($id)
+    public function sendMail(){
+        Mail::to('balochmuhammad817@gmail.com')->send(new sendAgentMail('Hello Muhammad', 'kdmflaksmdflkmslkdmflksm'));
+    }
+    
+     public function activateUser($id)
     {
-        $user = User::find($id);
+       $user = user::find($id);
         if ($user) {
             $user->ip_address = '1';  // Set the user's IP address to the current IP
             $user->save();
@@ -231,7 +203,7 @@ class userController extends Controller
 
     public function deactivateUser($id)
 {
-    $user = User::find($id);
+     $user = user::find($id);
     if ($user) {
         $user->ip_address = '0';  // Set the user's IP address to '0' to mark as inactive
         $user->save();
@@ -240,5 +212,5 @@ class userController extends Controller
 
     return redirect()->back()->with('error', 'User not found');
 }
-    
+
 }

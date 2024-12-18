@@ -24,18 +24,14 @@ class adminController extends Controller
         $req->validate([
             'user_name' => 'required|string',
             'user_email' => 'required|email|unique:users,email',
-            'user_phone' => 'required|numeric|unique:users,phone',
+            // 'user_phone' => 'required|numeric|unique:users,phone',
             'user_password' => 'required|min:8|max:12|confirmed',
             'role' => 'required'
         ]);
 
-        $address = '';
-
-        if($req->user_address){
-            $address = $req->user_address;
-        }else{
-            $address = 'No Address';
-        }
+       
+        $address = $req->user_address ?: 'No Address';
+        $phone = $req->user_phone ?: 'No Address';
 
         $toSendMail = $req->user_email;
         $subject ='Hello ' . $req->user_name . ' Login Now';
@@ -46,16 +42,14 @@ class adminController extends Controller
         user::insert([
           'name' => $req->user_name,
           'email' => $req->user_email,
-          'phone' => $req->user_phone,
+          'phone' => $phone,
           'address' => $address,
           'password' => Hash::make($req->user_password),
           'role' => $req->role,
-          'ip_address' => '1',
+           'ip_address' => '1',
           'created_at' => now(),
           'updated_at' => now(),
         ]);
-
-        
         
         return redirect()->route('viewAdminTable')->with(['success' => 'Admin Created Successfuly']);
      }
@@ -71,22 +65,17 @@ class adminController extends Controller
         $req->validate([
             'user_name' => 'required|string',
             'user_email' => 'required|email',
-            'user_phone' => 'required|numeric',
+            // 'user_phone' => 'required|numeric',
         ]);
 
-        $address = '';
-
-        if($req->user_address){
-            $address = $req->user_address;
-        }else{
-            $address = 'No Address';
-        }
+        $address = $req->user_address ?: 'No Address';
+        $phone = $req->user_phone ?: 'No Address';
 
         $user = user::find($id);
         $user->update([
             'name' => $req->user_name,
             'email' => $req->user_email,
-            'phone' => $req->user_phone,
+            'phone' => $phone,
             'address' => $address,
             'role' =>  $req->role,
             'ip_address' =>  $req->ip,
@@ -109,7 +98,7 @@ class adminController extends Controller
 
 
     public function viewAdminUpdatePasswordForm(){
-        $admin = session('user')->id;
+        $admin = Auth::user()->id;
         return view('admin.changePassword',compact('admin'));
     }
 

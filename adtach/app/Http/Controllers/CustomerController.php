@@ -8,6 +8,7 @@ use App\Models\customer;
 use App\Models\user;
 use Illuminate\Support\Facades\Auth;
 use Carbon\Carbon;
+
 class CustomerController extends Controller
 {
     public function storeCustomerDetail(Request $req){
@@ -20,6 +21,7 @@ class CustomerController extends Controller
             'remarks' => 'required',
             'status' => 'required', 
             'date' => 'required'
+            
         ]);
         
         $email = $req->customer_email ?: 'No Email'; 
@@ -31,15 +33,15 @@ class CustomerController extends Controller
             'price' => $req->price,
             'remarks' => $req->remarks,
             'status' => $req->status,  
-            'a_name' => session('user')->id, 
+            'a_name' => Auth::id(), 
             'regitr_date' => $req->date
         ]);
         $customer->created_at = now();
         $customer->updated_at = now();
-        $customer->regitr_date = $req->date;
+         $customer->regitr_date = $req->date;
         $customer->save();
 
-        $customer->user_name = session('user')->name;
+        $customer->user_name = Auth::user()->name;
         $customer->save();
         
         return back()->with(['success' => 'Customer Created Successfully']);
@@ -56,32 +58,37 @@ class CustomerController extends Controller
     }
 
     public function customerSalesTable(){
-
-                $customers = Customer::where('a_name',session('user')->id)
+                          $customers = Customer::where('a_name', Auth::id())
                                    ->where('status', 'sale')
                                    ->orderByRaw('MONTH(regitr_date) asc')
                                    ->get();
-                                   
 
-        $user = User::where('id', session('user')->id)->first();
-        // $customers = Customer::where('a_name', session('user')->id)->where('status','sale')->get();
-        // $user = user::where('id', session('user')->id)->first();
+        $user = user::where('id', Auth::id())->first();
         return view('front.customer_sale',compact(['user','customers']));
     }
 
     public function customerLeadTable(){
 
-        $customers = Customer::where('a_name', session('user')->id)->where('status','lead')->get();
-        $user = user::where('id', session('user')->id)->first();
+             $customers = Customer::where('a_name', Auth::id())
+                                   ->where('status', 'lead')
+                                   ->orderByRaw('MONTH(regitr_date) asc')
+                                   ->get();
+        // $customers = Customer::where('a_name', Auth::id())->where('status','lead')->get();
+        $user = user::where('id', Auth::id())->first();
         return view('front.customer_lead',compact(['user','customers']));
     }
 
     
 
     public function customerTrialTable(){
+        
+           $customers = Customer::where('a_name', Auth::id())
+                                   ->where('status', 'trial')
+                                   ->orderByRaw('MONTH(regitr_date) asc')
+                                   ->get();
 
-        $customers = Customer::where('a_name',session('user')->id)->where('status','trial')->get();
-        $user = user::where('id',session('user')->id)->first();
+        // $customers = Customer::where('a_name',Auth::id())->where('status','trial')->get();
+        $user = user::where('id',Auth::id())->first();
         return view('front.customer_trial',compact(['user','customers']));
     }
 }

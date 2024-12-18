@@ -48,7 +48,7 @@
                             </thead>
                             <tbody>
                                 @foreach ($helpRequest as $index => $data)
-                                    @if (session('user')->role === 'sub_admin' && $data->status === 'pending')
+                                    @if (Auth::user()->role === 'sub_admin' && $data->status === 'pending')
                                         <tr>
                                             <td> {{ $index + 1 }} </td>
                                             <td> {{ $data->c_name }} </td>
@@ -72,7 +72,7 @@
                                             </td>
                                         </tr>
                                     @endif
-                                    @if (session('user')->role === 'admin')
+                                    @if (Auth::user()->role === 'admin')
                                         <tr>
                                             <td> {{ $index + 1 }} </td>
                                             <td> {{ $data->c_name }} </td>
