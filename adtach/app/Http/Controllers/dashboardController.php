@@ -14,7 +14,8 @@ class dashboardController extends Controller
      public function viewDashboard(){
         $userCount = user::where('role','user')->count();
         $sale = customer::whereMonth('created_at',now())->where('status','sale')->count();
-        $trial = customer::whereMonth('created_at',now())->where('status','trial')->count();
+        $trial = customer::whereMonth('created_at', now()->month)
+        ->whereYear('created_at', now()->year)->where('status','trial')->count();
         $lead = customer::whereMonth('created_at',now())->where('status','lead')->count();
         $help = help::where('status','pending')->count();
         $price = Customer::whereMonth('created_at',now())->sum('price');
