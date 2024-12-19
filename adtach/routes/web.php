@@ -38,6 +38,11 @@ Route::controller(dashboardController::class)->group(function () {
     Route::post('/dashboard/{id}/update-customer-sale-status', 'updateSaleCustomerStatus')->name('updateSaleCustomerStatus')->middleware(validUser::class)->middleware(validRole::class);
     Route::get('/dashboard/{id}/add-customer-sale-day', 'viewSaleDaysForm')->name('viewSaleDaysForm')->middleware(validUser::class)->middleware(validRole::class);
     Route::post('/dashboard/{id}/addSaleCustomerStatus', 'addSaleCustomerStatus')->name('addSaleCustomerStatus')->middleware(validUser::class)->middleware(validRole::class);
+    Route::get('/dashboard/customer-numbers', 'viewCustomerNumber')->name('viewCustomerNumber')->middleware(validUser::class)->middleware(validRole::class);
+    Route::get('/dashboard/add-customer-numbers', 'viewCustomerNumberForm')->name('viewCustomerNumberForm')->middleware(validUser::class)->middleware(validRole::class);
+    Route::get('/dashboard/{id}/edit-customer-numbers', 'editCustomerNumber')->name('editCustomerNumber')->middleware(validUser::class)->middleware(validRole::class);
+    Route::post('/dashboard/storeCustomerNumbers', 'storeCustomerNumbers')->name('storeCustomerNumbers')->middleware(validUser::class)->middleware(validRole::class);
+    Route::post('/dashboard/{id}/storeEditCustomerNumberData', 'storeEditCustomerNumberData')->name('storeEditCustomerNumberData')->middleware(validUser::class)->middleware(validRole::class);
 });
 
 
@@ -87,6 +92,10 @@ Route::controller(CustomerController::class)->group(function () {
     Route::get('/customerSalesTable', 'customerSalesTable')->name('customerSalesTable')->middleware(validUser::class); 
     Route::get('/customerLeadTable', 'customerLeadTable')->name('customerLeadTable')->middleware(validUser::class); 
     Route::get('/customerTrialTable', 'customerTrialTable')->name('customerTrialTable')->middleware(validUser::class); 
+    Route::get('/customer-numbers', 'viewCunstomerNumberTable')->name('viewCunstomerNumberTable')->middleware(validUser::class); 
+    Route::get('/customer-response', 'viewCustomerResponseForm')->name('viewCustomerResponseForm')->middleware(validUser::class); 
+    Route::post('/storeCustomerResponse', 'storeCustomerResponse')->name('storeCustomerResponse')->middleware(validUser::class); 
+    Route::get('/view-customer-response', 'viewCustomerResponsePage')->name('viewCustomerResponsePage')->middleware(validUser::class); 
 });
 
 Route::controller(HelpController::class)->group(function () {

@@ -52,6 +52,14 @@ class User extends Authenticatable
         return $this->hasMany(customer::class);
      }
 
+     public function customerNumber(){
+        return $this->hasMany(customerNumber::class);
+     }
+
+     public function customerResponse(){
+        return $this->hasMany(customerNumber::class);
+     }
+
      public function getSalesCountForMonth($month, $year)
     {
         return customer::getSalesByAgentAndMonth($this->id, $month, $year);

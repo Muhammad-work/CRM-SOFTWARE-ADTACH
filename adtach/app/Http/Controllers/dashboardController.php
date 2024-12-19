@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use App\Models\user;
 use App\Models\help;
 use App\Models\customer;
+use App\Models\customerNumber;
 use Carbon\Carbon;
 
 class dashboardController extends Controller
@@ -313,4 +314,72 @@ public function cutomerUPdateDetailTrialStore(Request $req, string $id){
       $customer->save();
       return redirect()->route('viewAgentSaleTable')->with(['success' => 'Customer Sale Days Is Start Now']);
      }
+
+
+     public function viewCustomerNumber(){
+       
+        $allCustomerNumber = customerNumber::with('user')->get();
+    
+        return view('admin.customer_number',compact('allCustomerNumber'));
+     }
+
+
+     public function viewCustomerNumberForm(){
+      
+         $agentName = User::select('name','id')->where('role','user')->get();
+         return view('admin.add_customer_number',compact('agentName'));
+     }
+
+
+     public function storeCustomerNumbers(Request $req){
+      
+      $req->validate([
+          'agent' => 'required',
+          'date' => 'required|date', 
+          'customerNumber' => 'required', 
+      ]);
+  
+      $customerName = 'No Customer Name';
+      
+      
+      customerNumber::create([
+          'customer_name' => $customerName,
+          'customer_number' => $req->customerNumber,  
+          'agent' => $req->agent,
+          'date' => $req->date,  
+          'created_at' => now(),
+          'updated_at' => now(),
+      ]);
+  
+      return redirect()->route('viewCustomerNumber')->with(['success' => 'Customer Number Added Successfully']);
+
+     }
+
+     public function editCustomerNumber(string $id){
+        
+        $customerNumber = customerNumber::find($id);
+        $agentName = User::select('name','id')->where('role','user')->get();
+          return view('admin.edit_customer_number',compact(['agentName','customerNumber']));
+     }
+
+     public function storeEditCustomerNumberData(Request $req, string $id){
+             $req->validate([
+                'agent' => 'required',
+                'date' => 'required|date', 
+                'customerNumber' => 'required', 
+           ]);
+         $customerNumber = customerNumber::find($id);
+         $customerName = 'No Customer Name';
+         $customerNumber->update([
+          'customer_name' => $customerName,
+          'customer_number' => $req->customerNumber,  
+          'agent' => $req->agent,
+          'date' => $req->date,  
+          'created_at' => now(),
+          'updated_at' => now(),
+      ]);
+
+      return redirect()->route('viewCustomerNumber')->with(['success' => 'updated Successfully']);
+     }
+
 }

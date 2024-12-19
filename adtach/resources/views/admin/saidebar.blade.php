@@ -86,7 +86,7 @@
 
                     @if (Auth::user()->role === 'admin')
                         <li class="nav-item">
-                            <a href="" class="nav-link">
+                            <a href="{{ route('viewCustomerNumber') }}" class="nav-link">
                                 <i class="nav-icon fa-solid fa-phone"></i>
                                 <p>
                                    Customer Number

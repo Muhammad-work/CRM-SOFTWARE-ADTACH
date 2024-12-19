@@ -6,6 +6,8 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\customer;
 use App\Models\user;
+use App\Models\customerNumber;
+use App\Models\customerResponse;
 use Illuminate\Support\Facades\Auth;
 use Carbon\Carbon;
 
@@ -90,5 +92,40 @@ class CustomerController extends Controller
         // $customers = Customer::where('a_name',Auth::id())->where('status','trial')->get();
         $user = user::where('id',Auth::id())->first();
         return view('front.customer_trial',compact(['user','customers']));
+    }
+
+    public function viewCunstomerNumberTable(){
+        $customerNumbers = CustomerNumber::with('user')->whereMonth('date',now()->month)->where('agent', Auth::id())->get();
+         return view('front.customer_number',compact('customerNumbers')); 
+    }
+
+
+    public function viewCustomerResponseForm(){
+        return view('front.add_customer_response');
+    }
+
+    public function storeCustomerResponse(Request $req){
+         $req->validate([
+              'customer_name' => 'required',
+              'customer_number' => 'required',
+              'date' => 'required',
+              'remarks' => 'required',
+         ]);
+
+         customerResponse::create([
+            'customer_name' => $req->customer_name,
+            'customer_number' => $req->customer_number,
+            'remarks' => $req->remarks,
+            'date' => $req->date,
+            'agent' => Auth::id(),
+         ]);
+
+         return redirect()->route('viewCunstomerNumberTable')->with(['success' => 'Add Customer Response Successfuly']);
+    }
+
+
+    public function viewCustomerResponsePage(){
+        $customerResponse = customerResponse::with('user')->where('agent',Auth::id())->get();
+        return view('front.customer_response',compact('customerResponse'));
     }
 }
