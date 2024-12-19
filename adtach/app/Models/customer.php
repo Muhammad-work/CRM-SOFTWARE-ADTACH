@@ -27,8 +27,8 @@ class customer extends Model
         {
             return self::where('a_name', $agent_id)
                         ->where('status', 'sale') // Filter only successful sales
-                        ->whereMonth('created_at', $month)
-                        ->whereYear('created_at', $year)
+                        ->whereMonth('regitr_date', $month)
+                        ->whereYear('regitr_date', $year)
                         ->count();
         }
     
