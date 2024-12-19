@@ -84,7 +84,7 @@
                         </a>
                     </li>
 
-                    {{-- @if (Auth::user()->role === 'admin')
+                    @if (Auth::user()->role === 'admin')
                         <li class="nav-item">
                             <a href="" class="nav-link">
                                 <i class="nav-icon fa-solid fa-phone"></i>
@@ -93,7 +93,7 @@
                                 </p>
                             </a>
                         </li>
-                    @endif --}}
+                    @endif
 
                     @if (Auth::user()->role === 'admin')
                         <li class="nav-item">
