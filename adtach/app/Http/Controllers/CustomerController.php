@@ -60,7 +60,7 @@ class CustomerController extends Controller
     public function customerSalesTable(){
                           $customers = Customer::where('a_name', Auth::id())
                                    ->where('status', 'sale')
-                                   ->orderByRaw('MONTH(regitr_date) asc')
+                                   ->orderByRaw('MONTH(regitr_date) desc')
                                    ->get();
 
         $user = user::where('id', Auth::id())->first();
@@ -71,7 +71,7 @@ class CustomerController extends Controller
 
              $customers = Customer::where('a_name', Auth::id())
                                    ->where('status', 'lead')
-                                   ->orderByRaw('MONTH(regitr_date) asc')
+                                   ->orderByRaw('MONTH(regitr_date) desc')
                                    ->get();
         // $customers = Customer::where('a_name', Auth::id())->where('status','lead')->get();
         $user = user::where('id', Auth::id())->first();
@@ -84,7 +84,7 @@ class CustomerController extends Controller
         
            $customers = Customer::where('a_name', Auth::id())
                                    ->where('status', 'trial')
-                                   ->orderByRaw('MONTH(regitr_date) asc')
+                                   ->orderByRaw('MONTH(regitr_date) desc')
                                    ->get();
 
         // $customers = Customer::where('a_name',Auth::id())->where('status','trial')->get();
