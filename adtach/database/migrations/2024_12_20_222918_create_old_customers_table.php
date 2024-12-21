@@ -11,13 +11,16 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('customer_responses', function (Blueprint $table) {
+        Schema::create('old_customers', function (Blueprint $table) {
             $table->id();
             $table->string('customer_name');
             $table->string('customer_number');
-            $table->longText('remarks');
-            $table->string('date');
-            $table->foreignId('agent')->constrained('users')->onDelete('cascade');
+            $table->string('customer_email');
+            $table->decimal('price', 8, 2); 
+            $table->string('remarks');
+            $table->string('status');
+            $table->string('regitr_date')->nullable();
+            $table->string('agent')->nullable();
             $table->timestamps();
         });
     }
@@ -27,6 +30,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('customer_responses');
+        Schema::dropIfExists('old_customers');
     }
 };

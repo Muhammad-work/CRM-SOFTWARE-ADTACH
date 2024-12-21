@@ -53,7 +53,7 @@
                                         <td> {{ $index + 1 }} </td>
                                         <td>
                                             @if ($customer->regitr_date)
-                                                {{ \Carbon\Carbon::parse( $customer->regitr_date)->format('d M, Y') }}
+                                                {{ \Carbon\Carbon::parse($customer->regitr_date)->format('d M, Y') }}
                                             @else
                                                 No Registration Date
                                             @endif
@@ -66,8 +66,8 @@
                                         <td><span
                                                 class="bg-success py-1 px-2 rounded block mt-5">{{ $customer->status }}</span>
                                         </td>
-                                      
-                                        <td> {{ $customer->user_name }}</td>
+
+                                        <td> {{ $customer['user']->name }}</td>
                                         <td>
                                             @if ($customer->make_address)
                                                 {{ $customer->make_address }}
@@ -79,7 +79,7 @@
                                             <a href="{{ route('cutomerUPdateSaleDetailFormVIew', $customer->id) }}"
                                                 class="btn btn-primary"><i class="fa-solid fa-pen-to-square"></i></a>
                                             <a href="{{ route('deleteSaleCustomerDetails', $customer->id) }}"
-                                                class="btn btn-danger"><i class="fa-solid fa-trash"></i></a>             
+                                                class="btn btn-danger"><i class="fa-solid fa-trash"></i></a>
                                         </td>
                                     </tr>
                                 @endforeach

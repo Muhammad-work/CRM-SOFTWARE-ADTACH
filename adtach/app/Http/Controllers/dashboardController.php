@@ -8,32 +8,52 @@ use App\Models\user;
 use App\Models\help;
 use App\Models\customer;
 use App\Models\customerNumber;
+use App\Models\oldCustomer;
 use Carbon\Carbon;
 
 class dashboardController extends Controller
 {
      public function viewDashboard(){
         $userCount = user::where('role','user')->count();
-        $sale = customer::whereMonth('regitr_date',now()->month)
+        $oldsale = customer::whereMonth('regitr_date',now()->month)
                          ->whereYear('regitr_date', now()->year)->where('status','sale')->count();
+        $Newsale = oldCustomer::whereMonth('regitr_date',now()->month)
+                         ->whereYear('regitr_date', now()->year)->where('status','sale')->count();
+        $sale = $oldsale + $Newsale;  
         $trial = customer::whereMonth('regitr_date', now()->month)
                            ->whereYear('regitr_date', now()->year)->where('status','trial')->count();
         $lead = customer::whereMonth('regitr_date',now()->month)
                           ->whereYear('regitr_date', now()->year)->where('status','lead')->count();
         $help = help::where('status','pending')->count();
-        $price = Customer::whereMonth('regitr_date',now()->month)->whereYear('regitr_date', now()->year)->sum('price');
-        $customerExpriDate = customer::whereDate('regitr_date',today())->get();
-        return  view('admin.dashbord',compact(['userCount','sale','trial','lead','price','help','customerExpriDate']));
+
+        $oldCutomerprice = Customer::whereMonth('regitr_date',now()->month)->whereYear('regitr_date', now()->year)->sum('price');
+        $NewCustomerprice = oldCustomer::whereMonth('regitr_date',now()->month)->whereYear('regitr_date', now()->year)->sum('price');
+        $price = $oldCutomerprice + $NewCustomerprice;
+
+        $oldSalecustomerExpriDate = Customer::with('user')->whereDate('regitr_date', today())->get(); // Use 'registration_date' and 'today()'
+
+        $NewSalecurentSale = OldCustomer::with('user')->whereDate('regitr_date', today())->get(); // Same column and model naming conventions
+        
+        $curentSale = $oldSalecustomerExpriDate->merge($NewSalecurentSale);
+        return  view('admin.dashbord',compact(['userCount','sale','trial','lead','price','help','curentSale']));
      }
 
      public function  viewAgentSaleTable(){
       
-       $customers = Customer::with('user')
-      ->where('status', 'sale')
-      ->orderByRaw('MONTH(regitr_date) desc')  // Sorting by the month part of 'registration_date'
-      ->get();
+         $oldcustomers = Customer::with('user')
+                               ->where('status', 'sale')
+                               ->orderBy('regitr_date','desc') // Correct the column name here
+                               ->get();
+   
+         $Newcustomers = oldCustomer::with('user')
+                                 ->where('status', 'sale')
+                                 ->orderBy('regitr_date','desc') // Correct the column name here
+                                 ->get();
+  
+          $customers = $oldcustomers->merge($Newcustomers); 
 
-       return view('admin.agent_sale',compact('customers'));
+  
+      return view('admin.agent_sale', compact('customers'));
      }
 
      public function cutomerUPdateSaleDetailFormVIew(string $id){
@@ -319,7 +339,7 @@ public function cutomerUPdateDetailTrialStore(Request $req, string $id){
      public function viewCustomerNumber(){
        
         $allCustomerNumber = customerNumber::with('user')->get();
-    
+         
         return view('admin.customer_number',compact('allCustomerNumber'));
      }
 
@@ -332,26 +352,28 @@ public function cutomerUPdateDetailTrialStore(Request $req, string $id){
 
 
      public function storeCustomerNumbers(Request $req){
-      
       $req->validate([
-          'agent' => 'required',
-          'date' => 'required|date', 
-          'customerNumber' => 'required', 
-      ]);
-  
-      $customerName = 'No Customer Name';
-      
-      
-      customerNumber::create([
-          'customer_name' => $customerName,
-          'customer_number' => $req->customerNumber,  
-          'agent' => $req->agent,
-          'date' => $req->date,  
-          'created_at' => now(),
-          'updated_at' => now(),
-      ]);
-  
-      return redirect()->route('viewCustomerNumber')->with(['success' => 'Customer Number Added Successfully']);
+        'agent' => 'required',
+        'date' => 'required|date', 
+        'customerNumber' => 'required', 
+    ]);
+    
+    $customerName = 'No Customer Name';
+    
+    $customerNumberArray = explode("\r\n", $req->customerNumber);
+    
+    foreach ($customerNumberArray as $customerNumber) {
+        customerNumber::create([
+            'customer_name' => $customerName,
+            'customer_number' => $customerNumber, 
+            'agent' => $req->agent,
+            'date' => $req->date,  
+            'created_at' => now(),
+            'updated_at' => now(),
+        ]);
+    }
+    
+      return redirect()->route('viewCustomerNumber')->with(['success' => 'Customer Numbers Added Successfully']);
 
      }
 
@@ -380,6 +402,13 @@ public function cutomerUPdateDetailTrialStore(Request $req, string $id){
       ]);
 
       return redirect()->route('viewCustomerNumber')->with(['success' => 'updated Successfully']);
+     }
+
+     public function deleteCustomerNumber(string $id){
+        $customerNumber = customerNumber::find($id);
+        $customerNumber->delete();
+       return redirect()->route('viewCustomerNumber')->with(['success' => 'deleted Successfully']);
+
      }
 
 }

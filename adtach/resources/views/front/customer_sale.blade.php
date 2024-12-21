@@ -14,6 +14,11 @@
 
     <div class="w-full mx-auto mt-5 mb-5 overflow-x-auto">
         <table class="min-w-[600px] table-auto border-collapse border border-gray-200">
+            @if (session('success'))
+                <div class="alert alert-success" role="alert">
+                    {{ session('success') }}
+                </div>
+            @endif
             <thead>
                 <tr class="bg-gray-100 text-gray-700">
                     <th class="px-4 py-2 border border-gray-300">S.NO</th>
@@ -25,7 +30,7 @@
                     <th class="px-4 py-2 border border-gray-300">STATUS</th>
                     <th class="px-4 py-2 border border-gray-300 hidden sm:table-cell">CUSTOMER REGISTRATION DATE</th>
                     <th class="px-4 py-2 border border-gray-300 hidden md:table-cell">AGENT NAME</th>
-                    <!--<th class="px-4 py-2 border border-gray-300">DATE</th>-->
+                    <th class="px-4 py-2 border border-gray-300 hidden md:table-cell">ACTION</th>
                 </tr>
             </thead>
             <tbody id="tableBody">
@@ -36,9 +41,11 @@
                         <td class="px-4 py-2 border border-gray-300 customer">{{ $customer->customer_number }}</td>
                         <td class="px-4 py-2 border border-gray-300 customer">{{ $customer->customer_email }}</td>
                         <td class="px-4 py-2 border border-gray-300 customer">${{ $customer->price }}</td>
-                        <td class="px-4 py-2 border border-gray-300 customer hidden sm:table-cell">{{ $customer->remarks }}</td>
+                        <td class="px-4 py-2 border border-gray-300 customer hidden sm:table-cell">{{ $customer->remarks }}
+                        </td>
                         <td class="px-4 py-2 border border-gray-300 customer">
-                            <span class="bg-success py-1 px-2 rounded font-bold text-xl text-white"> {{ $customer->status }} </span>
+                            <span class="bg-success py-1 px-2 rounded font-bold text-xl text-white"> {{ $customer->status }}
+                            </span>
                         </td>
                         <td class="px-4 py-2 border border-gray-300 customer hidden sm:table-cell">
                             @if ($customer->regitr_date)
@@ -47,12 +54,13 @@
                                 No Registration Date
                             @endif
                         </td>
-                        <td class="px-4 py-2 border border-gray-300 customer hidden md:table-cell">{{ $user->name }}</td>
-                        <!--<td class="px-4 py-2 border border-gray-300 customer">-->
-                        <!--    {{ \Carbon\Carbon::parse($customer->created_at)->format('d M, Y') }}-->
-                        <!--</td>-->
+                        <td class="px-4 py-2 border border-gray-300 customer hidden md:table-cell">{{ $customer['user']->name }}</td>
+                        <td class="px-4 py-2 border border-gray-300 customer hidden md:table-cell ">
+                            <a href="{{ route('viewOldCustomerNewPKG',$customer->id) }}" class="btn btn-primary mt-2"><i class="fa-solid fa-plus"></i></a>
+                        </td>
                     </tr>
                 @endforeach
+
                 @if ($customers->isEmpty())
                     <tr>
                         <td colspan="10" class="text-center">No Sale Record Found</td>

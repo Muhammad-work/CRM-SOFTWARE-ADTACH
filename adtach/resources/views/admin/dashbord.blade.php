@@ -119,7 +119,7 @@
         </section>
         <!-- /.content -->
 
-             @if ($customerExpriDate->isEmpty())
+             @if ($curentSale->isEmpty())
         @else
           @if (Auth::user()->role === 'admin')
           <div class="content-header">
@@ -153,7 +153,7 @@
                                 </tr>
                             </thead>
                             <tbody>
-                                @foreach ($customerExpriDate as $index => $customer)
+                                @foreach ($curentSale as $index => $customer)
                                 @if ($customer->status === 'sale')
                                     <tr>
                                         <td>{{ $index + 1 }}</td>
@@ -185,7 +185,7 @@
                                             {{ $customer->active_status }}
                                             </span>
                                         </td>
-                                        <td> {{ $customer->user_name }} </td>
+                                        <td> {{ $customer['user']->name }} </td>
                                       <td>   <a href="{{ route('cutomerUPdateSaleDetailFormVIew', $customer->id) }}"
                                                 class="btn btn-primary"><i class="fa-solid fa-pen-to-square"></i></a></td>
                                        

@@ -4,14 +4,16 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 
-class customerResponse extends Model
+class oldCustomer extends Model
 {
     protected $fillable = [
         'customer_name',
         'customer_number',
+        'customer_email',
+        'price',
         'remarks',
-        'date',
-        'agent',
+        'status',
+        'a_name',
     ];
 
     public function user(){

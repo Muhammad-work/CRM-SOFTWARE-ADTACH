@@ -17,6 +17,8 @@ return new class extends Migration
             $table->longText('customer_number')->nullable();
             $table->foreignId('agent')->constrained('users')->onDelete('cascade');
             $table->string('date'); 
+            $table->string('status')->default('pending');
+            $table->string('remarks')->nullable();
             $table->timestamps();
         });
     }

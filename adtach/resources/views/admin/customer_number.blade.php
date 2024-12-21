@@ -36,7 +36,10 @@
                             <thead>
                                 <tr>
                                     <th>ID</th>
+                                    <th>CUSTOMER NAME</th>
                                     <th>CUSTOMER NUMBER</th>
+                                    <th>STATUS</th>
+                                    <th>REMARKS</th>
                                     <th>AGENT NAME</th>
                                     <th>CALL MONTH</th>
                                     <th>ACTION</th>
@@ -48,16 +51,38 @@
                                     <tr>
                                         <td> {{ $index + 1 }} </td>
 
-                                        <!-- Use \n as line breaks -->
-                                        <td>{!! nl2br(e($data->customer_number)) !!}</td>
-
+                                        <td>{{ $data->customer_name }}</td>
+                                        <td>{{ $data->customer_number }}</td>
+                                        <td>
+                                            @if ($data->status === 'pending')
+                                                <span class="px-2 py-1 bg-warning rounded text-white">Pendding</span>
+                                            @elseif($data->status === 'not int')
+                                                <span class="px-2 py-1 bg-danger rounded text-white">Not Intersted</span>
+                                            @elseif($data->status === 'hung up')
+                                                <span class="px-2 py-1 bg-primary rounded text-white">Hung Up</span>
+                                            @elseif($data->status === 'not ava')
+                                                <span class="px-2 py-1 bg-secondary rounded text-white">Not Available</span>
+                                            @elseif($data->status === 'not in service')
+                                                <span class="px-2 py-1 bg-info rounded text-white">Not In Service</span>
+                                            @else
+                                                <span class="px-2 py-1 bg-success rounded text-white">ON Trial</span>
+                                            @endif
+                                        </td>
+                                        <td>
+                                            @if ($data->remarks === null)
+                                                No Remarks
+                                            @else
+                                                {{ $data->remarks }}
+                                            @endif
+                                        </td>
                                         <td>{{ $data['user']->name }}</td>
                                         <td>{{ \Carbon\Carbon::parse($data->date)->format('d M, Y') }}</td>
                                         <td>
-                                            <a href="{{ route('editCustomerNumber',$data->id) }}" class="btn btn-primary">
+                                            <a href="{{ route('editCustomerNumber', $data->id) }}" class="btn btn-primary">
                                                 <i class="fa-solid fa-pen-to-square"></i>
                                             </a>
-                                            <a href="" class="btn btn-danger">
+                                            <a href="{{ route('deleteCustomerNumber', $data->id) }}"
+                                                class="btn btn-danger">
                                                 <i class="fa-solid fa-trash"></i>
                                             </a>
                                         </td>
