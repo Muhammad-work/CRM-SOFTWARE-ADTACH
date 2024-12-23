@@ -102,7 +102,8 @@ class CustomerController extends Controller
 
     public function viewCunstomerNumberTable(){
         $customerNumbers = CustomerNumber::with('user')
-                          ->whereDate('date', '<>', today())  // Exclude today's date
+                          ->whereDate('date', '<>', today())
+                          ->orWhere('status','pending')  
                           ->where('agent', Auth::id())
                           ->orderByRaw("CASE 
                             WHEN status = 'pending' THEN 0 
@@ -121,13 +122,13 @@ class CustomerController extends Controller
     
     public function storeCustomerNumbersDetails(Request $req,string $id){
         $req->validate([
-            'customer_name' => 'required',
             'status' => 'required',
             'remarks' => 'required',
         ]);
+        // return $req;
         $customer = CustomerNumber::find($id);
-
-        $customer->customer_name = $req->customer_name;
+        $customerName = $req->customer_name ?: 'No Name';
+        $customer->customer_name =$customerName;
         $customer->status = $req->status;
         $customer->remarks = $req->remarks;
         $customer->save();

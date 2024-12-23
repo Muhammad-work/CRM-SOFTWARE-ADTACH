@@ -58,6 +58,8 @@
                                                 <span class="px-2 py-1 bg-warning rounded text-white">Pendding</span>
                                             @elseif($data->status === 'not int')
                                                 <span class="px-2 py-1 bg-danger rounded text-white">Not Intersted</span>
+                                            @elseif($data->status === 'vm')
+                                                <span class="px-2 py-1 bg-dark rounded text-white">VM</span>
                                             @elseif($data->status === 'hung up')
                                                 <span class="px-2 py-1 bg-primary rounded text-white">Hung Up</span>
                                             @elseif($data->status === 'not ava')

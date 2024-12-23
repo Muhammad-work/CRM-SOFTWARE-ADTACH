@@ -34,7 +34,7 @@
                         @csrf
                         <tr class="odd:bg-gray-50 even:bg-white">
                             <td class="px-4 py-2 border border-gray-300">
-                                @if ($customer->customer_name === 'No Customer Name')
+                                @if ($customer->status === 'pending')
                                     <input type="text" class="form-control" placeholder="Enter Customer Name"
                                         aria-label="Username" name="customer_name" aria-describedby="basic-addon1">
                                     @error('customer_name')
@@ -99,11 +99,11 @@
                             <td class="px-4 py-2 border border-gray-300">
                                 {{ \Carbon\Carbon::parse($customer->date)->format('d M, Y') }}</td>
                             <td class="px-4 py-2 border border-gray-300">
-                                @if ($customer->customer_name === 'No Customer Name')
+                                @if ($customer->customer_name === 'pending')
                                     <button class="px-3 py-2 bg-[blue] text-white rounded"><i
                                             class="fa-solid fa-plus"></i></button>
                                 @endif
-                                @if ($customer->customer_name !== 'No Customer Name')
+                                @if ($customer->customer_name !== 'pending')
                                    <a href="{{ route('viewCustomerNumberEditForm',$customer->id) }}" class="px-3 py-2 bg-[blue] text-white rounded"><i
                                       class="fa-solid fa-pen-to-square"></i></a>   
                                 @endif
