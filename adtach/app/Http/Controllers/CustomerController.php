@@ -81,7 +81,6 @@ class CustomerController extends Controller
                                    ->where('status', 'lead')
                                    ->orderByRaw('MONTH(regitr_date) desc')
                                    ->get();
-        // $customers = Customer::where('a_name', Auth::id())->where('status','lead')->get();
         $user = user::where('id', Auth::id())->first();
         return view('front.customer_lead',compact(['user','customers']));
     }
@@ -95,7 +94,6 @@ class CustomerController extends Controller
                                    ->orderByRaw('MONTH(regitr_date) desc')
                                    ->get();
 
-        // $customers = Customer::where('a_name',Auth::id())->where('status','trial')->get();
         $user = user::where('id',Auth::id())->first();
         return view('front.customer_trial',compact(['user','customers']));
     }
@@ -103,8 +101,8 @@ class CustomerController extends Controller
     public function viewCunstomerNumberTable(){
         $customerNumbers = CustomerNumber::with('user')
                           ->whereDate('date', '<>', today())
+                          ->where('agent',Auth::id())
                           ->orWhere('status','pending')  
-                          ->where('agent', Auth::id())
                           ->orderByRaw("CASE 
                             WHEN status = 'pending' THEN 0 
                             WHEN status = 'VM' THEN 1
@@ -115,8 +113,9 @@ class CustomerController extends Controller
                             WHEN status = 'trial' THEN 6
                             ELSE 7 
                         END")
-                        ->orderBy('status', 'desc')  // Sort other statuses in descending order
+                        ->orderBy('status', 'desc')  
                        ->get();
+
          return view('front.customer_number',compact('customerNumbers')); 
     }
     

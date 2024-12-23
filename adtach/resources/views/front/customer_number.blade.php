@@ -9,7 +9,7 @@
     </div>
     {{-- Search customer details --}}
 
-    
+
     <div class="w-full mx-auto mt-3 mb-5 overflow-x-auto">
         <table class="w-full table-auto border-collapse border border-gray-200 mx-auto">
             @if (session('success'))
@@ -99,14 +99,15 @@
                             <td class="px-4 py-2 border border-gray-300">
                                 {{ \Carbon\Carbon::parse($customer->date)->format('d M, Y') }}</td>
                             <td class="px-4 py-2 border border-gray-300">
-                                @if ($customer->customer_name === 'pending')
+                                @if ($customer->status === 'pending')
                                     <button class="px-3 py-2 bg-[blue] text-white rounded"><i
                                             class="fa-solid fa-plus"></i></button>
+                                @else
+                                    <a href="{{ route('viewCustomerNumberEditForm', $customer->id) }}"
+                                        class="px-3 py-2 bg-[blue] text-white rounded"><i
+                                            class="fa-solid fa-pen-to-square"></i></a>
                                 @endif
-                                @if ($customer->customer_name !== 'pending')
-                                   <a href="{{ route('viewCustomerNumberEditForm',$customer->id) }}" class="px-3 py-2 bg-[blue] text-white rounded"><i
-                                      class="fa-solid fa-pen-to-square"></i></a>   
-                                @endif
+
                             </td>
                         </tr>
                     </form>
