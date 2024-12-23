@@ -26,7 +26,7 @@ class customer extends Model
         public static function getSalesByAgentAndMonth($agent_id, $month, $year)
         {
             return self::where('a_name', $agent_id)
-                        ->where('status', 'sale') // Filter only successful sales
+                        ->where('status', 'sale') 
                         ->whereMonth('regitr_date', $month)
                         ->whereYear('regitr_date', $year)
                         ->count();

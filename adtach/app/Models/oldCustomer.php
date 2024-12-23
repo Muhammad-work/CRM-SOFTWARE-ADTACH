@@ -19,4 +19,13 @@ class oldCustomer extends Model
     public function user(){
         return $this->belongsTo(user::class,'agent');
      }
+
+     public static function getSalesByAgentAndMonth($agent_id, $month, $year)
+     {
+         return self::where('agent', $agent_id)
+                     ->where('status', 'sale') 
+                     ->whereMonth('regitr_date', $month)
+                     ->whereYear('regitr_date', $year)
+                     ->count();
+     }
 }

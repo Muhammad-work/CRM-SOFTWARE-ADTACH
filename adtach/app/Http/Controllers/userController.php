@@ -24,9 +24,8 @@ class userController extends Controller
 
     public function viewUserTable(){
 
-         $currentMonth = now()->month; // Current month
+        $currentMonth = now()->month; // Current month
         $currentYear = now()->year;  // Current year
-    
         // Get all agents
         $agents = User::all();
     
@@ -38,11 +37,9 @@ class userController extends Controller
             $salesData[$agent->id] = $salesCount; // Store sales count with agent id
         }
     
-        $users = User::all(); // Or filter users as needed
+        $users = User::all(); 
         
-        // Pass both users and salesData to the view
-        // return view('admin.users.index', compact('users', 'salesData'));
-    
+        
 
        return view('admin.userTable', compact('users', 'salesData','currentMonth'));
     }
