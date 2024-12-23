@@ -100,9 +100,9 @@ class CustomerController extends Controller
 
     public function viewCunstomerNumberTable(){
         $customerNumbers = CustomerNumber::with('user')
-                          ->whereDate('date', '<>', today())
-                          ->where('agent',Auth::id())
+                          ->whereDate('date', '!==', today())
                           ->orWhere('status','pending')  
+                          ->where('agent',Auth::id())
                           ->orderByRaw("CASE 
                             WHEN status = 'pending' THEN 0 
                             WHEN status = 'VM' THEN 1
@@ -115,7 +115,6 @@ class CustomerController extends Controller
                         END")
                         ->orderBy('status', 'desc')  
                        ->get();
-
          return view('front.customer_number',compact('customerNumbers')); 
     }
     
