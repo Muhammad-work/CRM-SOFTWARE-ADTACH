@@ -99,8 +99,9 @@ class CustomerController extends Controller
     }
 
     public function viewCunstomerNumberTable(){
+        $today = Carbon::today();  
         $customerNumbers = CustomerNumber::with('user')
-                          ->whereDate('date', '!==', today())
+                          ->whereDate('date', '>=', now())
                           ->orWhere('status','pending')  
                           ->where('agent',Auth::id())
                           ->orderByRaw("CASE 
