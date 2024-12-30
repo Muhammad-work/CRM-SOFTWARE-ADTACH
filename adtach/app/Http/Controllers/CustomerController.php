@@ -103,6 +103,7 @@ class CustomerController extends Controller
         $customerNumbers = CustomerNumber::with('user')
                           ->whereDate('date', '>=', now())
                           ->orWhere('status','pending')  
+                          ->orWhere('status','vm')
                           ->where('agent',Auth::id())
                           ->orderByRaw("CASE 
                             WHEN status = 'pending' THEN 0 
