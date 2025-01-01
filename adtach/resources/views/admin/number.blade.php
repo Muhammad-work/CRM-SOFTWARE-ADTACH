@@ -7,13 +7,20 @@
         <div class="content-header">
             <div class="container-fluid">
                 <div class="row mb-2">
-                    <div class="col-sm-6">
-                        <h1 class="m-0 d-inline">All Customer Numbers Report</h1>
+                    <div class="col-sm-2">
+                        <h1 class="m-0 d-inline">All Numbers</h1>
+                    </div><!-- /.col -->
+                    <div class="col-sm-2">
+                        <h1 class="m-0 d-inline"><a href="{{ route('viewAddNumbersForm') }}" class="btn btn-primary">Add
+                                New</a></h1>
+                    </div><!-- /.col -->
+                    <div class="col-sm-2">
+                        <h1 class="m-0 d-inline"><a href="{{ route('viewCustomerNumberForm') }}" class="btn btn-primary">Distribute Number</a></h1>
                     </div><!-- /.col -->
                     <div class="col-sm-6">
                         <ol class="breadcrumb float-sm-right">
                             <li class="breadcrumb-item"><a href="{{ route('dashboard') }}">DashBord</a></li>
-                            <li class="breadcrumb-item active">All Customer Numbers Report</li>
+                            <li class="breadcrumb-item active">All Numbers</li>
                         </ol>
                     </div><!-- /.col -->
                 </div><!-- /.row -->
@@ -29,28 +36,23 @@
                                     {{ session('success') }}
                                 </div>
                             @endif
+                            @if (session('error'))
+                                <div class="alert alert-danger text-center" role="alert">
+                                    {{ session('error') }}
+                                </div>
+                            @endif
                             <thead>
                                 <tr>
                                     <th>ID</th>
-                                    <th>AGENT NAME</th>
-                                    <th>TOTAL DISTRIBUTE NUMBERS</th>
-                                    <th>ACTION</th>
+                                    <th>Numbers</th>
                                 </tr>
                             </thead>
                             <tbody>
 
-                                @foreach ($allCustomerNumber as $index => $data)
+                                @foreach ($numbers as $index => $number)
                                     <tr>
                                         <td> {{ $index + 1 }} </td>
-
-                                        <td>{{ $data['user']->name }}</td>
-                                        <td>{{ $data->total }}</td>
-                                        <td>
-                                            <a href="{{ route('viewAgentDistributeNumbersDetail',$data['user']->id) }}" class="btn btn-primary">
-                                                <i class="fa-solid fa-eye"></i>
-                                            </a>
-
-                                        </td>
+                                        <td> {{ $number->number }} </td>
                                     </tr>
                                 @endforeach
 

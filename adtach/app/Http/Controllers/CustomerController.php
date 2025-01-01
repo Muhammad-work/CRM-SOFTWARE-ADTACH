@@ -22,21 +22,21 @@ class CustomerController extends Controller
             'customer_email' => 'unique:customers,customer_email',
             'price' => 'required|numeric',
             'remarks' => 'required',
-            'status' => 'required', 
+            'status' => 'required',
             'date' => 'required'
-            
+
         ]);
-        
-        $email = $req->customer_email ?: 'No Email'; 
-        
+
+        $email = $req->customer_email ?: 'No Email';
+
         $customer = customer::create([
             'customer_name' => $req->customer_name,
             'customer_email' => $email,
             'customer_number' => $req->customer_number,
             'price' => $req->price,
             'remarks' => $req->remarks,
-            'status' => $req->status,  
-            'a_name' => Auth::id(), 
+            'status' => $req->status,
+            'a_name' => Auth::id(),
             'regitr_date' => $req->date
         ]);
         $customer->created_at = now();
@@ -46,12 +46,12 @@ class CustomerController extends Controller
 
         $customer->user_name = Auth::user()->name;
         $customer->save();
-        
+
         return back()->with(['success' => 'Customer Created Successfully']);
     }
 
     public function customerStatus(Request $req,string $id){
-       
+
         $customer = customer::find($id);
         $customer->update([
             'status' => $req->status
@@ -70,7 +70,7 @@ class CustomerController extends Controller
                                  ->where('status', 'sale')
                                  ->orderBy('regitr_date','desc')
                                  ->get();
-          
+
          $customers = $oldcustomers->merge($newCustomer);
         return view('front.customer_sale',compact(['customers']));
     }
@@ -85,10 +85,10 @@ class CustomerController extends Controller
         return view('front.customer_lead',compact(['user','customers']));
     }
 
-    
+
 
     public function customerTrialTable(){
-        
+
            $customers = Customer::where('a_name', Auth::id())
                                    ->where('status', 'trial')
                                    ->orderByRaw('MONTH(regitr_date) desc')
@@ -99,27 +99,25 @@ class CustomerController extends Controller
     }
 
     public function viewCunstomerNumberTable(){
-        $today = Carbon::today();  
+        $today = Carbon::today();
         $customerNumbers = CustomerNumber::with('user')
-                          ->whereDate('date', '>=', now())
-                          ->orWhere('status','pending')  
-                          ->orWhere('status','vm')
                           ->where('agent',Auth::id())
-                          ->orderByRaw("CASE 
-                            WHEN status = 'pending' THEN 0 
+                          ->whereDate('date', '>=', now())
+                          ->orderByRaw("CASE
+                            WHEN status = 'pending' THEN 0
                             WHEN status = 'VM' THEN 1
                             WHEN status = 'not int' THEN 2
                             WHEN status = 'hung up' THEN 3
                             WHEN status = 'not ava' THEN 4
                             WHEN status = 'not in service' THEN 5
                             WHEN status = 'trial' THEN 6
-                            ELSE 7 
+                            ELSE 7
                         END")
-                        ->orderBy('status', 'desc')  
+                        ->orderBy('status', 'desc')
                        ->get();
-         return view('front.customer_number',compact('customerNumbers')); 
+         return view('front.customer_number',compact('customerNumbers'));
     }
-    
+
     public function storeCustomerNumbersDetails(Request $req,string $id){
         $req->validate([
             'status' => 'required',
@@ -135,7 +133,7 @@ class CustomerController extends Controller
 
         return redirect()->route('viewCunstomerNumberTable')->with(['success' => 'Add Customer Information Successfuly']);
     }
-  
+
     public function viewCustomerNumberEditForm(string $id){
         $customer = CustomerNumber::find($id);
         return view('front.edit_customer_number',compact('customer'));
@@ -185,7 +183,7 @@ class CustomerController extends Controller
         $oldCustomerData = customer::find($id);
         return view('front.add_old_customer_sale',compact('oldCustomerData'));
     }
-    
+
     public function storeOldCustomerNewPKGData(Request $req,string $id){
         $req->validate([
             'price' => 'required',

@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use App\Models\user;
 use App\Models\help;
 use App\Models\customer;
+use App\Models\client_number;
 use App\Models\customerNumber;
 use App\Models\oldCustomer;
 use Carbon\Carbon;
@@ -19,7 +20,7 @@ class dashboardController extends Controller
                          ->whereYear('regitr_date', now()->year)->where('status','sale')->count();
         $Newsale = oldCustomer::whereMonth('regitr_date',now()->month)
                          ->whereYear('regitr_date', now()->year)->where('status','sale')->count();
-        $sale = $oldsale + $Newsale;  
+        $sale = $oldsale + $Newsale;
         $trial = customer::whereMonth('regitr_date', now()->month)
                            ->whereYear('regitr_date', now()->year)->where('status','trial')->count();
         $lead = customer::whereMonth('regitr_date',now()->month)
@@ -33,31 +34,31 @@ class dashboardController extends Controller
         $oldSalecustomerExpriDate = Customer::with('user')->whereDate('regitr_date', today())->get(); // Use 'registration_date' and 'today()'
 
         $NewSalecurentSale = OldCustomer::with('user')->whereDate('regitr_date', today())->get(); // Same column and model naming conventions
-        
+
         $curentSale = $oldSalecustomerExpriDate->merge($NewSalecurentSale);
         return  view('admin.dashbord',compact(['userCount','sale','trial','lead','price','help','curentSale']));
      }
 
      public function  viewAgentSaleTable(){
-      
+
          $oldcustomers = Customer::with('user')
                                ->where('status', 'sale')
                                ->orderBy('regitr_date','desc') // Correct the column name here
                                ->get();
-   
+
          $Newcustomers = oldCustomer::with('user')
                                  ->where('status', 'sale')
                                  ->orderBy('regitr_date','desc') // Correct the column name here
                                  ->get();
-  
-          $customers = $oldcustomers->merge($Newcustomers); 
 
-  
+          $customers = $oldcustomers->merge($Newcustomers);
+
+
       return view('admin.agent_sale', compact('customers'));
      }
 
      public function cutomerUPdateSaleDetailFormVIew(string $id){
-      $customer = customer::find($id); 
+      $customer = customer::find($id);
 
      return view('admin.edit_agent_sale',compact('customer'));
 }
@@ -68,19 +69,19 @@ public function cutomerUPdateDetailSaleStore(Request $req, string $id){
     'customer_number' => 'required|numeric',
     'price' => 'required|numeric',
     'remarks' => 'required',
-    'status' => 'required', 
+    'status' => 'required',
 ]);
 
     $customer = customer::find($id);
-    $email = $req->customer_email ?: 'No Email'; 
+    $email = $req->customer_email ?: 'No Email';
     $customer->update([
       'customer_name' => $req->customer_name,
       'customer_email' => $email,
       'customer_number' => $req->customer_number,
       'price' => $req->price,
       'remarks' => $req->remarks,
-      'status' => $req->status,  
-        'regitr_date' => $req->date,  
+      'status' => $req->status,
+        'regitr_date' => $req->date,
     ]);
     $customer->make_address = $req->make_address;
      $customer->regitr_date = $req->date;
@@ -105,32 +106,32 @@ public function cutomerUPdateDetailSaleStore(Request $req, string $id){
      }
 
      public function cutomerUPdateDetailFormVIew(string $id){
-       $customer = customer::find($id); 
+       $customer = customer::find($id);
 
       return view('admin.edit_agent_lead',compact('customer'));
  }
 
    public function cutomerUPdateDetailStore(Request $req, string $id){
-  
+
     $req->validate([
       'customer_name' => 'required|string',
       'customer_number' => 'required|numeric',
       'price' => 'required|numeric',
       'remarks' => 'required',
-      'status' => 'required', 
-      
+      'status' => 'required',
+
   ]);
-  
+
       $customer = customer::find($id);
-      $email = $req->customer_email ?: 'No Email'; 
+      $email = $req->customer_email ?: 'No Email';
       $customer->update([
         'customer_name' => $req->customer_name,
         'customer_email' => $email,
         'customer_number' => $req->customer_number,
         'price' => $req->price,
         'remarks' => $req->remarks,
-        'status' => $req->status,  
-         'regitr_date' => $req->date, 
+        'status' => $req->status,
+         'regitr_date' => $req->date,
       ]);
       $customer->make_address = $req->make_address;
        $customer->regitr_date = $req->date;
@@ -146,7 +147,7 @@ public function cutomerUPdateDetailSaleStore(Request $req, string $id){
    }
 
      public function  viewAgentTrialTable(){
-      
+
        $customers = Customer::with('user')
       ->where('status', 'trial')
       ->orderByRaw('MONTH(regitr_date) asc')  // Sorting by the month part of 'registration_date'
@@ -155,7 +156,7 @@ public function cutomerUPdateDetailSaleStore(Request $req, string $id){
      }
 
      public function cutomerUPdateTrialDetailFormVIew(string $id){
-      $customer = customer::find($id); 
+      $customer = customer::find($id);
 
      return view('admin.edit_agent_trial',compact('customer'));
 }
@@ -166,19 +167,19 @@ public function cutomerUPdateDetailTrialStore(Request $req, string $id){
     'customer_number' => 'required|numeric',
     'price' => 'required|numeric',
     'remarks' => 'required',
-    'status' => 'required', 
+    'status' => 'required',
 ]);
 
     $customer = customer::find($id);
-    $email = $req->customer_email ?: 'No Email'; 
+    $email = $req->customer_email ?: 'No Email';
     $customer->update([
       'customer_name' => $req->customer_name,
       'customer_email' => $email,
       'customer_number' => $req->customer_number,
       'price' => $req->price,
       'remarks' => $req->remarks,
-      'status' => $req->status,  
-        'regitr_date' => $req->date,  
+      'status' => $req->status,
+        'regitr_date' => $req->date,
     ]);
 
     $customer->make_address = $req->make_address;
@@ -207,7 +208,7 @@ public function cutomerUPdateDetailTrialStore(Request $req, string $id){
         $customer->save();
         return  redirect()->route('viewAgentTrialTable')->with(['success' => 'Customer Detail Updated Successfuly']);
       }
-      
+
       public function deleteCustomerDetails(string $id){
         $customer = customer::find($id);
         $customer->delete();
@@ -224,45 +225,21 @@ public function cutomerUPdateDetailTrialStore(Request $req, string $id){
       $help = help::find($id);
       $help->status = 'down';
       $help->save();
-      return redirect()->route('viewHelpRequestTableDashboard')->with(['success' => 'Help Request is Down Successfuly']);     
+      return redirect()->route('viewHelpRequestTableDashboard')->with(['success' => 'Help Request is Down Successfuly']);
     }
 
     public function cancelHelpRequestStatus(string $id){
       $help = help::find($id);
       $help->status = 'cancel';
       $help->save();
-      return redirect()->route('viewHelpRequestTableDashboard')->with(['success' => 'Help Request is Cancel Successfuly']);     
+      return redirect()->route('viewHelpRequestTableDashboard')->with(['success' => 'Help Request is Cancel Successfuly']);
     }
 
     public function viewTrialDaysForm(string $id){
       $customer = customer::find($id);
       return view('admin.trial_Days',compact('customer'));
     }
-    
-    public function storeTrialDays(Request $req,string $id){
-          $req->validate([
-           'make_address' => 'required',
-           'start_date' => 'required|date',
-           'end_date' => 'required|date|after_or_equal:start_date',
-         ]);
 
-         $startDate = new \DateTime($req->start_date);
-         $endDate = new \DateTime($req->end_date);
-
-  
-         $interval = $startDate->diff($endDate);
-         $daysDifference = $interval->days; 
-         $customer = Customer::find($id);
-         $customer->active_status = 'active';
-         $customer->make_address = $req->make_address;
-         $customer->start_date = $req->start_date;
-         $customer->end_date = $req->end_date;
-         $customer->date_count = $daysDifference;
-         $customer->save();
-
-         return redirect()->route('viewAgentTrialTable')->with(['success' => 'Customer Trial Days Is Start Now']);
-
-    }
 
     public function updateStatusCustomerTrial(){
       $customers = Customer::where('active_status', 'active')->get();
@@ -297,7 +274,7 @@ public function cutomerUPdateDetailTrialStore(Request $req, string $id){
       $endDate = new \DateTime($req->end_date);
 
       $interval = $startDate->diff($endDate);
-      $daysDifference = $interval->days; 
+      $daysDifference = $interval->days;
       $customer = Customer::find($id);
       $customer->active_status = 'active';
       $customer->make_address = $req->make_address;
@@ -324,7 +301,7 @@ public function cutomerUPdateDetailTrialStore(Request $req, string $id){
       $endDate = new \DateTime($req->end_date);
 
       $interval = $startDate->diff($endDate);
-      $daysDifference = $interval->days; 
+      $daysDifference = $interval->days;
       $customer = Customer::find($id);
       $customer->active_status = 'active';
       $customer->make_address = $req->make_address;
@@ -337,78 +314,87 @@ public function cutomerUPdateDetailTrialStore(Request $req, string $id){
 
 
      public function viewCustomerNumber(){
-       
-        $allCustomerNumber = customerNumber::with('user')->get();
-         
+
+        // $allCustomerNumber = customerNumber::with('user')->get();
+        $allCustomerNumber = CustomerNumber::with('user')->select('agent', \DB::raw('count(*) as total'))
+                                ->groupBy('agent')
+                                ->get();
         return view('admin.customer_number',compact('allCustomerNumber'));
      }
 
 
      public function viewCustomerNumberForm(){
-      
+
          $agentName = User::select('name','id')->where('role','user')->get();
-         return view('admin.add_customer_number',compact('agentName'));
+         $allClientNumbersCount = client_number::count();
+         return view('admin.add_customer_number',compact(['agentName','allClientNumbersCount']));
+     }
+
+
+     public function viewNumbersTable(){
+        $numbers = client_number::get();
+        return view('admin.number',compact('numbers'));
+     }
+
+     public function viewAddNumbersForm(){
+        return view('admin.add_number');
+     }
+
+     public function storeNumbers(Request $req){
+     $customerNumberArray = explode("\r\n", $req->customerNumber);
+      foreach ($customerNumberArray as $number) {
+              $number = trim($number);
+              $existingNumber = client_number::where('number', $number)->first();
+              if (!$existingNumber) {
+                    client_number::create([
+                       'number' => $number
+                    ]);
+                }else{
+                    return redirect()->route('viewNumbersTable')->with(['error' => 'You Can Not Add Same Numbers']);
+                }
+            }
+            return redirect()->route('viewNumbersTable')->with(['success' => 'Add Numbers Successfuly']);
      }
 
 
      public function storeCustomerNumbers(Request $req){
-      $req->validate([
-        'agent' => 'required',
-        'date' => 'required|date', 
-        'customerNumber' => 'required', 
-    ]);
-    
-    $customerName = 'No Customer Name';
-    
-    $customerNumberArray = explode("\r\n", $req->customerNumber);
-    
-    foreach ($customerNumberArray as $customerNumber) {
-        customerNumber::create([
-            'customer_name' => $customerName,
-            'customer_number' => $customerNumber, 
-            'agent' => $req->agent,
-            'date' => $req->date,  
-            'created_at' => now(),
-            'updated_at' => now(),
+        $req->validate([
+            'agent' => 'required',
+            'date' => 'required|date',
+            'number' => 'required|integer|min:1',
         ]);
-    }
-    
-      return redirect()->route('viewCustomerNumber')->with(['success' => 'Customer Numbers Added Successfully']);
 
-     }
 
-     public function editCustomerNumber(string $id){
-        
-        $customerNumber = customerNumber::find($id);
-        $agentName = User::select('name','id')->where('role','user')->get();
-          return view('admin.edit_customer_number',compact(['agentName','customerNumber']));
-     }
+        $number = $req->input('number');
 
-     public function storeEditCustomerNumberData(Request $req, string $id){
-             $req->validate([
-                'agent' => 'required',
-                'date' => 'required|date', 
-                'customerNumber' => 'required', 
-           ]);
-         $customerNumber = customerNumber::find($id);
-         $customerName = 'No Customer Name';
-         $customerNumber->update([
-          'customer_name' => $customerName,
-          'customer_number' => $req->customerNumber,  
-          'agent' => $req->agent,
-          'date' => $req->date,  
-          'created_at' => now(),
-          'updated_at' => now(),
-      ]);
 
-      return redirect()->route('viewCustomerNumber')->with(['success' => 'updated Successfully']);
-     }
+        $clientNumbers = client_number::select('number','id')->take($number)->get();
+        $customerName = 'No Customer Name';
 
-     public function deleteCustomerNumber(string $id){
-        $customerNumber = customerNumber::find($id);
-        $customerNumber->delete();
-       return redirect()->route('viewCustomerNumber')->with(['success' => 'deleted Successfully']);
+        foreach ($clientNumbers as $clientNumber) {
+            customerNumber::create([
+                'customer_name' => $customerName,
+                'customer_number' => $clientNumber->number,
+                'agent' => $req->agent,
+                'date' => $req->date,
+                'created_at' => now(),
+                'updated_at' => now(),
+            ]);
+        }
 
-     }
+
+        $clientNumbers->each(function($clientNumber) {
+            $clientNumber->delete();
+        });
+
+        return redirect()->route('viewNumbersTable')->with(['success' => 'Distribute To Customer Numbers Successfully']);
+
+       }
+
+
+       public function viewAgentDistributeNumbersDetail(string $id){
+          $customerResponseReports = customerNumber::with('user')->where('agent',$id)->get();
+          return view('admin.customer_response',compact('customerResponseReports'));
+       }
 
 }

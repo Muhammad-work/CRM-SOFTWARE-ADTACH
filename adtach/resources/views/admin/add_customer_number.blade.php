@@ -35,7 +35,7 @@
                                     </div>
 
                                     <div class="col-12 mt-2">
-                                        <label for="exampleInputEmail1">Calling Month</label>
+                                        <label for="exampleInputEmail1">Expiry Date</label>
                                         <input type="date" class="form-control" name="date" id="exampleInputEmail1"
                                             placeholder="Enter User Email" value="{{ old('data') }}">
                                         @error('date')
@@ -46,8 +46,10 @@
 
                                     <div class="col-12 mt-2">
                                         <label for="exampleInputEmail1">Customer Number</label>
-                                        <textarea class="form-control" name="customerNumber" placeholder="Enter Customers Numbers" id="floatingTextarea"></textarea>
-                                        @error('customerNumber')
+                                        <input type="number" class="form-control" name="number" id="exampleInputEmail1"
+                                        placeholder="Enter Distribute Number Count" value="{{ old('number') }}">
+                                        <span class="text-success">All Customer Numbers Count {{$allClientNumbersCount}}</span>
+                                        @error('number')
                                             <span class="text-danger">{{ $message }}</span>
                                         @enderror
                                     </div>

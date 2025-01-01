@@ -32,7 +32,6 @@ Route::controller(dashboardController::class)->group(function () {
     Route::get('/dashboard/{id}/downHelpRequestStatus', 'downHelpRequestStatus')->name('downHelpRequestStatus')->middleware(validUser::class)->middleware(validRole::class);
     Route::get('/dashboard/{id}/cancelHelpRequestStatus', 'cancelHelpRequestStatus')->name('cancelHelpRequestStatus')->middleware(validUser::class)->middleware(validRole::class);
     Route::get('/dashboard/{id}/viewTrialDaysForm', 'viewTrialDaysForm')->name('viewTrialDaysForm')->middleware(validUser::class)->middleware(validRole::class);
-    Route::post('/dashboard/{id}/storeTrialDays', 'storeTrialDays')->name('storeTrialDays')->middleware(validUser::class)->middleware(validRole::class);
     Route::post('/dashboard/update-customer-status', 'updateStatusCustomerTrial')->name('updateStatusCustomerTrial')->middleware(validUser::class);
     Route::get('/dashboard/{id}/view-update-customer-status', 'viewupdateSaleCustomerStatus')->name('viewupdateSaleCustomerStatus')->middleware(validUser::class)->middleware(validRole::class);
     Route::post('/dashboard/{id}/update-customer-sale-status', 'updateSaleCustomerStatus')->name('updateSaleCustomerStatus')->middleware(validUser::class)->middleware(validRole::class);
@@ -40,10 +39,11 @@ Route::controller(dashboardController::class)->group(function () {
     Route::post('/dashboard/{id}/addSaleCustomerStatus', 'addSaleCustomerStatus')->name('addSaleCustomerStatus')->middleware(validUser::class)->middleware(validRole::class);
     Route::get('/dashboard/customer-numbers', 'viewCustomerNumber')->name('viewCustomerNumber')->middleware(validUser::class)->middleware(validRole::class);
     Route::get('/dashboard/add-customer-numbers', 'viewCustomerNumberForm')->name('viewCustomerNumberForm')->middleware(validUser::class)->middleware(validRole::class);
-    Route::get('/dashboard/{id}/edit-customer-numbers', 'editCustomerNumber')->name('editCustomerNumber')->middleware(validUser::class)->middleware(validRole::class);
     Route::post('/dashboard/storeCustomerNumbers', 'storeCustomerNumbers')->name('storeCustomerNumbers')->middleware(validUser::class)->middleware(validRole::class);
-    Route::post('/dashboard/{id}/storeEditCustomerNumberData', 'storeEditCustomerNumberData')->name('storeEditCustomerNumberData')->middleware(validUser::class)->middleware(validRole::class);
-    Route::get('/dashboard/{id}/deleteCustomerNumber', 'deleteCustomerNumber')->name('deleteCustomerNumber')->middleware(validUser::class)->middleware(validRole::class);
+    Route::get('/dashboard/all-numbers', 'viewNumbersTable')->name('viewNumbersTable')->middleware(validUser::class)->middleware(validRole::class);
+    Route::get('/dashboard/add-numbers', 'viewAddNumbersForm')->name('viewAddNumbersForm')->middleware(validUser::class)->middleware(validRole::class);
+    Route::post('/dashboard/storeNumbers', 'storeNumbers')->name('storeNumbers')->middleware(validUser::class)->middleware(validRole::class);
+    Route::get('/dashboard/{id}/customer-response', 'viewAgentDistributeNumbersDetail')->name('viewAgentDistributeNumbersDetail')->middleware(validUser::class)->middleware(validRole::class);
 });
 
 
@@ -58,7 +58,7 @@ Route::controller(userController::class)->middleware(validUser::class)->middlewa
     // Route::get('/dashboard/activateUser', 'activateUser')->name('activateUser');
     // Route::get('/dashboard/curront-mont-sale', 'viewAgentSaleCountCurrontMont')->name('viewAgentSaleCountCurrontMont');
     // Route::get('/dashboard/lastmontsale', 'lastmontsale')->name('lastmontsale');
-   
+
 });
 // Correct route to activate a user (with user ID parameter)
 Route::get('/user/{id}/activate', [UserController::class, 'activateUser'])->name('activateUser');
@@ -85,27 +85,27 @@ Route::controller(userController::class)->group(function () {
 
 
 Route::controller(homeController::class)->group(function () {
-    Route::get('/', 'viewHome')->name('viewHome')->middleware(validUser::class); 
+    Route::get('/', 'viewHome')->name('viewHome')->middleware(validUser::class);
 });
 Route::controller(CustomerController::class)->group(function () {
-    Route::post('/storeCustomerDetail', 'storeCustomerDetail')->name('storeCustomerDetail'); 
-    Route::post('/customerStatus/{id}', 'customerStatus')->name('customerStatus'); 
-    Route::get('/customerSalesTable', 'customerSalesTable')->name('customerSalesTable')->middleware(validUser::class); 
-    Route::get('/customerLeadTable', 'customerLeadTable')->name('customerLeadTable')->middleware(validUser::class); 
-    Route::get('/customerTrialTable', 'customerTrialTable')->name('customerTrialTable')->middleware(validUser::class); 
-    Route::get('/customer-numbers', 'viewCunstomerNumberTable')->name('viewCunstomerNumberTable')->middleware(validUser::class); 
-    Route::post('/{id}/storeCustomerNumbersDetails', 'storeCustomerNumbersDetails')->name('storeCustomerNumbersDetails')->middleware(validUser::class); 
-    Route::get('/{id}/edit-customer-numbers', 'viewCustomerNumberEditForm')->name('viewCustomerNumberEditForm')->middleware(validUser::class); 
-    Route::get('/{id}/add-old-customer-data', 'viewOldCustomerNewPKG')->name('viewOldCustomerNewPKG')->middleware(validUser::class); 
-    Route::post('/{id}/storeOldCustomerNewPKGData', 'storeOldCustomerNewPKGData')->name('storeOldCustomerNewPKGData')->middleware(validUser::class); 
-    Route::post('/{id}/storeCustomerNumberEditDetails', 'storeCustomerNumberEditDetails')->name('storeCustomerNumberEditDetails')->middleware(validUser::class); 
-    Route::get('/{id}/edit-sale', 'viewEditCustomerSaleDetailForm')->name('viewEditCustomerSaleDetailForm')->middleware(validUser::class); 
-    Route::post('/{id}/storeEditCustomerSaleDetails', 'storeEditCustomerSaleDetails')->name('storeEditCustomerSaleDetails')->middleware(validUser::class); 
+    Route::post('/storeCustomerDetail', 'storeCustomerDetail')->name('storeCustomerDetail');
+    Route::post('/customerStatus/{id}', 'customerStatus')->name('customerStatus');
+    Route::get('/customerSalesTable', 'customerSalesTable')->name('customerSalesTable')->middleware(validUser::class);
+    Route::get('/customerLeadTable', 'customerLeadTable')->name('customerLeadTable')->middleware(validUser::class);
+    Route::get('/customerTrialTable', 'customerTrialTable')->name('customerTrialTable')->middleware(validUser::class);
+    Route::get('/customer-numbers', 'viewCunstomerNumberTable')->name('viewCunstomerNumberTable')->middleware(validUser::class);
+    Route::post('/{id}/storeCustomerNumbersDetails', 'storeCustomerNumbersDetails')->name('storeCustomerNumbersDetails')->middleware(validUser::class);
+    Route::get('/{id}/edit-customer-numbers', 'viewCustomerNumberEditForm')->name('viewCustomerNumberEditForm')->middleware(validUser::class);
+    Route::get('/{id}/add-old-customer-data', 'viewOldCustomerNewPKG')->name('viewOldCustomerNewPKG')->middleware(validUser::class);
+    Route::post('/{id}/storeOldCustomerNewPKGData', 'storeOldCustomerNewPKGData')->name('storeOldCustomerNewPKGData')->middleware(validUser::class);
+    Route::post('/{id}/storeCustomerNumberEditDetails', 'storeCustomerNumberEditDetails')->name('storeCustomerNumberEditDetails')->middleware(validUser::class);
+    Route::get('/{id}/edit-sale', 'viewEditCustomerSaleDetailForm')->name('viewEditCustomerSaleDetailForm')->middleware(validUser::class);
+    Route::post('/{id}/storeEditCustomerSaleDetails', 'storeEditCustomerSaleDetails')->name('storeEditCustomerSaleDetails')->middleware(validUser::class);
 });
 
 Route::controller(HelpController::class)->group(function () {
-    Route::get('/help-Request', 'viewHelpForm')->name('help')->middleware(validUser::class); 
-    Route::get('/help-Detail', 'viewHelpTable')->name('viewHelpTable')->middleware(validUser::class); 
-    Route::post('/storeHelpRequest', 'storeHelpRequest')->name('storeHelpRequest')->middleware(validUser::class); 
+    Route::get('/help-Request', 'viewHelpForm')->name('help')->middleware(validUser::class);
+    Route::get('/help-Detail', 'viewHelpTable')->name('viewHelpTable')->middleware(validUser::class);
+    Route::post('/storeHelpRequest', 'storeHelpRequest')->name('storeHelpRequest')->middleware(validUser::class);
 });
 
