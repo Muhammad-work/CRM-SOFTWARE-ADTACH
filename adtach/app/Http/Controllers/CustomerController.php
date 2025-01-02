@@ -119,19 +119,62 @@ class CustomerController extends Controller
     }
 
     public function storeCustomerNumbersDetails(Request $req,string $id){
-        $req->validate([
-            'status' => 'required',
-            'remarks' => 'required',
-        ]);
-        // return $req;
-        $customer = CustomerNumber::find($id);
-        $customerName = $req->customer_name ?: 'No Name';
-        $customer->customer_name =$customerName;
-        $customer->status = $req->status;
-        $customer->remarks = $req->remarks;
-        $customer->save();
+        if ($req->status == 'lead' || $req->status == 'trial') {
+            $req->validate([
+                'status' => 'required',
+                'remarks' => 'required',
+                'price' => 'required',
+            ]);
 
-        return redirect()->route('viewCunstomerNumberTable')->with(['success' => 'Add Customer Information Successfuly']);
+            $customer = CustomerNumber::find($id);
+            $customerName = $req->customer_name ?: 'No Name';
+            $customerEmail = 'No Email';
+            $price = $req->price;
+            $status = $req->status;
+            $remarks = $req->remarks;
+            $authID = Auth::id();
+            $authName = Auth::user()->name;
+            $date = now();
+
+$customerLeadDataStoreAndTrialDataStore = customer::create([
+                'customer_name' => $customerName,
+                'customer_email' =>  $customerEmail,
+                'customer_number' =>  $customer->customer_number,
+                'price' =>  $price,
+                'remarks' =>  $remarks,
+                'status' =>   $req->status,
+                'a_name' =>   $authID,
+                'user_name' => $authName,
+                'regitr_date' => $date,
+            ]);
+
+            $customerLeadDataStoreAndTrialDataStore->user_name =$authName;
+            $customerLeadDataStoreAndTrialDataStore->regitr_date =$date;
+            $customerLeadDataStoreAndTrialDataStore->save();
+            $customer->delete();
+
+           if ($req->status == 'lead') {
+            return redirect()->route('viewCunstomerNumberTable')->with(['success' => 'Add Customer Information To Youre Lead Page Successfuly']);
+            }else{
+               return redirect()->route('viewCunstomerNumberTable')->with(['success' => 'Add Customer Information To Youre Trial Page Successfuly']);
+           }
+
+        }else{
+            $req->validate([
+                'status' => 'required',
+                'remarks' => 'required',
+            ]);
+
+
+            $customer = CustomerNumber::find($id);
+            $customerName = $req->customer_name ?: 'No Name';
+            $customer->customer_name =$customerName;
+            $customer->status = $req->status;
+            $customer->remarks = $req->remarks;
+            $customer->save();
+
+            return redirect()->route('viewCunstomerNumberTable')->with(['success' => 'Add Customer Information Successfuly']);
+        }
     }
 
     public function viewCustomerNumberEditForm(string $id){

@@ -14,10 +14,10 @@
                         <h1 class="m-0 d-inline"><a href="{{ route('addUser') }}" class="btn btn-primary">Add New</a></h1>
                     </div><!-- /.col -->
                     <div class="col-sm-6">
-                        <ol class="breadcrumb float-sm-right">
-                            <li class="breadcrumb-item"><a href="{{ route('dashboard') }}">Dashboard</a></li>
-                            <li class="breadcrumb-item active">All Users</li>
-                        </ol>
+                        <form action="{{  route('viewUserTable') }}" method="get" id="filterbyMonthForm">
+                            <label for="exampleInputEmail1">Filter By Month Sale Count</label>
+                            <input type="month" class="form-control" name="date" aria-label="Text input with 2 dropdown buttons" id="filterbyMonth">
+                        </form>
                     </div><!-- /.col -->
                 </div><!-- /.row -->
             </div><!-- /.container-fluid -->
@@ -57,14 +57,12 @@
                                             <td>{{ $user->role }}</td>
                                             <td>
                                                 @php
-                                                    // Get sales count from salesData array
                                                     $salesCount = $salesData[$user->id] ?? 0;
                                                 @endphp
-                                                {{ $salesCount }} <!-- Display sales count -->
+                                                {{ $salesCount }}
                                             </td>
                                             <td>
                                                 {{ \Carbon\Carbon::now()->month($currentMonth)->format('F') }}
-                                                <!-- Display current month name -->
                                             </td>
                                             <td>
                                                 @if ($user->ip_address === '0')
@@ -91,4 +89,12 @@
             </div>
         </div>
     </div>
+
+    <script>
+        let fileByMonth = document.querySelector('#filterbyMonth');
+        let FilterMonthForm = document.querySelector('#filterbyMonthForm');
+        fileByMonth.addEventListener('change', () => {
+            FilterMonthForm.submit();
+        });
+    </script>
 @endsection

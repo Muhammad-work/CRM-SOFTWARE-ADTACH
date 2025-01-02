@@ -10,9 +10,6 @@
                     <div class="col-sm-6">
                         <h1 class="m-0 d-inline">All Agent Sale Report</h1>
                     </div><!-- /.col -->
-                    {{-- <div class="col-sm-4">
-                        <h1 class="m-0 d-inline"><a href="{{ route('addUser') }}" class="btn btn-primary">Add New</a></h1>
-                    </div><!-- /.col --> --}}
                     <div class="col-sm-6">
                         <ol class="breadcrumb float-sm-right">
                             <li class="breadcrumb-item"><a href="{{ route('dashboard') }}">DashBord</a></li>
@@ -35,15 +32,7 @@
                             <thead>
                                 <tr>
                                     <th>ID</th>
-                                    <th>CUSTOMER REGISTRATION DATE</th>
-                                    <th>CUSTOMER NAME</th>
-                                    <th>CUSTOMER EMAIL</th>
-                                    <th>CUSTOMER PHONE</th>
-                                    <th>PRICE</th>
-                                    <th>REMARKS</th>
-                                    <th>STATUS</th>
                                     <th>AGENT NAME</th>
-                                    <th>MAC ADDRESS</th>
                                     <th>ACTION</th>
                                 </tr>
                             </thead>
@@ -51,35 +40,10 @@
                                 @foreach ($customers as $index => $customer)
                                     <tr>
                                         <td> {{ $index + 1 }} </td>
+                                        <td>{{$customer['user']->name}}</td>
                                         <td>
-                                            @if ($customer->regitr_date)
-                                                {{ \Carbon\Carbon::parse($customer->regitr_date)->format('d M, Y') }}
-                                            @else
-                                                No Registration Date
-                                            @endif
-                                        </td>
-                                        <td> {{ $customer->customer_name }} </td>
-                                        <td>{{ $customer->customer_email }}</td>
-                                        <td>{{ $customer->customer_number }}</td>
-                                        <td>${{ $customer->price }}</td>
-                                        <td>{{ $customer->remarks }}</td>
-                                        <td><span
-                                                class="bg-success py-1 px-2 rounded block mt-5">{{ $customer->status }}</span>
-                                        </td>
-
-                                        <td> {{ $customer['user']->name }}</td>
-                                        <td>
-                                            @if ($customer->make_address)
-                                                {{ $customer->make_address }}
-                                            @else
-                                                No Mac Address
-                                            @endif
-                                        </td>
-                                        <td>
-                                            <a href="{{ route('cutomerUPdateSaleDetailFormVIew', $customer->id) }}"
-                                                class="btn btn-primary"><i class="fa-solid fa-pen-to-square"></i></a>
-                                            <a href="{{ route('deleteSaleCustomerDetails', $customer->id) }}"
-                                                class="btn btn-danger"><i class="fa-solid fa-trash"></i></a>
+                                            <a href="{{ route('viewSaleTable',$customer['user']->id) }}"
+                                                class="btn btn-primary"><i class="fa-solid fa-eye"></i></a>
                                         </td>
                                     </tr>
                                 @endforeach

@@ -14,7 +14,33 @@ use Carbon\Carbon;
 
 class dashboardController extends Controller
 {
-     public function viewDashboard(){
+     public function viewDashboard(Request $req){
+        $month = date('m', strtotime($req->date));
+        $year = date('Y', strtotime($req->date));
+       if ($req->date !== null) {
+        $userCount = user::where('role','user')->count();
+        $oldsale = customer::whereMonth('regitr_date',$month)
+                         ->whereYear('regitr_date', $year)->where('status','sale')->count();
+        $Newsale = oldCustomer::whereMonth('regitr_date',$month)
+                         ->whereYear('regitr_date', $year)->where('status','sale')->count();
+        $sale = $oldsale + $Newsale;
+        $trial = customer::whereMonth('regitr_date', $month)
+                           ->whereYear('regitr_date', $year)->where('status','trial')->count();
+        $lead = customer::whereMonth('regitr_date',$month)
+                          ->whereYear('regitr_date', $year)->where('status','lead')->count();
+        $help = help::where('status','pending')->count();
+
+        $oldCutomerprice = Customer::whereMonth('regitr_date',$month)->whereYear('regitr_date', $year)->sum('price');
+        $NewCustomerprice = oldCustomer::whereMonth('regitr_date',$month)->whereYear('regitr_date', $year)->sum('price');
+        $price = $oldCutomerprice + $NewCustomerprice;
+
+        $oldSalecustomerExpriDate = Customer::with('user')->whereDate('regitr_date', today())->get();
+
+        $NewSalecurentSale = OldCustomer::with('user')->whereDate('regitr_date', today())->get();
+
+        $curentSale = $oldSalecustomerExpriDate->merge($NewSalecurentSale);
+        return  view('admin.dashbord',compact(['userCount','sale','trial','lead','price','help','curentSale']));
+       }else{
         $userCount = user::where('role','user')->count();
         $oldsale = customer::whereMonth('regitr_date',now()->month)
                          ->whereYear('regitr_date', now()->year)->where('status','sale')->count();
@@ -31,37 +57,48 @@ class dashboardController extends Controller
         $NewCustomerprice = oldCustomer::whereMonth('regitr_date',now()->month)->whereYear('regitr_date', now()->year)->sum('price');
         $price = $oldCutomerprice + $NewCustomerprice;
 
-        $oldSalecustomerExpriDate = Customer::with('user')->whereDate('regitr_date', today())->get(); // Use 'registration_date' and 'today()'
+        $oldSalecustomerExpriDate = Customer::with('user')->whereDate('regitr_date', today())->get();
 
-        $NewSalecurentSale = OldCustomer::with('user')->whereDate('regitr_date', today())->get(); // Same column and model naming conventions
+        $NewSalecurentSale = OldCustomer::with('user')->whereDate('regitr_date', today())->get();
 
         $curentSale = $oldSalecustomerExpriDate->merge($NewSalecurentSale);
         return  view('admin.dashbord',compact(['userCount','sale','trial','lead','price','help','curentSale']));
+       }
      }
 
      public function  viewAgentSaleTable(){
 
+             $customers = Customer::with('user')
+                            ->select('a_name', \DB::raw('count(*) as total'))
+                            ->groupBy('a_name')
+                            ->where('status', 'sale')
+                            ->orderBy('regitr_date', 'desc')
+                            ->get();
+
+            return view('admin.agent_sale', compact('customers'));
+     }
+
+     public function viewSaleTable(string $id){
          $oldcustomers = Customer::with('user')
                                ->where('status', 'sale')
-                               ->orderBy('regitr_date','desc') // Correct the column name here
+                               ->orderBy('regitr_date','desc')
+                               ->where('a_name',$id)
                                ->get();
-
          $Newcustomers = oldCustomer::with('user')
                                  ->where('status', 'sale')
-                                 ->orderBy('regitr_date','desc') // Correct the column name here
+                                 ->orderBy('regitr_date','desc')
+                                 ->where('agent',$id)
                                  ->get();
 
-          $customers = $oldcustomers->merge($Newcustomers);
-
-
-      return view('admin.agent_sale', compact('customers'));
+         $customers = $oldcustomers->merge($Newcustomers);
+         return view('admin.sale_table', compact('customers'));
      }
 
      public function cutomerUPdateSaleDetailFormVIew(string $id){
       $customer = customer::find($id);
 
      return view('admin.edit_agent_sale',compact('customer'));
-}
+    }
 
 public function cutomerUPdateDetailSaleStore(Request $req, string $id){
   $req->validate([
@@ -97,12 +134,47 @@ public function cutomerUPdateDetailSaleStore(Request $req, string $id){
 
      public function  viewAgentLeadlTable(){
 
-       $customers = Customer::with('user')
-      ->where('status', 'lead')
-      ->orderByRaw('MONTH(regitr_date) asc')  // Sorting by the month part of 'registration_date'
-      ->get();
-
+                $customers = Customer::with('user')
+                            ->select('a_name', \DB::raw('count(*) as total'))
+                            ->groupBy('a_name')
+                            ->where('status', 'lead')
+                            ->orderBy('regitr_date', 'desc')
+                            ->get();
        return view('admin.agent_lead',compact('customers'));
+     }
+
+     public function viewleadtable(string $id){
+       $customers = Customer::with('user')
+                   ->where('status', 'lead')
+                   ->orderByRaw('MONTH(regitr_date) asc')
+                   ->where('a_name',$id)
+                   ->get();
+        return view('admin.lead_table',compact('customers'));
+     }
+
+     public function distributeLeadsForm(string $id){
+        $agentName = Customer::select('a_name')->with('user')->where('status','lead')->groupBy('a_name')->where('a_name','!=',$id)->get();
+        $agentID = user::find($id);
+        $customer = Customer::where('status','lead')->where('a_name',$id)->get();
+        return view('admin.dis_lead',compact(['agentName','agentID']));
+     }
+
+     public function updateLeadAgent(Request $req,string $id){
+        $OldLeadAgent = customer::where('status', 'lead')->where('a_name', $id)->get();
+        $disLeadAgent = customer::where('status', 'lead')->where('a_name', $req->agent)->get();
+        foreach ($OldLeadAgent as $oldAgent) {
+            foreach ($disLeadAgent as $newAgent) {
+                $newAgentID = $newAgent->a_name;
+                $newAgentName = $newAgent->user_name;
+
+                $oldAgent->a_name = $newAgentID;
+                $oldAgent->user_name = $newAgentName;
+
+                $oldAgent->save();
+                $newAgent->save();
+            }
+        }
+         return redirect()->route('viewAgentLeadlTable')->with(['success' => 'Distribute Lead Successfuly']);
      }
 
      public function cutomerUPdateDetailFormVIew(string $id){
@@ -315,7 +387,6 @@ public function cutomerUPdateDetailTrialStore(Request $req, string $id){
 
      public function viewCustomerNumber(){
 
-        // $allCustomerNumber = customerNumber::with('user')->get();
         $allCustomerNumber = CustomerNumber::with('user')->select('agent', \DB::raw('count(*) as total'))
                                 ->groupBy('agent')
                                 ->get();

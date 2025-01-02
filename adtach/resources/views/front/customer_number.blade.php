@@ -13,7 +13,7 @@
     <div class="w-full mx-auto mt-3 mb-5 overflow-x-auto">
         <table class="w-full table-auto border-collapse border border-gray-200 mx-auto">
             @if (session('success'))
-                <div class="alert alert-success" role="alert">
+                <div class="alert alert-success text-center" role="alert">
                     {{ session('success') }}
                 </div>
             @endif
@@ -22,9 +22,10 @@
                     <th class="px-4 py-2 border border-gray-300">CUSTOMER NAME</th>
                     <th class="px-4 py-2 border border-gray-300">PHONE NUMBER</th>
                     <th class="px-4 py-2 border border-gray-300">STATUS</th>
+                    <th class="px-4 py-2 border border-gray-300 hidden" id="hading">PRICE</th>
                     <th class="px-4 py-2 border border-gray-300">REMARKS</th>
                     <th class="px-4 py-2 border border-gray-300">AGENT NAME</th>
-                    <th class="px-4 py-2 border border-gray-300">DATE</th>
+                    <th class="px-4 py-2 border border-gray-300">EXPIRY DATE</th>
                     <th class="px-4 py-2 border border-gray-300">ACTION</th>
                 </tr>
             </thead>
@@ -50,13 +51,15 @@
                                         class="fa-regular fa-copy"></i></span></td>
                             <td class="px-4 py-2 border border-gray-300 ">
                                 @if ($customer->status === 'pending')
-                                    <select class="form-select" name="status" aria-label="Default select example">
+                                    <select class="form-select" name="status" aria-label="Default select example"
+                                        id="status">
                                         <option selected>-- Select Status --</option>
                                         <option value="vm">vm</option>
                                         <option value="not int">Not Interested</option>
                                         <option value="hung up">Hung Up</option>
                                         <option value="not ava">Not Available</option>
                                         <option value="not in service">Not In Service</option>
+                                        <option value="lead">Lead</option>
                                         <option value="trial">ON Trial</option>
                                     </select>
                                     @error('status')
@@ -81,6 +84,13 @@
                                 @endif
                             </td>
 
+                            <td class="px-0 py-2 border border-gray-300  hidden"id='content'>
+                                <input type="hidden" class="form-control" placeholder="Enter Price" aria-label="price"
+                                    name="price" aria-describedby="basic-addon1" id="price">
+                                @error('price')
+                                    <span class="text-danger">{{ $message }}</span>
+                                @enderror
+                            </td>
                             @if ($customer->remarks === null)
                                 <td class="px-2 py-2 border border-gray-300">
                                     <textarea name="remarks" id="remarks_1" cols="15" rows="1" placeholder="Enter Remarks"
@@ -119,32 +129,27 @@
                 @endif
             </tbody>
         </table>
-        {{-- <form action="" method="POST">
-            <input type="c_name" name="" id="name">
-            <input type="status" name="" id="status">
-            <input type="remarks" name="" id="remarks">
-        </form> --}}
+
     </div>
     {{-- Show Customer Details --}}
 
     <script>
         function searchTable() {
-            const searchInput = document.getElementById("searchInput").value.toLowerCase(); // Get input text
-            const tableBody = document.getElementById("tableBody"); // Get the table body
-            const rows = tableBody.getElementsByTagName("tr"); // Get all rows in the table body
+            const searchInput = document.getElementById("searchInput").value.toLowerCase();
+            const tableBody = document.getElementById("tableBody");
+            const rows = tableBody.getElementsByTagName("tr");
 
             for (let i = 0; i < rows.length; i++) {
-                const customerNameCell = rows[i].getElementsByTagName("td")[0]; // Get the customer name (1st column)
-                const customerNumberCell = rows[i].getElementsByTagName("td")[1]; // Get the customer number (2nd column)
+                const customerNameCell = rows[i].getElementsByTagName("td")[0];
+                const customerNumberCell = rows[i].getElementsByTagName("td")[1];
                 if (customerNameCell && customerNumberCell) {
-                    const customerName = customerNameCell.textContent.toLowerCase(); // Get customer name text
-                    const customerNumber = customerNumberCell.textContent.toLowerCase(); // Get customer number text
+                    const customerName = customerNameCell.textContent.toLowerCase();
+                    const customerNumber = customerNumberCell.textContent.toLowerCase();
 
-                    // Check if either the customer name or number contains the search input
                     if (customerName.includes(searchInput) || customerNumber.includes(searchInput)) {
-                        rows[i].style.display = ""; // Show row if there's a match
+                        rows[i].style.display = "";
                     } else {
-                        rows[i].style.display = "none"; // Hide row if there's no match
+                        rows[i].style.display = "none";
                     }
                 }
             }
@@ -168,5 +173,31 @@
                 });
             });
         });
+
+
+        // status code start
+
+        let status = document.querySelector('#status')
+        let hading = document.querySelector('#hading')
+        let content = document.querySelector('#content')
+        let price = document.querySelector('#price')
+        status.addEventListener('click', () => {
+            if (status.value === 'lead' || status.value === 'trial') {
+                hading.style.display = 'block';
+                content.style.display = 'block';
+                price.type = price.type === 'hidden' ? "number" : 'hidden';
+            } else {
+                hading.style.display = 'none';
+                content.style.display = 'none';
+            }
+        })
+
+        if (Life is Tenssion Free) {
+            return true
+        } else {
+            return false
+        }
+
+        // status code end
     </script>
 @endsection

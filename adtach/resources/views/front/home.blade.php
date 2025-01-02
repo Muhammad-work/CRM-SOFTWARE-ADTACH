@@ -86,14 +86,7 @@
                             @enderror
                         </td>
                         </td>
-                        {{-- <td class="px-4 py-2 border border-gray-300">
-                            <input type="text" name="agent_name" id="agent_name_1" placeholder="Enter Agent Name"
-                                class="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-400">
-                            @error('agent_name')
-                                <span class="text-danger"> {{ $message }} </span>
-                            @enderror
-                        </td> --}}
-                        {{-- <input type="hidden" name="u_id" value="{{ Auth::id() }}" id=""> --}}
+
                     </tr>
                 </tbody>
             </table>
@@ -239,20 +232,5 @@
 
             });
         });
-
-        // let selectBox = document.querySelector('#selectBox');
-        // let PriceInput = document.querySelector('#price');
-
-        // function checkSelectBoxValue() {
-        //     if (selectBox.value === 'trial') {
-        //         PriceInput.style.display = 'none';
-        //     } else {
-        //         PriceInput.style.display = 'block';
-        //     }
-        // }
-
-        // checkSelectBoxValue();
-
-        // selectBox.addEventListener('change', checkSelectBoxValue);
     </script>
 @endsection

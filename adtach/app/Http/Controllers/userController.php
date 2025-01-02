@@ -12,36 +12,38 @@ use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Str;
 use App\Mail\sendAgentMail;
 use Illuminate\Support\Facades\Mail;
-
+use Carbon\Carbon;
 class userController extends Controller
 {
 
     public function viewHome(){
-       
-
         return view('front.home');
     }
 
-    public function viewUserTable(){
+    public function viewUserTable(Request $req){
+         if ($req->date !== null && strtotime($req->date)) {
+              $salemonth = (int) date('m', strtotime($req->date));
+              $saleyear = (int) date('Y', strtotime($req->date));
 
-        $currentMonth = now()->month; // Current month
-        $currentYear = now()->year;  // Current year
-        // Get all agents
-        $agents = User::all();
-    
-        // Prepare data for sales counts
-        $salesData = [];
-    
-        foreach ($agents as $agent) {
+              $currentMonth = $salemonth;
+              $currentYear = $saleyear;
+         } else {
+              $currentMonth = (int) now()->month;
+              $currentYear = (int) now()->year;
+         }
+
+          $agents = User::all();
+
+         $salesData = [];
+
+         foreach ($agents as $agent) {
             $salesCount = $agent->getSalesCountForMonth($currentMonth, $currentYear);
-            $salesData[$agent->id] = $salesCount; // Store sales count with agent id
-        }
-    
-        $users = User::all(); 
-        
-        
+            $salesData[$agent->id] = $salesCount;
+         }
 
-       return view('admin.userTable', compact('users', 'salesData','currentMonth'));
+          $users = User::all();
+
+       return view('admin.userTable', compact('users', 'salesData', 'currentMonth'));
     }
 
     public function addUser(){
@@ -63,9 +65,9 @@ class userController extends Controller
         $toSendMail = $req->user_email;
         $subject ='Hello ' . $req->user_name . ' Login Now';
         $message ='Email : ' . $req->user_email . ' Password : ' . $req->user_password;
-        
+
         Mail::to( $toSendMail)->send(new sendAgentMail($subject,$message));
-        
+
         user::insert([
           'name' => $req->user_name,
           'email' => $req->user_email,
@@ -185,7 +187,7 @@ class userController extends Controller
     public function sendMail(){
         Mail::to('balochmuhammad817@gmail.com')->send(new sendAgentMail('Hello Muhammad', 'kdmflaksmdflkmslkdmflksm'));
     }
-    
+
      public function activateUser($id)
     {
        $user = user::find($id);
@@ -194,7 +196,7 @@ class userController extends Controller
             $user->save();
             return redirect()->back()->with('success', 'User activated successfully');
         }
-    
+
         return redirect()->back()->with('error', 'User not found');
     }
 

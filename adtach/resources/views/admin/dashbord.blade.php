@@ -11,6 +11,12 @@
                     <div class="col-sm-6">
                         <h1 class="m-0">Dashboard</h1>
                     </div><!-- /.col -->
+                    <div class="col-sm-6">
+                        <form action="" method="get" id="filterbyMonthForm">
+                            <label for="exampleInputEmail1">Filter By Month</label>
+                            <input type="month" class="form-control" name="date" aria-label="Text input with 2 dropdown buttons" id="filterbyMonth">
+                        </form>
+                    </div><!-- /.col -->
                 </div><!-- /.row -->
             </div><!-- /.container-fluid -->
         </div>
@@ -205,11 +211,11 @@
         @endif
 
         <script>
-            let fileByMonth = document.querySelector('#fileByMonth');
-            let FilterMonthForm = document.querySelector('#FilterMonthForm');
-                 fileByMonth.addEventListener('change',()=>{
-                    FilterMonthForm.submit();
-                 });
-         </script>
+            let fileByMonth = document.querySelector('#filterbyMonth');
+            let FilterMonthForm = document.querySelector('#filterbyMonthForm');
+            fileByMonth.addEventListener('change', () => {
+                FilterMonthForm.submit();
+            });
+        </script>
 
     @endsection
