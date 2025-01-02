@@ -2,6 +2,7 @@
 @extends('front.nav')
 
 @section('home')
+
     {{-- Search customer details --}}
     <div class="w-full h-[80px] flex justify-center items-center bg-[#1D4ED8]">
         <input type="text" name="" onkeyup="searchTable()" id="searchInput" placeholder="Search Customer"
@@ -22,7 +23,7 @@
                     <th class="px-4 py-2 border border-gray-300">CUSTOMER NAME</th>
                     <th class="px-4 py-2 border border-gray-300">PHONE NUMBER</th>
                     <th class="px-4 py-2 border border-gray-300">STATUS</th>
-                    <th class="px-4 py-2 border border-gray-300 hidden" id="hading">PRICE</th>
+                    <th class="px-4 py-2 border border-gray-300 hidden" id="heading">PRICE</th>
                     <th class="px-4 py-2 border border-gray-300">REMARKS</th>
                     <th class="px-4 py-2 border border-gray-300">AGENT NAME</th>
                     <th class="px-4 py-2 border border-gray-300">EXPIRY DATE</th>
@@ -84,7 +85,7 @@
                                 @endif
                             </td>
 
-                            <td class="px-0 py-2 border border-gray-300  hidden"id='content'>
+                            <td class="px-0 py-2 border border-gray-300 hidden" id="content">
                                 <input type="hidden" class="form-control" placeholder="Enter Price" aria-label="price"
                                     name="price" aria-describedby="basic-addon1" id="price">
                                 @error('price')
@@ -177,27 +178,30 @@
 
         // status code start
 
-        let status = document.querySelector('#status')
-        let hading = document.querySelector('#hading')
-        let content = document.querySelector('#content')
-        let price = document.querySelector('#price')
-        status.addEventListener('click', () => {
-            if (status.value === 'lead' || status.value === 'trial') {
-                hading.style.display = 'block';
-                content.style.display = 'block';
-                price.type = price.type === 'hidden' ? "number" : 'hidden';
+    let statusElements = document.querySelectorAll('#status');
+    let heading = document.querySelector('#heading');
+
+    let content = document.querySelector('#content');
+
+    statusElements.forEach(status => {
+        status.addEventListener('change', function() {
+            let row = this.closest('tr');
+            let content = row.querySelector('#content');
+
+            if (this.value == 'lead' || this.value == 'trial') {
+                heading.classList.remove('hidden');
+                content.classList.remove('hidden');
+
+                let priceInput = content.querySelector('#price');
+
+
+                priceInput.type = 'number';
             } else {
-                hading.style.display = 'none';
-                content.style.display = 'none';
+                heading.classList.add('hidden');
+                content.classList.add('hidden');
             }
-        })
-
-        if (Life is Tenssion Free) {
-            return true
-        } else {
-            return false
-        }
-
+        });
+    });
         // status code end
     </script>
 @endsection
