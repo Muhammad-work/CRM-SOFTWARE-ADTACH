@@ -468,4 +468,9 @@ public function cutomerUPdateDetailTrialStore(Request $req, string $id){
           return view('admin.customer_response',compact('customerResponseReports'));
        }
 
+
+       public function viewAgentDistributeNumbersForm(){
+          return view('admin.dis_to_agent_number');
+       }
+
 }
