@@ -470,7 +470,59 @@ public function cutomerUPdateDetailTrialStore(Request $req, string $id){
 
 
        public function viewAgentDistributeNumbersForm(){
-          return view('admin.dis_to_agent_number');
+           $allAgent = customerNumber::with('user')->select('agent')->groupby('agent')->get();
+           return view('admin.dis_to_agent_number',compact('allAgent'));
+       }
+
+       public function distributeNumberToAgent(Request $req){
+        $req->validate([
+            'old_agent' => 'required',
+            'date' => 'required',
+            'new_agent' => 'required',
+        ]);
+
+        // Fetch old and new agent customers
+        $old_agent = customerNumber::where('agent', $req->old_agent)->get();
+        $new_agent = customerNumber::where('agent', $req->new_agent)->get();
+
+        // Define common values to update
+        $CustomerName = 'No Customer Name';
+        $ExpriyDate = $req->date;
+        $status = 'pending';
+        $remarks = null;
+
+        // Loop through the old agent data
+        foreach ($old_agent as $old_Data) {
+            // Loop through the new agent data
+            foreach ($new_agent as $new_Data) {
+                // Swap the agent numbers between old and new
+                $oldAgent = $old_Data->agent;
+                $newAgent = $new_Data->agent;
+
+                // Swap the agent numbers
+                $old_Data->agent = $newAgent;
+                $new_Data->agent = $oldAgent;
+
+                // Update other fields
+                $old_Data->customer_name = $CustomerName;
+                $old_Data->date = $ExpriyDate;
+                $old_Data->status = $status;
+                $old_Data->remarks = $remarks;
+
+                $new_Data->customer_name = $CustomerName;
+                $new_Data->date = $ExpriyDate;
+                $new_Data->status = $status;
+                $new_Data->remarks = $remarks;
+
+                // Save the updated records
+                $old_Data->save();
+                $new_Data->save();
+            }
+        }
+
+        // Redirect with success message
+        return redirect()->route('viewCustomerNumber')->with(['success' => 'Distribute Numbers Successfully']);
+
        }
 
 }

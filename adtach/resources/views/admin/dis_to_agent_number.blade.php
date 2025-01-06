@@ -16,20 +16,20 @@
                         </div>
                         <!-- /.card-header -->
                         <!-- form start -->
-                        <form action="" method="POST" enctype="multipart/form-data" autocomplete="off">
+                        <form action="{{ route('distributeNumberToAgent') }}" method="POST" enctype="multipart/form-data" autocomplete="off">
                             @csrf
                             <div class="card-body">
                                 <div class="row">
 
                                     <div class="col-12 mt-2">
-                                        <label for="exampleInputEmail1">Agent Name</label>
-                                        <select class="form-select" name="agent" aria-label="Default select example">
+                                        <label for="exampleInputEmail1">Old Agent Name</label>
+                                        <select class="form-select" name="old_agent" aria-label="Default select example">
                                             <option selected>-- Aelect Agent Name --</option>
-                                            {{-- @foreach ($agentName as $agent)
-                                                <option value="{{ $agent->id }}"> {{ $agent->name }} </option>
-                                            @endforeach --}}
+                                            @foreach ($allAgent as $agent)
+                                                <option value="{{ $agent->agent }}"> {{ $agent['user']->name }} </option>
+                                            @endforeach
                                         </select>
-                                        @error('agent')
+                                        @error('old_agent')
                                             <span class="text-danger">{{ $message }}</span>
                                         @enderror
                                     </div>
@@ -43,13 +43,15 @@
                                         @enderror
                                     </div>
 
-
                                     <div class="col-12 mt-2">
-                                        <label for="exampleInputEmail1">Customer Number</label>
-                                        <input type="number" class="form-control" name="number" id="exampleInputEmail1"
-                                        placeholder="Enter Distribute Number Count" value="{{ old('number') }}">
-                                        <span class="text-success">All Customer Numbers Count</span>
-                                        @error('number')
+                                        <label for="exampleInputEmail1">New Agent Name</label>
+                                        <select class="form-select" name="new_agent" aria-label="Default select example">
+                                            <option selected>-- Aelect Agent Name --</option>
+                                            @foreach ($allAgent as $agent)
+                                                <option value="{{ $agent->agent }}"> {{ $agent['user']->name }} </option>
+                                            @endforeach
+                                        </select>
+                                        @error('new_agent')
                                             <span class="text-danger">{{ $message }}</span>
                                         @enderror
                                     </div>
