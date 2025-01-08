@@ -27,7 +27,7 @@
                     <th class="px-4 py-2 border border-gray-300">STATUS</th>
                     <th class="px-4 py-2 border border-gray-300 hidden sm:table-cell">CUSTOMER REGISTRATION DATE</th>
                     <th class="px-4 py-2 border border-gray-300 hidden md:table-cell">AGENT NAME</th>
-                    <th class="px-4 py-2 border border-gray-300">DATE</th>
+                    {{-- <th class="px-4 py-2 border border-gray-300">DATE</th> --}}
                     <th class="px-4 py-2 border border-gray-300">Action</th>
                 </tr>
             </thead>
@@ -51,9 +51,9 @@
                             @endif
                         </td>
                         <td class="px-4 py-2 border border-gray-300 customer hidden md:table-cell">{{ $user->name }}</td>
-                        <td class="px-4 py-2 border border-gray-300 customer">
+                        {{-- <td class="px-4 py-2 border border-gray-300 customer">
                             {{ \Carbon\Carbon::parse($customer->created_at)->format('d M, Y') }}
-                        </td>
+                        </td> --}}
                         @if ($customer->status === 'lead')
                             <form action="{{ route('customerStatus', $customer->id) }}" method="POST">
                                 @csrf

@@ -132,7 +132,7 @@
                         <th class="px-4 py-2 border border-gray-300">STATUS</th>
                         <th class="px-4 py-2 border border-gray-300">CUSTOMER REGISTRATION DATE</th>
                         <th class="px-4 py-2 border border-gray-300">AGENT NAME</th>
-                        <th class="px-4 py-2 border border-gray-300">DATE</th>
+                        {{-- <th class="px-4 py-2 border border-gray-300">DATE</th> --}}
                         <th class="px-4 py-2 border border-gray-300">ACTION</th>
                     </tr>
                 </thead>
@@ -165,8 +165,8 @@
                                 </td>
                                 <td class="px-4 py-2 border border-gray-300 customer hidden md:table-cell">
                                     {{ $user->name }}</td>
-                                <td class="px-4 py-2 border border-gray-300 customer hidden sm:table-cell">
-                                    {{ \Carbon\Carbon::parse($customer->created_at)->format('d M, Y') }}</td>
+                                {{-- <td class="px-4 py-2 border border-gray-300 customer hidden sm:table-cell">
+                                    {{ \Carbon\Carbon::parse($customer->created_at)->format('d M, Y') }}</td> --}}
 
                                 @if ($customer->status === 'lead')
                                     <form action="{{ route('customerStatus', $customer->id) }}" method="POST">

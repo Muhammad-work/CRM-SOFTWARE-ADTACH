@@ -20,6 +20,7 @@
             @endif
             <thead>
                 <tr class="bg-gray-100 text-gray-700">
+                    <th class="px-4 py-2 border border-gray-300">S.NO</th>
                     <th class="px-4 py-2 border border-gray-300">CUSTOMER NAME</th>
                     <th class="px-4 py-2 border border-gray-300">PHONE NUMBER</th>
                     <th class="px-4 py-2 border border-gray-300">STATUS</th>
@@ -31,10 +32,13 @@
                 </tr>
             </thead>
             <tbody id="tableBody">
-                @foreach ($customerNumbers as $customer)
+                @foreach ($customerNumbers as $index => $customer)
                     <form action="{{ route('storeCustomerNumbersDetails', $customer->id) }}" method="POST">
                         @csrf
                         <tr class="odd:bg-gray-50 even:bg-white">
+                            <td class="px-4 py-2 border border-gray-300">
+                               {{ $index + 1 }}
+                            </td>
                             <td class="px-4 py-2 border border-gray-300">
                                 @if ($customer->status === 'pending')
                                     <input type="text" class="form-control" placeholder="Enter Customer Name"
