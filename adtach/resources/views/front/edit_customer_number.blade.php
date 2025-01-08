@@ -25,7 +25,7 @@
 
                     <div class="mb-3">
                         <label for="exampleInputEmail1" class="form-label">Select Status</label>
-                        <select class="form-select" name="status" aria-label="Default select example">
+                        <select class="form-select" name="status" aria-label="Default select example" id="status">
                             @if ($customer->status === 'trial')
                                 <option selected value="trial">ON Trial</option>
                             @elseif($customer->status === 'not int')
@@ -47,8 +47,19 @@
                             <option value="hung up">Hung Up</option>
                             <option value="not ava">Not Available</option>
                             <option value="not in service">Not In Service</option>
+                            <option value="lead">Lead</option>
+                            <option value="trial">Trial</option>
                         </select>
                         @error('customer_name')
+                            <span class="text-danger"> {{ $message }} </span>
+                        @enderror
+                    </div>
+
+                    <div class="mb-3 hidden" id="priceinput">
+                        <label for="exampleInputEmail1" class="form-label">Price</label>
+                        <input type="text" class="form-control" name="price" id="exampleInputEmail1"
+                            placeholder="Enter Price" aria-describedby="emailHelp">
+                        @error('price')
                             <span class="text-danger"> {{ $message }} </span>
                         @enderror
                     </div>
@@ -66,4 +77,17 @@
             </div>
         </div>
     </div>
+
+    <script>
+         let status = document.querySelector('#status');
+         let priceinput = document.querySelector('#priceinput');
+         status.addEventListener('change',()=>{
+            if (status.value === 'lead' || status.value === 'trial') {
+                priceinput.style.display = 'block';
+            }else{
+                priceinput.style.display = 'none';
+            }
+         })
+    </script>
+
 @endsection

@@ -26,7 +26,6 @@
                     <th class="px-4 py-2 border border-gray-300">STATUS</th>
                     <th class="px-4 py-2 border border-gray-300 hidden sm:table-cell">CUSTOMER REGISTRATION DATE</th>
                     <th class="px-4 py-2 border border-gray-300">AGENT NAME</th>
-                    <th class="px-4 py-2 border border-gray-300">DATE</th>
                     <th class="px-4 py-2 border border-gray-300">Action</th>
                 </tr>
             </thead>
@@ -50,9 +49,6 @@
                             @endif
                         </td>
                         <td class="px-4 py-2 border border-gray-300 customer">{{ $user->name }}</td>
-                        <td class="px-4 py-2 border border-gray-300 customer">
-                            {{ \Carbon\Carbon::parse($customer->created_at)->format('d M, Y') }}
-                        </td>
                         @if ($customer->status === 'lead')
                             <form action="{{ route('customerStatus', $customer->id) }}" method="POST">
                                 @csrf
@@ -60,6 +56,7 @@
                                     <input type="hidden" name="status" id="input">
                                     <button class="btn btn-success" id="statusBtn">sale</button>
                                     <button class="btn btn-danger" id="statusBtn">trial</button>
+
                                 </td>
                             </form>
                         @elseif($customer->status === 'trial')
@@ -69,6 +66,8 @@
                                     <input type="hidden" name="status" id="input">
                                     <button class="btn btn-warning" id="statusBtn">lead</button>
                                     <button class="btn btn-success" id="statusBtn">sale</button>
+                                    <a href="{{route('viewTrialEditForm',$customer->id)}}" class="btn btn-primary"><i class="fa-solid fa-pen-to-square"></i></a>
+
                                 </td>
                             </form>
                         @else
@@ -83,7 +82,7 @@
             </tbody>
         </table>
     </div>
-    
+
     {{-- Show Customer Details --}}
 
 
@@ -111,7 +110,7 @@
             btn.addEventListener('click', function(e) {
                 target = e.target;
                 text = target.textContent;
-            
+
                 statusInput.forEach((input) => {
                     input.value = text;
                 })

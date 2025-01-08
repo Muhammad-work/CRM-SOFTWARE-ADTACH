@@ -136,7 +136,7 @@ class CustomerController extends Controller
             $authName = Auth::user()->name;
             $date = now();
 
-$customerLeadDataStoreAndTrialDataStore = customer::create([
+     $customerLeadDataStoreAndTrialDataStore = customer::create([
                 'customer_name' => $customerName,
                 'customer_email' =>  $customerEmail,
                 'customer_number' =>  $customer->customer_number,
@@ -183,20 +183,66 @@ $customerLeadDataStoreAndTrialDataStore = customer::create([
     }
 
       public function storeCustomerNumberEditDetails(Request $req, string $id){
-        $req->validate([
-            'customer_name' => 'required',
-            'status' => 'required',
-            'remarks' => 'required',
-        ]);
 
-        $customer = CustomerNumber::find($id);
 
-        $customer->customer_name = $req->customer_name;
-        $customer->status = $req->status;
-        $customer->remarks = $req->remarks;
-        $customer->save();
+        if ($req->status == 'lead' || $req->status == 'trial') {
+            $req->validate([
+                'status' => 'required',
+                'remarks' => 'required',
+                'price' => 'required',
+            ]);
 
-        return redirect()->route('viewCunstomerNumberTable')->with(['success' => 'Update Customer Information Successfuly']);
+            $customer = CustomerNumber::find($id);
+            $customerName = $req->customer_name ?: 'No Name';
+            $customerEmail = 'No Email';
+            $price = $req->price;
+            $status = $req->status;
+            $remarks = $req->remarks;
+            $authID = Auth::id();
+            $authName = Auth::user()->name;
+            $date = now();
+
+     $customerLeadDataStoreAndTrialDataStore = customer::create([
+                'customer_name' => $customerName,
+                'customer_email' =>  $customerEmail,
+                'customer_number' =>  $customer->customer_number,
+                'price' =>  $price,
+                'remarks' =>  $remarks,
+                'status' =>   $req->status,
+                'a_name' =>   $authID,
+                'user_name' => $authName,
+                'regitr_date' => $date,
+            ]);
+
+            $customerLeadDataStoreAndTrialDataStore->user_name =$authName;
+            $customerLeadDataStoreAndTrialDataStore->regitr_date =$date;
+            $customerLeadDataStoreAndTrialDataStore->save();
+            $customer->delete();
+
+           if ($req->status == 'lead') {
+            return redirect()->route('viewCunstomerNumberTable')->with(['success' => 'Add Customer Information To Youre Lead Page Successfuly']);
+            }else{
+               return redirect()->route('viewCunstomerNumberTable')->with(['success' => 'Add Customer Information To Youre Trial Page Successfuly']);
+           }
+
+        }else{
+            $req->validate([
+                'customer_name' => 'required',
+                'status' => 'required',
+                'remarks' => 'required',
+            ]);
+
+            $customer = CustomerNumber::find($id);
+
+            $customer->customer_name = $req->customer_name;
+            $customer->status = $req->status;
+            $customer->remarks = $req->remarks;
+            $customer->save();
+
+            return redirect()->route('viewCunstomerNumberTable')->with(['success' => 'Update Customer Information Successfuly']);
+        }
+
+
 
       }
 
@@ -247,5 +293,53 @@ $customerLeadDataStoreAndTrialDataStore = customer::create([
         $NewCustomer->agent = Auth::id();
         $NewCustomer->save();
         return redirect()->route('customerSalesTable')->with(['success' => 'Add New Customer Successfully']);
+    }
+
+
+    public function viewleadEditForm(string $id){
+       $customer  = customer::find($id);
+       return view('front.lead_edit',compact('customer'));
+    }
+
+    public function storeUpdateLeadData(Request $req,string $id){
+        $req->validate([
+            'price' => 'required',
+            'date' => 'required',
+            'remarks' => 'required',
+        ]);
+
+        $customer  = customer::find($id);
+        $customer->price = $req->price;
+        $customer->regitr_date = $req->date;
+        $customer->remarks = $req->remarks;
+
+        $customer->save();
+
+        return redirect()->route('customerLeadTable')->with(['success' => 'update customer detail']);
+
+    }
+
+    public function viewTrialEditForm(string $id){
+        $customer  = customer::find($id);
+        // return $customer;
+        return view('front.trial_edit',compact('customer'));
+     }
+
+     public function storeUpdateTrialData(Request $req,string $id){
+        $req->validate([
+            'price' => 'required',
+            'date' => 'required',
+            'remarks' => 'required',
+        ]);
+
+        $customer  = customer::find($id);
+        $customer->price = $req->price;
+        $customer->regitr_date = $req->date;
+        $customer->remarks = $req->remarks;
+
+        $customer->save();
+
+        return redirect()->route('customerTrialTable')->with(['success' => 'update customer detail']);
+
     }
 }

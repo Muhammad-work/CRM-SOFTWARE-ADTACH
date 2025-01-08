@@ -61,6 +61,7 @@
                                     <input type="hidden" name="status" id="input">
                                     <button class="btn btn-success" id="statusBtn">sale</button>
                                     <button class="btn btn-danger" id="statusBtn">trial</button>
+                                    <a href="{{route('viewleadEditForm',$customer->id)}}" class="btn btn-primary"><i class="fa-solid fa-pen-to-square"></i></a>
                                 </td>
                             </form>
                         @elseif($customer->status === 'trial')

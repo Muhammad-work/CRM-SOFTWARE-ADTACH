@@ -107,6 +107,10 @@ Route::controller(CustomerController::class)->group(function () {
     Route::post('/{id}/storeCustomerNumberEditDetails', 'storeCustomerNumberEditDetails')->name('storeCustomerNumberEditDetails')->middleware(validUser::class);
     Route::get('/{id}/edit-sale', 'viewEditCustomerSaleDetailForm')->name('viewEditCustomerSaleDetailForm')->middleware(validUser::class);
     Route::post('/{id}/storeEditCustomerSaleDetails', 'storeEditCustomerSaleDetails')->name('storeEditCustomerSaleDetails')->middleware(validUser::class);
+    Route::get('/{id}/update-lead', 'viewleadEditForm')->name('viewleadEditForm')->middleware(validUser::class);
+    Route::get('/{id}/update-trial', 'viewTrialEditForm')->name('viewTrialEditForm')->middleware(validUser::class);
+    Route::post('/{id}/storeUpdateLeadData', 'storeUpdateLeadData')->name('storeUpdateLeadData')->middleware(validUser::class);
+    Route::post('/{id}/storeUpdateTrialData', 'storeUpdateTrialData')->name('storeUpdateTrialData')->middleware(validUser::class);
 });
 
 Route::controller(HelpController::class)->group(function () {
