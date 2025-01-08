@@ -14,10 +14,11 @@
                         <h1 class="m-0 d-inline"><a href="{{ route('addUser') }}" class="btn btn-primary">Add New</a></h1>
                     </div><!-- /.col --> --}}
                     <div class="col-sm-6">
-                        <ol class="breadcrumb float-sm-right">
-                            <li class="breadcrumb-item"><a href="{{ route('dashboard') }}">DashBord</a></li>
-                            <li class="breadcrumb-item active">All Agent Sale Report</li>
-                        </ol>
+                        <form action="" method="get" id="filterbyMonthForm">
+                            <label for="exampleInputEmail1">Filter By Month</label>
+                            <input type="month" class="form-control" name="date"
+                                aria-label="Text input with 2 dropdown buttons" id="filterbyMonth">
+                        </form>
                     </div><!-- /.col -->
                 </div><!-- /.row -->
             </div><!-- /.container-fluid -->
@@ -90,4 +91,13 @@
                 <div>
                 </div>
             </div>
+
+
+            <script>
+                let fileByMonth = document.querySelector('#filterbyMonth');
+                let FilterMonthForm = document.querySelector('#filterbyMonthForm');
+                fileByMonth.addEventListener('change', () => {
+                    FilterMonthForm.submit();
+                });
+            </script>
         @endsection

@@ -78,19 +78,39 @@ class dashboardController extends Controller
             return view('admin.agent_sale', compact('customers'));
      }
 
-     public function viewSaleTable(string $id){
-         $oldcustomers = Customer::with('user')
-                               ->where('status', 'sale')
-                               ->orderBy('regitr_date','desc')
-                               ->where('a_name',$id)
-                               ->get();
-         $Newcustomers = oldCustomer::with('user')
-                                 ->where('status', 'sale')
-                                 ->orderBy('regitr_date','desc')
-                                 ->where('agent',$id)
-                                 ->get();
+     public function viewSaleTable(Request $req,string $id){
+        $month = date('m', strtotime($req->date));
+        $year = date('Y', strtotime($req->date));
+         if ($req->date == null) {
+            $oldcustomers = Customer::with('user')
+            ->where('status', 'sale')
+            ->orderBy('regitr_date','desc')
+            ->where('a_name',$id)
+            ->get();
+           $Newcustomers = oldCustomer::with('user')
+              ->where('status', 'sale')
+              ->orderBy('regitr_date','desc')
+              ->where('agent',$id)
+              ->get();
 
-         $customers = $oldcustomers->merge($Newcustomers);
+        //   $customers = $oldcustomers->merge($Newcustomers);
+         } else {
+            $oldcustomers = Customer::with('user')
+            ->where('status', 'sale')
+            ->whereMonth('regitr_date', $month)
+            ->whereYear('regitr_date', $year)
+            ->where('a_name',$id)
+            ->get();
+            $Newcustomers = oldCustomer::with('user')
+              ->where('status', 'sale')
+              ->whereMonth('regitr_date', $month)
+            ->whereYear('regitr_date', $year)
+              ->where('agent',$id)
+              ->get();
+
+            }
+            $customers = $oldcustomers->merge($Newcustomers);
+
          return view('admin.sale_table', compact('customers'));
      }
 
@@ -222,7 +242,7 @@ public function cutomerUPdateDetailSaleStore(Request $req, string $id){
 
        $customers = Customer::with('user')
       ->where('status', 'trial')
-      ->orderByRaw('MONTH(regitr_date) asc')  // Sorting by the month part of 'registration_date'
+      ->orderByRaw('MONTH(regitr_date) asc')
       ->get();
        return view('admin.agent_trial',compact('customers'));
      }
@@ -503,7 +523,7 @@ public function cutomerUPdateDetailTrialStore(Request $req, string $id){
                 $old_Data->agent = $newAgent;
                 $new_Data->agent = $oldAgent;
 
-                // Update other fields
+              
                 $old_Data->customer_name = $CustomerName;
                 $old_Data->date = $ExpriyDate;
                 $old_Data->status = $status;
@@ -514,7 +534,6 @@ public function cutomerUPdateDetailTrialStore(Request $req, string $id){
                 $new_Data->status = $status;
                 $new_Data->remarks = $remarks;
 
-                // Save the updated records
                 $old_Data->save();
                 $new_Data->save();
             }
