@@ -64,6 +64,7 @@
                                         <option value="hung up">Hung Up</option>
                                         <option value="not ava">Not Available</option>
                                         <option value="not in service">Not In Service</option>
+                                        <option value="call back">Call Back</option>
                                         <option value="lead">Lead</option>
                                         <option value="trial">ON Trial</option>
                                     </select>
@@ -71,8 +72,8 @@
                                         <span class="text-danger">{{ $message }}</span>
                                     @enderror
                                 @else
-                                    @if ($customer->status === 'pending')
-                                        <span class="px-2 py-1 bg-warning rounded text-white ">Pendding</span>
+                                    @if ($customer->status === 'call back')
+                                        <span class="px-2 py-1 bg-warning rounded text-white ">Call Back</span>
                                     @elseif($customer->status === 'not int')
                                         <span class="px-2 py-1 bg-danger rounded text-white">Not Intersted</span>
                                     @elseif($customer->status === 'vm')

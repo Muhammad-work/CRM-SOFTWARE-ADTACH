@@ -61,6 +61,8 @@
                                                 <span class="px-2 py-1 bg-secondary rounded text-white">Not Available</span>
                                             @elseif($data->status === 'not in service')
                                                 <span class="px-2 py-1 bg-info rounded text-white">Not In Service</span>
+                                            @elseif($data->status === 'call back')
+                                                <span class="px-2 py-1 bg-info rounded text-white">Call Back</span>
                                             @else
                                                 <span class="px-2 py-1 bg-success rounded text-white">ON Trial</span>
                                             @endif

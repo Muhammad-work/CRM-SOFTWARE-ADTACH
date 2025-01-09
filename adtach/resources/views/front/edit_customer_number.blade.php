@@ -26,8 +26,8 @@
                     <div class="mb-3">
                         <label for="exampleInputEmail1" class="form-label">Select Status</label>
                         <select class="form-select" name="status" aria-label="Default select example" id="status">
-                            @if ($customer->status === 'trial')
-                                <option selected value="trial">ON Trial</option>
+                            @if ($customer->status === 'call back')
+                                <option selected value="trial">Call Back</option>
                             @elseif($customer->status === 'not int')
                                 <option selected value="not int">Not Intersted</option>
                             @elseif($customer->status === 'vm')
@@ -41,12 +41,12 @@
                             @else
                                 <span class="px-2 py-1 bg-success rounded text-white">Pending</span>
                             @endif
-                            <option value="trial">ON Trial</option>
                             <option value="not int">Not Intersted</option>
                             <option value="vm">VM</option>
                             <option value="hung up">Hung Up</option>
                             <option value="not ava">Not Available</option>
                             <option value="not in service">Not In Service</option>
+                            <option value="call back">Call Back</option>
                             <option value="lead">Lead</option>
                             <option value="trial">Trial</option>
                         </select>

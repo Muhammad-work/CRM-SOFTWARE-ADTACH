@@ -27,7 +27,6 @@
                     <th class="px-4 py-2 border border-gray-300">STATUS</th>
                     <th class="px-4 py-2 border border-gray-300 hidden sm:table-cell">CUSTOMER REGISTRATION DATE</th>
                     <th class="px-4 py-2 border border-gray-300 hidden md:table-cell">AGENT NAME</th>
-                    {{-- <th class="px-4 py-2 border border-gray-300">DATE</th> --}}
                     <th class="px-4 py-2 border border-gray-300">Action</th>
                 </tr>
             </thead>
@@ -51,9 +50,6 @@
                             @endif
                         </td>
                         <td class="px-4 py-2 border border-gray-300 customer hidden md:table-cell">{{ $user->name }}</td>
-                        {{-- <td class="px-4 py-2 border border-gray-300 customer">
-                            {{ \Carbon\Carbon::parse($customer->created_at)->format('d M, Y') }}
-                        </td> --}}
                         @if ($customer->status === 'lead')
                             <form action="{{ route('customerStatus', $customer->id) }}" method="POST">
                                 @csrf
@@ -61,6 +57,7 @@
                                     <input type="hidden" name="status" id="input">
                                     <button class="btn btn-success" id="statusBtn">sale</button>
                                     <button class="btn btn-danger" id="statusBtn">trial</button>
+                                    <button class="btn btn-dark" id="statusBtn">denied</button>
                                     <a href="{{route('viewleadEditForm',$customer->id)}}" class="btn btn-primary"><i class="fa-solid fa-pen-to-square"></i></a>
                                 </td>
                             </form>
@@ -101,7 +98,7 @@
                 if (customerName.includes(searchInput) || customerNumber.includes(searchInput)) {
                     rows[i].style.display = "";
                 } else {
-                    rows[i].style.display = "none"; // Hide rows that don't match
+                    rows[i].style.display = "none";
                 }
             }
         }

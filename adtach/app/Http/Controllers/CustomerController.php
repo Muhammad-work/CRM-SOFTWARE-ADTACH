@@ -89,13 +89,13 @@ class CustomerController extends Controller
 
     public function customerTrialTable(){
 
-           $customers = Customer::where('a_name', Auth::id())
+           $customers = Customer::with('user')
+                                   ->where('a_name', Auth::id())
                                    ->where('status', 'trial')
                                    ->orderByRaw('MONTH(regitr_date) desc')
                                    ->get();
 
-        $user = user::where('id',Auth::id())->first();
-        return view('front.customer_trial',compact(['user','customers']));
+        return view('front.customer_trial',compact('customers'));
     }
 
     public function viewCunstomerNumberTable(){
@@ -110,7 +110,7 @@ class CustomerController extends Controller
                             WHEN status = 'hung up' THEN 3
                             WHEN status = 'not ava' THEN 4
                             WHEN status = 'not in service' THEN 5
-                            WHEN status = 'trial' THEN 6
+                            WHEN status = 'call back' THEN 6
                             ELSE 7
                         END")
                         ->orderBy('status', 'desc')
@@ -279,7 +279,7 @@ class CustomerController extends Controller
             'date' => 'required',
             'remarks' => 'required',
         ]);
-        // return $req;
+
         $oldCustomerData = customer::find($id);
        $NewCustomer = oldCustomer::create([
             'customer_name' => $oldCustomerData->customer_name,
@@ -321,7 +321,7 @@ class CustomerController extends Controller
 
     public function viewTrialEditForm(string $id){
         $customer  = customer::find($id);
-        // return $customer;
+
         return view('front.trial_edit',compact('customer'));
      }
 
@@ -342,4 +342,18 @@ class CustomerController extends Controller
         return redirect()->route('customerTrialTable')->with(['success' => 'update customer detail']);
 
     }
+
+
+    public function customerDeniedTable(){
+
+        $customers = Customer::with('user')
+                              ->where('status', 'denied')
+                              ->orderByRaw('MONTH(regitr_date) desc')
+                              ->where('a_name',Auth::id())
+                              ->get();
+
+       return view('front.customer_denied',compact('customers'));
+   }
+
+
 }

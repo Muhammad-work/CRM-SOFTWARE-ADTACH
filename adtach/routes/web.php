@@ -50,6 +50,8 @@ Route::controller(dashboardController::class)->group(function () {
     Route::post('/dashboard/updateLeadAgent/{id}', 'updateLeadAgent')->name('updateLeadAgent')->middleware(validUser::class)->middleware(validRole::class);
     Route::get('/dashboard/distribute-number', 'viewAgentDistributeNumbersForm')->name('viewAgentDistributeNumbersForm')->middleware(validUser::class)->middleware(validRole::class);
     Route::post('/dashboard/distributeNumberToAgent', 'distributeNumberToAgent')->name('distributeNumberToAgent')->middleware(validUser::class)->middleware(validRole::class);
+    Route::get('/dashboard/{id}/distributesaleToAgent', 'viewAgentDistributeSale')->name('viewAgentDistributeSale')->middleware(validUser::class)->middleware(validRole::class);
+    Route::post('/dashboard/{id}/updateSaleAgent', 'updateSaleAgent')->name('updateSaleAgent')->middleware(validUser::class)->middleware(validRole::class);
 });
 
 
@@ -105,6 +107,7 @@ Route::controller(CustomerController::class)->group(function () {
     Route::post('/{id}/storeEditCustomerSaleDetails', 'storeEditCustomerSaleDetails')->name('storeEditCustomerSaleDetails')->middleware(validUser::class);
     Route::get('/{id}/update-lead', 'viewleadEditForm')->name('viewleadEditForm')->middleware(validUser::class);
     Route::get('/{id}/update-trial', 'viewTrialEditForm')->name('viewTrialEditForm')->middleware(validUser::class);
+    Route::get('/customerDeniedTable', 'customerDeniedTable')->name('customerDeniedTable')->middleware(validUser::class);
     Route::post('/{id}/storeUpdateLeadData', 'storeUpdateLeadData')->name('storeUpdateLeadData')->middleware(validUser::class);
     Route::post('/{id}/storeUpdateTrialData', 'storeUpdateTrialData')->name('storeUpdateTrialData')->middleware(validUser::class);
 });

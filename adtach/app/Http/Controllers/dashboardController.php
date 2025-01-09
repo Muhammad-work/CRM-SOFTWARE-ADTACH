@@ -200,7 +200,7 @@ public function cutomerUPdateDetailSaleStore(Request $req, string $id){
        $customer = customer::find($id);
 
       return view('admin.edit_agent_lead',compact('customer'));
- }
+     }
 
    public function cutomerUPdateDetailStore(Request $req, string $id){
 
@@ -535,5 +535,39 @@ public function cutomerUPdateDetailTrialStore(Request $req, string $id){
         return redirect()->route('viewCustomerNumber')->with(['success' => 'Distribute Numbers Successfully']);
 
        }
+
+       public function viewAgentDistributeSale(string $id){
+        $agentName = Customer::select('a_name')->with('user')->where('status','sale')->groupBy('a_name')->where('a_name','!=',$id)->get();
+        $agentID = user::find($id);;
+        return view('admin.dis_sale',compact(['agentName','agentID']));
+       }
+
+       public function updateSaleAgent(Request $req,string $id){
+            $CustomerSaleAgent = customer::where('status', 'sale')->where('a_name', $id)->get();
+            $disSaleAgent = customer::where('status', 'sale')->where('a_name', $req->agent)->get();
+
+            $oldCustomerSaleAgent = oldcustomer::where('status', 'sale')->where('agent', $id)->get();
+
+            foreach ($CustomerSaleAgent as $oldAgent) {
+                foreach ($disSaleAgent as $newAgent) {
+                     $oldAgent->a_name = $newAgent->a_name;
+                     $oldAgent->user_name = $newAgent->user_name;
+
+                     $oldAgent->save();
+                }
+            }
+
+           foreach ($oldCustomerSaleAgent as $oldAgent) {
+               foreach ($disSaleAgent as $newAgent) {
+                   $oldAgent->agent = $newAgent->a_name;
+
+                   $oldAgent->save();
+               }
+           }
+
+     return redirect()->route('viewAgentSaleTable')->with(['success' => 'Distribute Sale Successfully']);
+
+     }
+
 
 }
