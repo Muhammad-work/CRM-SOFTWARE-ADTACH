@@ -93,7 +93,6 @@ class dashboardController extends Controller
               ->where('agent',$id)
               ->get();
 
-        //   $customers = $oldcustomers->merge($Newcustomers);
          } else {
             $oldcustomers = Customer::with('user')
             ->where('status', 'sale')
@@ -501,29 +500,23 @@ public function cutomerUPdateDetailTrialStore(Request $req, string $id){
             'new_agent' => 'required',
         ]);
 
-        // Fetch old and new agent customers
         $old_agent = customerNumber::where('agent', $req->old_agent)->get();
         $new_agent = customerNumber::where('agent', $req->new_agent)->get();
 
-        // Define common values to update
         $CustomerName = 'No Customer Name';
         $ExpriyDate = $req->date;
         $status = 'pending';
         $remarks = null;
 
-        // Loop through the old agent data
         foreach ($old_agent as $old_Data) {
-            // Loop through the new agent data
             foreach ($new_agent as $new_Data) {
-                // Swap the agent numbers between old and new
                 $oldAgent = $old_Data->agent;
                 $newAgent = $new_Data->agent;
 
-                // Swap the agent numbers
                 $old_Data->agent = $newAgent;
                 $new_Data->agent = $oldAgent;
 
-              
+
                 $old_Data->customer_name = $CustomerName;
                 $old_Data->date = $ExpriyDate;
                 $old_Data->status = $status;
@@ -539,7 +532,6 @@ public function cutomerUPdateDetailTrialStore(Request $req, string $id){
             }
         }
 
-        // Redirect with success message
         return redirect()->route('viewCustomerNumber')->with(['success' => 'Distribute Numbers Successfully']);
 
        }

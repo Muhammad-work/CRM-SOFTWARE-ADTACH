@@ -11,7 +11,7 @@ use App\Http\Controllers\saleContoller;
 use App\Http\Middleware\validUser;
 use App\Http\Middleware\validRole;
 
-// Dashboard Routes
+
 Route::controller(dashboardController::class)->group(function () {
     Route::get('/dashboard', 'viewDashboard')->name('dashboard')->middleware(validUser::class)->middleware(validRole::class);
     Route::get('/dashboard/viewAgentSaleTable', 'viewAgentSaleTable')->name('viewAgentSaleTable')->middleware(validUser::class)->middleware(validRole::class);
@@ -61,16 +61,12 @@ Route::controller(userController::class)->middleware(validUser::class)->middlewa
     Route::post('/dashboard/{id}/storeUpdateUser', 'storeUpdateUser')->name('storeUpdateUser');
     Route::get('/dashboard/{id}/deleteUser', 'deleteUser')->name('deleteUser');
     Route::get('/dashboard/sendMail', 'sendMail')->name('sendMail');
-    // Route::get('/dashboard/activateUser', 'activateUser')->name('activateUser');
-    // Route::get('/dashboard/curront-mont-sale', 'viewAgentSaleCountCurrontMont')->name('viewAgentSaleCountCurrontMont');
-    // Route::get('/dashboard/lastmontsale', 'lastmontsale')->name('lastmontsale');
-
 });
-// Correct route to activate a user (with user ID parameter)
+
 Route::get('/user/{id}/activate', [UserController::class, 'activateUser'])->name('activateUser');
 Route::get('/user/{id}/deactivateUser', [UserController::class, 'deactivateUser'])->name('deactivateUser');
 
-// Admin Routes
+
 Route::controller(adminController::class)->middleware(validUser::class)->middleware(validRole::class)->group(function () {
     Route::get('/dashboard/all-admin', 'viewAdminTable')->name('viewAdminTable');
     Route::get('/dashboard/add-admin', 'viewAddForm')->name('viewAddForm');
@@ -82,7 +78,7 @@ Route::controller(adminController::class)->middleware(validUser::class)->middlew
     Route::post('/dashboard/{id}/changePasswordStore', 'changePasswordStore')->name('changePasswordStore');
 });
 
-// Login Routes (No middleware needed for login routes)
+
 Route::controller(userController::class)->group(function () {
     Route::get('/login', 'login')->name('login');
     Route::post('/storeLogin', 'loginstore')->name('loginstore');
