@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\user;
+use App\Models\customer;
+use App\Models\oldcustomer;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\Auth;
@@ -20,31 +22,47 @@ class userController extends Controller
         return view('front.home');
     }
 
-    public function viewUserTable(Request $req){
-         if ($req->date !== null && strtotime($req->date)) {
-              $salemonth = (int) date('m', strtotime($req->date));
-              $saleyear = (int) date('Y', strtotime($req->date));
+    public function viewUserTable(Request $req)
+    {
+        // Handling the date input from the request, defaulting to the current date if none provided
+        $date = $req->date ? Carbon::parse($req->date) : now();
+        $currentMonth = $date->month;
+        $currentYear = $date->year;
 
-              $currentMonth = $salemonth;
-              $currentYear = $saleyear;
-         } else {
-              $currentMonth = (int) now()->month;
-              $currentYear = (int) now()->year;
-         }
+        // Query for the customers' sales data
+        $oldCustomer = Customer::with('user')
+                               ->select('a_name', \DB::raw('sum(price) as total')) // Summing the price field
+                               ->where('status', 'sale')
+                               ->where('price', '>', 0)
+                               ->groupBy('a_name')
+                               ->whereMonth('regitr_date', $currentMonth)
+                               ->whereYear('regitr_date', $currentYear)
+                               ->orderBy('regitr_date', 'desc')
+                               ->get();
 
-          $agents = User::all();
+        $newCustomer = OldCustomer::with('user') // Ensure the correct class name (OldCustomer)
+                                  ->select('agent', \DB::raw('sum(price) as total')) // Summing the price field
+                                  ->where('status', 'sale')
+                                  ->where('price', '>', 0)
+                                  ->groupBy('agent')
+                                  ->whereMonth('regitr_date', $currentMonth)
+                                  ->whereYear('regitr_date', $currentYear)
+                                  ->orderBy('regitr_date', 'desc')
+                                  ->get();
 
-         $salesData = [];
+        
+        $agents = User::all();
+        $salesData = [];
 
-         foreach ($agents as $agent) {
+        foreach ($agents as $agent) {
             $salesCount = $agent->getSalesCountForMonth($currentMonth, $currentYear);
             $salesData[$agent->id] = $salesCount;
-         }
+        }
+        $users = User::all();
 
-          $users = User::all();
-
-       return view('admin.userTable', compact('users', 'salesData', 'currentMonth'));
+        return view('admin.userTable', compact('users', 'salesData', 'currentMonth', 'oldCustomer','newCustomer'));
     }
+
 
     public function addUser(){
         return view('admin.add_user');

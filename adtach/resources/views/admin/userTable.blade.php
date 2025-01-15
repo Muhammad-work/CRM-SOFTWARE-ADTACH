@@ -41,6 +41,7 @@
                                     <th>USER PHONE</th>
                                     <th>ROLE</th>
                                     <th>SALES COUNT</th> <!-- Sales Count Column -->
+                                    <th>SALES TOTAL</th> <!-- Sales Count Column -->
                                     <th>MONTH</th>
                                     <th>LOGIN STATUS</th> <!-- Login Status -->
                                     <th>ACTION</th>
@@ -60,6 +61,13 @@
                                                     $salesCount = $salesData[$user->id] ?? 0;
                                                 @endphp
                                                 {{ $salesCount }}
+                                            </td>
+                                            <td>
+                                                @php
+                                                    $totalSales_1 = $oldCustomer->where('a_name', $user->id)->sum('total');
+                                                    $totalSales_2 = $newCustomer->where('agent', $user->id)->sum('total');
+                                                @endphp
+                                                ${{ $totalSales_1 +  $totalSales_2}}
                                             </td>
                                             <td>
                                                 {{ \Carbon\Carbon::now()->month($currentMonth)->format('F') }}

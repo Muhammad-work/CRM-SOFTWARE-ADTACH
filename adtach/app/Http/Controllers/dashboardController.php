@@ -14,57 +14,62 @@ use Carbon\Carbon;
 
 class dashboardController extends Controller
 {
-     public function viewDashboard(Request $req){
-        $month = date('m', strtotime($req->date));
-        $year = date('Y', strtotime($req->date));
-       if ($req->date !== null) {
-        $userCount = user::where('role','user')->count();
-        $oldsale = customer::whereMonth('regitr_date',$month)
-                         ->whereYear('regitr_date', $year)->where('status','sale')->count();
-        $Newsale = oldCustomer::whereMonth('regitr_date',$month)
-                         ->whereYear('regitr_date', $year)->where('status','sale')->count();
+  public function viewDashboard(Request $req) {
+        $date = $req->date ?? now();
+        $month = date('m', strtotime($date));
+        $year = date('Y', strtotime($date));
+
+
+        $userCount = user::where('role', 'user')->count();
+
+        $oldsale = customer::whereMonth('regitr_date', $month)
+                           ->whereYear('regitr_date', $year)
+                           ->where('status', 'sale')
+                           ->count();
+        $Newsale = oldCustomer::whereMonth('regitr_date', $month)
+                              ->whereYear('regitr_date', $year)
+                              ->where('status', 'sale')
+                              ->count();
         $sale = $oldsale + $Newsale;
+
         $trial = customer::whereMonth('regitr_date', $month)
-                           ->whereYear('regitr_date', $year)->where('status','trial')->count();
-        $lead = customer::whereMonth('regitr_date',$month)
-                          ->whereYear('regitr_date', $year)->where('status','lead')->count();
-        $help = help::where('status','pending')->count();
+                         ->whereYear('regitr_date', $year)
+                         ->where('status', 'trial')
+                         ->count();
 
-        $oldCutomerprice = Customer::whereMonth('regitr_date',$month)->whereYear('regitr_date', $year)->sum('price');
-        $NewCustomerprice = oldCustomer::whereMonth('regitr_date',$month)->whereYear('regitr_date', $year)->sum('price');
+        $lead = customer::whereMonth('regitr_date', $month)
+                        ->whereYear('regitr_date', $year)
+                        ->where('status', 'lead')
+                        ->count();
+
+
+        $help = help::where('status', 'pending')->count();
+
+
+        $oldCutomerprice = Customer::where('status','sale')->whereMonth('regitr_date', $month)
+                                   ->whereYear('regitr_date', $year)
+                                   ->sum('price');
+        $NewCustomerprice = oldCustomer::where('status','sale')->whereMonth('regitr_date', $month)
+                                       ->whereYear('regitr_date', $year)
+                                       ->sum('price');
         $price = $oldCutomerprice + $NewCustomerprice;
 
-        $oldSalecustomerExpriDate = Customer::with('user')->whereDate('regitr_date', today())->get();
 
-        $NewSalecurentSale = OldCustomer::with('user')->whereDate('regitr_date', today())->get();
+        $oldSalecustomerExpriDate = Customer::with('user')
+                                            ->whereDate('regitr_date', today())
+                                            ->get();
+        $NewSalecurentSale = OldCustomer::with('user')
+                                        ->whereDate('regitr_date', today())
+                                        ->get();
 
-        $curentSale = $oldSalecustomerExpriDate->merge($NewSalecurentSale);
-        return  view('admin.dashbord',compact(['userCount','sale','trial','lead','price','help','curentSale']));
-       }else{
-        $userCount = user::where('role','user')->count();
-        $oldsale = customer::whereMonth('regitr_date',now()->month)
-                         ->whereYear('regitr_date', now()->year)->where('status','sale')->count();
-        $Newsale = oldCustomer::whereMonth('regitr_date',now()->month)
-                         ->whereYear('regitr_date', now()->year)->where('status','sale')->count();
-        $sale = $oldsale + $Newsale;
-        $trial = customer::whereMonth('regitr_date', now()->month)
-                           ->whereYear('regitr_date', now()->year)->where('status','trial')->count();
-        $lead = customer::whereMonth('regitr_date',now()->month)
-                          ->whereYear('regitr_date', now()->year)->where('status','lead')->count();
-        $help = help::where('status','pending')->count();
-
-        $oldCutomerprice = Customer::whereMonth('regitr_date',now()->month)->whereYear('regitr_date', now()->year)->sum('price');
-        $NewCustomerprice = oldCustomer::whereMonth('regitr_date',now()->month)->whereYear('regitr_date', now()->year)->sum('price');
-        $price = $oldCutomerprice + $NewCustomerprice;
-
-        $oldSalecustomerExpriDate = Customer::with('user')->whereDate('regitr_date', today())->get();
-
-        $NewSalecurentSale = OldCustomer::with('user')->whereDate('regitr_date', today())->get();
 
         $curentSale = $oldSalecustomerExpriDate->merge($NewSalecurentSale);
-        return  view('admin.dashbord',compact(['userCount','sale','trial','lead','price','help','curentSale']));
-       }
-     }
+
+
+        return view('admin.dashbord', compact([
+            'userCount', 'sale', 'trial', 'lead', 'price', 'help', 'curentSale'
+        ]));
+    }
 
      public function  viewAgentSaleTable(){
 
@@ -119,14 +124,14 @@ class dashboardController extends Controller
      return view('admin.edit_agent_sale',compact('customer'));
     }
 
-public function cutomerUPdateDetailSaleStore(Request $req, string $id){
-  $req->validate([
+   public function cutomerUPdateDetailSaleStore(Request $req, string $id){
+    $req->validate([
     'customer_name' => 'required|string',
     'customer_number' => 'required|numeric',
     'price' => 'required|numeric',
     'remarks' => 'required',
     'status' => 'required',
-]);
+   ]);
 
     $customer = customer::find($id);
     $email = $req->customer_email ?: 'No Email';

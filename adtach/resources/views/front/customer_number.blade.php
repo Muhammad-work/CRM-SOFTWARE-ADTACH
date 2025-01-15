@@ -146,8 +146,8 @@
             const rows = tableBody.getElementsByTagName("tr");
 
             for (let i = 0; i < rows.length; i++) {
-                const customerNameCell = rows[i].getElementsByTagName("td")[0];
-                const customerNumberCell = rows[i].getElementsByTagName("td")[1];
+                const customerNameCell = rows[i].getElementsByTagName("td")[1];
+                const customerNumberCell = rows[i].getElementsByTagName("td")[2];
                 if (customerNameCell && customerNumberCell) {
                     const customerName = customerNameCell.textContent.toLowerCase();
                     const customerNumber = customerNumberCell.textContent.toLowerCase();

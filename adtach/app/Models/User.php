@@ -60,14 +60,14 @@ class User extends Authenticatable
         return $this->hasMany(customerNumber::class);
      }
 
-     
+
 
      public function getSalesCountForMonth($month, $year)
     {
          $oldCustomer = customer::getSalesByAgentAndMonth($this->id, $month, $year);
          $newCustomer = oldCustomer::getSalesByAgentAndMonth($this->id, $month, $year);
          $sale = $oldCustomer + $newCustomer;
-         
+
          return $sale;
     }
 }
