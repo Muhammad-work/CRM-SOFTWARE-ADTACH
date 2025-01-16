@@ -243,12 +243,52 @@ class dashboardController extends Controller
    }
 
      public function  viewAgentTrialTable(){
-
-       $customers = Customer::with('user')
-      ->where('status', 'trial')
-      ->orderByRaw('MONTH(regitr_date) asc')
-      ->get();
+        $customers = Customer::with('user')
+                               ->select('a_name', \DB::raw('count(*) as total'))
+                               ->groupBy('a_name')
+                               ->where('status', 'trial')
+                               ->orderBy('regitr_date', 'desc')
+                               ->get();
+    //    $customers = Customer::with('user')
+    //                         ->where('status', 'trial')
+    //                         ->orderByRaw('MONTH(regitr_date) asc')
+    //                         ->get();
+        // return $customers;
        return view('admin.agent_trial',compact('customers'));
+     }
+
+     public function viewtrialtable(string $id){
+        $customers = Customer::with('user')
+                    ->where('status', 'trial')
+                    ->orderByRaw('MONTH(regitr_date) asc')
+                    ->where('a_name',$id)
+                    ->get();
+         return view('admin.trial_table',compact('customers'));
+      }
+
+      public function distributeTrialsForm(string $id){
+        $agentName = Customer::select('a_name')->with('user')->where('status','trial')->groupBy('a_name')->where('a_name','!=',$id)->get();
+        $agentID = user::find($id);
+        $customer = Customer::where('status','trial')->where('a_name',$id)->get();
+        return view('admin.dis_trial',compact(['agentName','agentID']));
+     }
+
+     public function updateTrialAgent(Request $req,string $id){
+        $OldLeadAgent = customer::where('status', 'trial')->where('a_name', $id)->get();
+        $disLeadAgent = customer::where('status', 'trial')->where('a_name', $req->agent)->get();
+        foreach ($OldLeadAgent as $oldAgent) {
+            foreach ($disLeadAgent as $newAgent) {
+                $newAgentID = $newAgent->a_name;
+                $newAgentName = $newAgent->user_name;
+
+                $oldAgent->a_name = $newAgentID;
+                $oldAgent->user_name = $newAgentName;
+
+                $oldAgent->save();
+                $newAgent->save();
+            }
+        }
+         return redirect()->route('viewAgentTrialTable')->with(['success' => 'Distribute Trial Successfuly']);
      }
 
      public function cutomerUPdateTrialDetailFormVIew(string $id){

@@ -33,6 +33,7 @@
                                 <tr>
                                     <th>ID</th>
                                     <th>AGENT NAME</th>
+                                    <th>TOTAL LEADS</th>
                                     <th>ACTION</th>
                                 </tr>
                             </thead>
@@ -41,6 +42,7 @@
                                     <tr>
                                         <td> {{ $index + 1 }} </td>
                                         <td>{{$customer['user']->name}}</td>
+                                        <td>{{$customer->total}}</td>
                                         <td>
                                             <a href="{{ route('viewleadtable',$customer['user']->id) }}"
                                                 class="btn btn-primary"><i class="fa-solid fa-eye"></i></a>

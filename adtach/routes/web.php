@@ -51,7 +51,10 @@ Route::controller(dashboardController::class)->group(function () {
     Route::get('/dashboard/distribute-number', 'viewAgentDistributeNumbersForm')->name('viewAgentDistributeNumbersForm')->middleware(validUser::class)->middleware(validRole::class);
     Route::post('/dashboard/distributeNumberToAgent', 'distributeNumberToAgent')->name('distributeNumberToAgent')->middleware(validUser::class)->middleware(validRole::class);
     Route::get('/dashboard/{id}/distributesaleToAgent', 'viewAgentDistributeSale')->name('viewAgentDistributeSale')->middleware(validUser::class)->middleware(validRole::class);
+    Route::get('/dashboard/{id}/all-agent-trial-report', 'viewtrialtable')->name('viewtrialtable')->middleware(validUser::class)->middleware(validRole::class);
+    Route::get('/dashboard/{id}/distributeTrialsForm', 'distributeTrialsForm')->name('distributeTrialsForm')->middleware(validUser::class)->middleware(validRole::class);
     Route::post('/dashboard/{id}/updateSaleAgent', 'updateSaleAgent')->name('updateSaleAgent')->middleware(validUser::class)->middleware(validRole::class);
+    Route::post('/dashboard/{id}/updateTrialAgent', 'updateTrialAgent')->name('updateTrialAgent')->middleware(validUser::class)->middleware(validRole::class);
 });
 
 
