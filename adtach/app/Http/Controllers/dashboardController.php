@@ -114,13 +114,19 @@ class dashboardController extends Controller
 
             }
             $customers = $oldcustomers->merge($Newcustomers);
-
          return view('admin.sale_table', compact('customers'));
      }
 
      public function cutomerUPdateSaleDetailFormVIew(string $id){
-      $customer = customer::find($id);
 
+      $oldcustomers = customer::find($id);
+      $Newcustomers = oldcustomer::find($id);
+      $customer;
+      if ($oldcustomers) {
+        $customer = $oldcustomers;
+      }else{
+          $customer = $Newcustomers;
+      }
      return view('admin.edit_agent_sale',compact('customer'));
     }
 
@@ -151,7 +157,14 @@ class dashboardController extends Controller
  }
 
  public function deleteSaleCustomerDetails(string $id){
-  $customer = customer::find($id);
+  $oldcustomer = customer::find($id);
+  $newcustomer = oldcustomer::find($id);
+  $customer = null;
+  if ($oldcustomer) {
+    $customer = $oldcustomer;
+   }else{
+      $customer = $newcustomer;
+  }
   $customer->delete();
   return  redirect()->route('viewAgentSaleTable')->with(['success' => 'Customer Detail Deleted Successfuly']);
 }
