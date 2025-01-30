@@ -29,14 +29,14 @@ class adminController extends Controller
             'role' => 'required'
         ]);
 
-       
+
         $address = $req->user_address ?: 'No Address';
         $phone = $req->user_phone ?: 'No Address';
 
         $toSendMail = $req->user_email;
         $subject ='Hello ' . $req->user_name . ' Login Now';
         $message ='Email : ' . $req->user_email . ' Password : ' . $req->user_password;
-        
+
         Mail::to( $toSendMail)->send(new sendAgentMail($subject,$message));
 
         user::insert([
@@ -50,7 +50,7 @@ class adminController extends Controller
           'created_at' => now(),
           'updated_at' => now(),
         ]);
-        
+
         return redirect()->route('viewAdminTable')->with(['success' => 'Admin Created Successfuly']);
      }
 

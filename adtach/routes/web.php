@@ -55,6 +55,7 @@ Route::controller(dashboardController::class)->group(function () {
     Route::get('/dashboard/{id}/distributeTrialsForm', 'distributeTrialsForm')->name('distributeTrialsForm')->middleware(validUser::class)->middleware(validRole::class);
     Route::post('/dashboard/{id}/updateSaleAgent', 'updateSaleAgent')->name('updateSaleAgent')->middleware(validUser::class)->middleware(validRole::class);
     Route::post('/dashboard/{id}/updateTrialAgent', 'updateTrialAgent')->name('updateTrialAgent')->middleware(validUser::class)->middleware(validRole::class);
+    Route::get('/dashboard/all-agent-sale', 'filterSaleByDate')->name('filterSaleByDate')->middleware(validUser::class)->middleware(validRole::class);
 });
 
 
@@ -66,6 +67,8 @@ Route::controller(userController::class)->middleware(validUser::class)->middlewa
     Route::post('/dashboard/{id}/storeUpdateUser', 'storeUpdateUser')->name('storeUpdateUser');
     Route::get('/dashboard/{id}/deleteUser', 'deleteUser')->name('deleteUser');
     Route::get('/dashboard/sendMail', 'sendMail')->name('sendMail');
+    Route::get('/dashboard/{id}/viewUserChangePassword', 'viewUserChangePassword')->name('viewUserChangePassword');
+    Route::post('/dashboard/{id}/changeAgentPasswordStore', 'changeAgentPasswordStore')->name('changeAgentPasswordStore');
 });
 
 Route::get('/user/{id}/activate', [UserController::class, 'activateUser'])->name('activateUser');

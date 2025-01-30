@@ -11,10 +11,15 @@
                         <h1 class="m-0 d-inline">All Agent Sale Report</h1>
                     </div><!-- /.col -->
                     <div class="col-sm-6">
-                        <ol class="breadcrumb float-sm-right">
+                        {{-- <ol class="breadcrumb float-sm-right">
                             <li class="breadcrumb-item"><a href="{{ route('dashboard') }}">DashBord</a></li>
                             <li class="breadcrumb-item active">All Agent Sale Report</li>
-                        </ol>
+                        </ol> --}}
+                        <form action="{{ route('filterSaleByDate') }}" method="get" id="filterbyDateForm">
+                            <label for="exampleInputEmail1">Filter By Date</label>
+                            <input type="date" class="form-control" name="date"
+                                aria-label="Text input with 2 dropdown buttons" id="filterbyDate">
+                        </form>
                     </div><!-- /.col -->
                 </div><!-- /.row -->
             </div><!-- /.container-fluid -->
@@ -40,11 +45,11 @@
                                 @foreach ($customers as $index => $customer)
                                     <tr>
                                         <td> {{ $index + 1 }} </td>
-                                        <td>{{$customer['user']->name}}</td>
+                                        <td>{{ $customer['user']->name }}</td>
                                         <td>
-                                            <a href="{{ route('viewSaleTable',$customer['user']->id) }}"
+                                            <a href="{{ route('viewSaleTable', $customer['user']->id) }}"
                                                 class="btn btn-primary"><i class="fa-solid fa-eye"></i></a>
-                                            <a href="{{ route('viewAgentDistributeSale',$customer['user']->id) }}"
+                                            <a href="{{ route('viewAgentDistributeSale', $customer['user']->id) }}"
                                                 class="btn btn-primary">Distribute Sale</a>
                                         </td>
                                     </tr>
@@ -56,4 +61,11 @@
                 <div>
                 </div>
             </div>
+            <script>
+                let filterbyDate = document.querySelector('#filterbyDate');
+                let filterbyDateForm = document.querySelector('#filterbyDateForm');
+                filterbyDate.addEventListener('change', () => {
+                    filterbyDateForm.submit();
+                })
+            </script>
         @endsection

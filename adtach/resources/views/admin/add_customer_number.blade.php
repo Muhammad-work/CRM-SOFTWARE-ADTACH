@@ -16,11 +16,11 @@
                         </div>
                         <!-- /.card-header -->
                         <!-- form start -->
-                        <form action="{{ route('storeCustomerNumbers') }}" method="POST" enctype="multipart/form-data" autocomplete="off">
+                        <form action="{{ route('storeCustomerNumbers') }}" method="POST" enctype="multipart/form-data"
+                            autocomplete="off">
                             @csrf
                             <div class="card-body">
                                 <div class="row">
-
                                     <div class="col-12 mt-2">
                                         <label for="exampleInputEmail1">Agent Name</label>
                                         <select class="form-select" name="agent" aria-label="Default select example">
@@ -47,8 +47,9 @@
                                     <div class="col-12 mt-2">
                                         <label for="exampleInputEmail1">Customer Number</label>
                                         <input type="number" class="form-control" name="number" id="exampleInputEmail1"
-                                        placeholder="Enter Distribute Number Count" value="{{ old('number') }}">
-                                        <span class="text-success">All Customer Numbers Count {{$allClientNumbersCount}}</span>
+                                            placeholder="Enter Distribute Number Count" value="{{ old('number') }}">
+                                        <span class="text-success">All Customer Numbers Count
+                                            {{ $allClientNumbersCount }}</span>
                                         @error('number')
                                             <span class="text-danger">{{ $message }}</span>
                                         @enderror

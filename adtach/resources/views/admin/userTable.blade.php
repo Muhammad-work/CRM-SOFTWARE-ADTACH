@@ -14,9 +14,10 @@
                         <h1 class="m-0 d-inline"><a href="{{ route('addUser') }}" class="btn btn-primary">Add New</a></h1>
                     </div><!-- /.col -->
                     <div class="col-sm-6">
-                        <form action="{{  route('viewUserTable') }}" method="get" id="filterbyMonthForm">
+                        <form action="{{ route('viewUserTable') }}" method="get" id="filterbyMonthForm">
                             <label for="exampleInputEmail1">Filter By Month Sale Count</label>
-                            <input type="month" class="form-control" name="date" aria-label="Text input with 2 dropdown buttons" id="filterbyMonth">
+                            <input type="month" class="form-control" name="date"
+                                aria-label="Text input with 2 dropdown buttons" id="filterbyMonth">
                         </form>
                     </div><!-- /.col -->
                 </div><!-- /.row -->
@@ -64,24 +65,35 @@
                                             </td>
                                             <td>
                                                 @php
-                                                    $totalSales_1 = $oldCustomer->where('a_name', $user->id)->sum('total');
-                                                    $totalSales_2 = $newCustomer->where('agent', $user->id)->sum('total');
+                                                    $totalSales_1 = $oldCustomer
+                                                        ->where('a_name', $user->id)
+                                                        ->sum('total');
+                                                    $totalSales_2 = $newCustomer
+                                                        ->where('agent', $user->id)
+                                                        ->sum('total');
                                                 @endphp
-                                                ${{ $totalSales_1 +  $totalSales_2}}
+                                                ${{ $totalSales_1 + $totalSales_2 }}
                                             </td>
                                             <td>
                                                 {{ \Carbon\Carbon::now()->month($currentMonth)->format('F') }}
                                             </td>
                                             <td>
                                                 @if ($user->ip_address === '0')
-                                                   <span class="bg-danger px-1 py-2 d-inline-block text-center rounded mt-1">Deactivate</span>
+                                                    <span
+                                                        class="bg-danger px-1 py-2 d-inline-block text-center rounded mt-1">Deactivate</span>
                                                 @else
-                                                  <span class="bg-success px-1 py-2 d-inline-block text-center rounded mt-1">Active</span>
+                                                    <span
+                                                        class="bg-success px-1 py-2 d-inline-block text-center rounded mt-1">Active</span>
                                                 @endif
                                             </td>
                                             <td>
-                                                <a href="{{ route('viewEditFormUser', $user->id) }}" class="btn btn-primary">
+                                                <a href="{{ route('viewEditFormUser', $user->id) }}"
+                                                    class="btn btn-primary">
                                                     <i class="fa-solid fa-pen-to-square"></i>
+                                                </a>
+                                                <a href="{{ route('viewUserChangePassword', $user->id) }}"
+                                                    class="btn btn-primary">
+                                                    Change Password
                                                 </a>
                                                 <a href="{{ route('deleteUser', $user->id) }}" class="btn btn-danger">
                                                     <i class="fa-solid fa-trash"></i>
