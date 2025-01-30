@@ -308,8 +308,8 @@ class dashboardController extends Controller
 
     public function updateTrialAgent(Request $req, string $id)
     {
-        $OldLeadAgent = customer::where('status', 'trial')->where('a_name', $id)->get();
-        $disLeadAgent = customer::where('status', 'trial')->where('a_name', $req->agent)->get();
+        $OldLeadAgent = customer::where('status', 'trial')->where('a_name', $id)->take($req->number)->get();
+        $disLeadAgent = customer::where('status', 'trial')->where('a_name', $req->agent)->take($req->number)->get();
         foreach ($OldLeadAgent as $oldAgent) {
             foreach ($disLeadAgent as $newAgent) {
                 $newAgentID = $newAgent->a_name;

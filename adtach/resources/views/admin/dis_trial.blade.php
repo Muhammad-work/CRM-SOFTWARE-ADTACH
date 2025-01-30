@@ -16,8 +16,8 @@
                         </div>
                         <!-- /.card-header -->
                         <!-- form start -->
-                        <form action="{{ route('updateTrialAgent',$agentID->id) }}" method="POST" enctype="multipart/form-data"
-                            autocomplete="off">
+                        <form action="{{ route('updateTrialAgent', $agentID->id) }}" method="POST"
+                            enctype="multipart/form-data" autocomplete="off">
                             @csrf
                             <div class="card-body">
                                 <div class="row">
@@ -32,6 +32,14 @@
                                             @endforeach
                                         </select>
                                         @error('agent')
+                                            <span class="text-danger">{{ $message }}</span>
+                                        @enderror
+                                    </div>
+                                    <div class="col-12 mt-2">
+                                        <label for="exampleInputEmail1">Lead Distribute Count</label>
+                                        <input type="number" class="form-control" name="number" id="exampleInputEmail1"
+                                            placeholder="Enter User Email" value="{{ old('number') }}">
+                                        @error('number')
                                             <span class="text-danger">{{ $message }}</span>
                                         @enderror
                                     </div>
