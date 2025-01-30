@@ -11,6 +11,7 @@ use App\Models\client_number;
 use App\Models\customerNumber;
 use App\Models\oldCustomer;
 use Carbon\Carbon;
+use Illuminate\Support\Facades\DB;
 
 class dashboardController extends Controller
 {
@@ -82,7 +83,7 @@ class dashboardController extends Controller
     {
 
         $customers = Customer::with('user')
-            ->select('a_name', \DB::raw('count(*) as total'))
+            ->select('a_name', DB::raw('count(*) as total'))
             ->groupBy('a_name')
             ->where('status', 'sale')
             ->orderBy('regitr_date', 'desc')
@@ -183,7 +184,7 @@ class dashboardController extends Controller
     {
 
         $customers = Customer::with('user')
-            ->select('a_name', \DB::raw('count(*) as total'))
+            ->select('a_name', DB::raw('count(*) as total'))
             ->groupBy('a_name')
             ->where('status', 'lead')
             ->orderBy('regitr_date', 'desc')
@@ -275,7 +276,7 @@ class dashboardController extends Controller
     public function  viewAgentTrialTable()
     {
         $customers = Customer::with('user')
-            ->select('a_name', \DB::raw('count(*) as total'))
+            ->select('a_name', DB::raw('count(*) as total'))
             ->groupBy('a_name')
             ->where('status', 'trial')
             ->orderBy('regitr_date', 'desc')
@@ -498,7 +499,7 @@ class dashboardController extends Controller
     public function viewCustomerNumber()
     {
 
-        $allCustomerNumber = CustomerNumber::with('user')->select('agent', \DB::raw('count(*) as total'))
+        $allCustomerNumber = CustomerNumber::with('user')->select('agent', DB::raw('count(*) as total'))
             ->groupBy('agent')
             ->get();
         return view('admin.customer_number', compact('allCustomerNumber'));
@@ -673,6 +674,6 @@ class dashboardController extends Controller
         $oldCustomers = Customer::whereRaw('DAY(regitr_date) = ?', [$day])->get();
         $newCustomers = OldCustomer::whereRaw('DAY(regitr_date) = ?', [$day])->get();
         $customers = $oldCustomers->merge($newCustomers);
-        return view('admin.all_sale',compact('customers'));
+        return view('admin.all_sale', compact('customers'));
     }
 }
