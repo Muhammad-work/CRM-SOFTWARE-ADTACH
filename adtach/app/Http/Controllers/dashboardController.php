@@ -20,10 +20,7 @@ class dashboardController extends Controller
         $date = $req->date ?? now();
         $month = date('m', strtotime($date));
         $year = date('Y', strtotime($date));
-
-
         $userCount = user::where('role', 'user')->count();
-
         $oldsale = customer::whereMonth('regitr_date', $month)
             ->whereYear('regitr_date', $year)
             ->where('status', 'sale')
@@ -33,21 +30,15 @@ class dashboardController extends Controller
             ->where('status', 'sale')
             ->count();
         $sale = $oldsale + $Newsale;
-
         $trial = customer::whereMonth('regitr_date', $month)
             ->whereYear('regitr_date', $year)
             ->where('status', 'trial')
             ->count();
-
         $lead = customer::whereMonth('regitr_date', $month)
             ->whereYear('regitr_date', $year)
             ->where('status', 'lead')
             ->count();
-
-
         $help = help::where('status', 'pending')->count();
-
-
         $oldCutomerprice = Customer::where('status', 'sale')->whereMonth('regitr_date', $month)
             ->whereYear('regitr_date', $year)
             ->sum('price');
@@ -55,19 +46,13 @@ class dashboardController extends Controller
             ->whereYear('regitr_date', $year)
             ->sum('price');
         $price = $oldCutomerprice + $NewCustomerprice;
-
-
         $oldSalecustomerExpriDate = Customer::with('user')
             ->whereDate('regitr_date', today())
             ->get();
         $NewSalecurentSale = OldCustomer::with('user')
             ->whereDate('regitr_date', today())
             ->get();
-
-
         $curentSale = $oldSalecustomerExpriDate->merge($NewSalecurentSale);
-
-
         return view('admin.dashbord', compact([
             'userCount',
             'sale',
@@ -130,7 +115,7 @@ class dashboardController extends Controller
 
         $oldcustomers = customer::find($id);
         $Newcustomers = oldcustomer::find($id);
-        $customer;
+        $customer = null;
         if ($oldcustomers) {
             $customer = $oldcustomers;
         } else {
@@ -584,50 +569,29 @@ class dashboardController extends Controller
     }
 
 
-    public function viewAgentDistributeNumbersForm()
+    public function distributeNumberForm(string $id)
     {
-        $allAgent = customerNumber::with('user')->select('agent')->groupby('agent')->get();
-        return view('admin.dis_to_agent_number', compact('allAgent'));
+        $allAgent = customerNumber::with('user')->select('agent')->where('agent', '!=', $id)->groupby('agent')->get();
+        $agentID = user::find($id);
+        return view('admin.dis_to_agent_number', compact('allAgent', 'agentID'));
     }
 
-    public function distributeNumberToAgent(Request $req)
+    public function distributeNumberToAgent(Request $req, string $id)
     {
         $req->validate([
-            'old_agent' => 'required',
-            'date' => 'required',
             'new_agent' => 'required',
+            'date' => 'required',
+            'number' => 'required',
         ]);
 
-        $old_agent = customerNumber::where('agent', $req->old_agent)->get();
-        $new_agent = customerNumber::where('agent', $req->new_agent)->get();
-
-        $CustomerName = 'No Customer Name';
-        $ExpriyDate = $req->date;
-        $status = 'pending';
-        $remarks = null;
-
-        foreach ($old_agent as $old_Data) {
-            foreach ($new_agent as $new_Data) {
-                $oldAgent = $old_Data->agent;
-                $newAgent = $new_Data->agent;
-
-                $old_Data->agent = $newAgent;
-                $new_Data->agent = $oldAgent;
-
-
-                $old_Data->customer_name = $CustomerName;
-                $old_Data->date = $ExpriyDate;
-                $old_Data->status = $status;
-                $old_Data->remarks = $remarks;
-
-                $new_Data->customer_name = $CustomerName;
-                $new_Data->date = $ExpriyDate;
-                $new_Data->status = $status;
-                $new_Data->remarks = $remarks;
-
-                $old_Data->save();
-                $new_Data->save();
-            }
+        $old_agent = customerNumber::where('agent', $id)->take($req->number)->get();
+        foreach ($old_agent as $old) {
+            $old->agent = $req->new_agent;
+            $old->customer_name = 'No Customer Name';
+            $old->date = $req->date;
+            $old->status = 'pending';
+            $old->remarks = null;
+            $old->save();
         }
 
         return redirect()->route('viewCustomerNumber')->with(['success' => 'Distribute Numbers Successfully']);
@@ -636,7 +600,7 @@ class dashboardController extends Controller
     public function viewAgentDistributeSale(string $id)
     {
         $agentName = Customer::select('a_name')->with('user')->where('status', 'sale')->groupBy('a_name')->where('a_name', '!=', $id)->get();
-        $agentID = user::find($id);;
+        $agentID = user::find($id);
         return view('admin.dis_sale', compact(['agentName', 'agentID']));
     }
 

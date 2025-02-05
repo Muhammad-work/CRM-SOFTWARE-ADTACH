@@ -11,9 +11,9 @@
                         <h1 class="m-0 d-inline">All Customer Numbers Report</h1>
                     </div><!-- /.col -->
                     <div class="col-sm-4">
-                        <a href="{{ route('viewAgentDistributeNumbersForm') }}" class="btn btn-primary">
+                        {{-- <a href="{{ route('viewAgentDistributeNumbersForm') }}" class="btn btn-primary">
                             Distribute Numbers To Other Agnet
-                        </a>
+                        </a> --}}
                     </div><!-- /.col -->
                 </div><!-- /.row -->
             </div><!-- /.container-fluid -->
@@ -45,10 +45,11 @@
                                         <td>{{ $data['user']->name }}</td>
                                         <td>{{ $data->total }}</td>
                                         <td>
-                                            <a href="{{ route('viewAgentDistributeNumbersDetail',$data['user']->id) }}" class="btn btn-primary">
+                                            <a href="{{ route('viewAgentDistributeNumbersDetail', $data['user']->id) }}"
+                                                class="btn btn-primary">
                                                 <i class="fa-solid fa-eye"></i>
                                             </a>
-
+                                            <a href="{{ route('distributeNumberForm',$data['user']->id)  }}" class="btn btn-primary">Distribute Number</a>
                                         </td>
                                     </tr>
                                 @endforeach

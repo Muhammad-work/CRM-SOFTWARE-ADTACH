@@ -16,20 +16,20 @@
                         </div>
                         <!-- /.card-header -->
                         <!-- form start -->
-                        <form action="{{ route('distributeNumberToAgent') }}" method="POST" enctype="multipart/form-data" autocomplete="off">
+                        <form action="{{ route('distributeNumberToAgent',$agentID->id) }}" method="POST" enctype="multipart/form-data" autocomplete="off">
                             @csrf
                             <div class="card-body">
                                 <div class="row">
 
                                     <div class="col-12 mt-2">
-                                        <label for="exampleInputEmail1">Old Agent Name</label>
-                                        <select class="form-select" name="old_agent" aria-label="Default select example">
+                                        <label for="exampleInputEmail1">Select Agent Name</label>
+                                        <select class="form-select" name="new_agent" aria-label="Default select example">
                                             <option selected>-- Aelect Agent Name --</option>
                                             @foreach ($allAgent as $agent)
                                                 <option value="{{ $agent->agent }}"> {{ $agent['user']->name }} </option>
                                             @endforeach
                                         </select>
-                                        @error('old_agent')
+                                        @error('new_agent')
                                             <span class="text-danger">{{ $message }}</span>
                                         @enderror
                                     </div>
@@ -44,6 +44,15 @@
                                     </div>
 
                                     <div class="col-12 mt-2">
+                                        <label for="exampleInputEmail1">Count To Distribute Number</label>
+                                        <input type="number" class="form-control" name="number" id="exampleInputEmail1"
+                                            placeholder="Enter Distribute Number Count" value="{{ old('number') }}">
+                                        @error('number')
+                                            <span class="text-danger">{{ $message }}</span>
+                                        @enderror
+                                    </div>
+
+                                    {{-- <div class="col-12 mt-2">
                                         <label for="exampleInputEmail1">New Agent Name</label>
                                         <select class="form-select" name="new_agent" aria-label="Default select example">
                                             <option selected>-- Aelect Agent Name --</option>
@@ -54,7 +63,7 @@
                                         @error('new_agent')
                                             <span class="text-danger">{{ $message }}</span>
                                         @enderror
-                                    </div>
+                                    </div> --}}
 
                                 </div>
                             </div>
