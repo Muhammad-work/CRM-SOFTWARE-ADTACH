@@ -66,7 +66,6 @@ class dashboardController extends Controller
 
     public function  viewAgentSaleTable()
     {
-
         $customers = Customer::with('user')
             ->select('a_name', DB::raw('count(*) as total'))
             ->groupBy('a_name')
@@ -112,7 +111,6 @@ class dashboardController extends Controller
 
     public function cutomerUPdateSaleDetailFormVIew(string $id)
     {
-
         $oldcustomers = customer::find($id);
         $Newcustomers = oldcustomer::find($id);
         $customer = null;
@@ -167,7 +165,6 @@ class dashboardController extends Controller
 
     public function  viewAgentLeadlTable()
     {
-
         $customers = Customer::with('user')
             ->select('a_name', DB::raw('count(*) as total'))
             ->groupBy('a_name')
@@ -217,13 +214,11 @@ class dashboardController extends Controller
     public function cutomerUPdateDetailFormVIew(string $id)
     {
         $customer = customer::find($id);
-
         return view('admin.edit_agent_lead', compact('customer'));
     }
 
     public function cutomerUPdateDetailStore(Request $req, string $id)
     {
-
         $req->validate([
             'customer_name' => 'required|string',
             'customer_number' => 'required|numeric',
@@ -266,11 +261,6 @@ class dashboardController extends Controller
             ->where('status', 'trial')
             ->orderBy('regitr_date', 'desc')
             ->get();
-        //    $customers = Customer::with('user')
-        //                         ->where('status', 'trial')
-        //                         ->orderByRaw('MONTH(regitr_date) asc')
-        //                         ->get();
-        // return $customers;
         return view('admin.agent_trial', compact('customers'));
     }
 
@@ -373,14 +363,11 @@ class dashboardController extends Controller
         $customer->delete();
         return  redirect()->route('viewAgentTrialTable')->with(['success' => 'Customer Cencel Successfuly']);
     }
-
-
     public function viewHelpRequestTableDashboard()
     {
         $helpRequest = help::all();
         return view('admin.helpTable', compact('helpRequest'));
     }
-
     public function downHelpRequestStatus(string $id)
     {
         $help = help::find($id);
@@ -407,7 +394,6 @@ class dashboardController extends Controller
     public function updateStatusCustomerTrial()
     {
         $customers = Customer::where('active_status', 'active')->get();
-
         foreach ($customers as $customer) {
             if ($customer->date_count > 0) {
                 $customer->date_count = (int) $customer->date_count - 1;
@@ -483,7 +469,6 @@ class dashboardController extends Controller
 
     public function viewCustomerNumber()
     {
-
         $allCustomerNumber = CustomerNumber::with('user')->select('agent', DB::raw('count(*) as total'))
             ->groupBy('agent')
             ->get();
@@ -493,7 +478,6 @@ class dashboardController extends Controller
 
     public function viewCustomerNumberForm()
     {
-
         $agentName = User::select('name', 'id')->where('role', 'user')->get();
         $allClientNumbersCount = client_number::count();
         return view('admin.add_customer_number', compact(['agentName', 'allClientNumbersCount']));
@@ -537,10 +521,7 @@ class dashboardController extends Controller
             'number' => 'required|integer|min:1',
         ]);
 
-
         $number = $req->input('number');
-
-
         $clientNumbers = client_number::select('number', 'id')->take($number)->get();
         $customerName = 'No Customer Name';
 
