@@ -53,6 +53,7 @@ class dashboardController extends Controller
             ->whereDate('regitr_date', today())
             ->get();
         $curentSale = $oldSalecustomerExpriDate->merge($NewSalecurentSale);
+
         return view('admin.dashbord', compact([
             'userCount',
             'sale',
@@ -620,5 +621,36 @@ class dashboardController extends Controller
         $newCustomers = OldCustomer::whereRaw('DAY(regitr_date) = ?', [$day])->get();
         $customers = $oldCustomers->merge($newCustomers);
         return view('admin.all_sale', compact('customers'));
+    }
+
+    public function viewPendingSale()
+    {
+        $oldCustomer = Customer::where('status', 'pending')->get();
+        $newCustomer = oldCustomer::where('status', 'pending')->get();
+        $customers = $oldCustomer->merge($newCustomer);
+        return view('admin.pending_sale', compact('customers'));
+    }
+
+    public function acceptPendingSale(string $id)
+    {
+        $oldCustomer = customer::find($id);
+        $newcustomer = oldCustomer::find($id);
+        if ($oldCustomer) {
+            $oldCustomer->status = 'sale';
+            $oldCustomer->save();
+            return back()->with(['success' => 'Pending Sale Accepted Successfuly']);
+        }
+        if ($newcustomer) {
+            $newcustomer->status = 'sale';
+            $newcustomer->save();
+            return back()->with(['success' => 'Pending Sale Accepted Successfuly']);
+        }
+    }
+
+    public function expiryDateNumberReturnToNumberTable()
+    {
+        $date = Carbon::now();
+        $customer_Number = customerNumber::where('date', $date)->get();
+        return $customer_Number;
     }
 }

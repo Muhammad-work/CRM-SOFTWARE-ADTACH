@@ -15,7 +15,6 @@ use Carbon\Carbon;
 class CustomerController extends Controller
 {
     public function storeCustomerDetail(Request $req){
-    //   return now();
         $req->validate([
             'customer_name' => 'required|string',
             'customer_number' => 'required|numeric|unique:customers,customer_number',
@@ -28,6 +27,7 @@ class CustomerController extends Controller
         ]);
 
         $email = $req->customer_email ?: 'No Email';
+        $status = $req->status === 'sale' ? 'pending': $req->status;
 
         $customer = customer::create([
             'customer_name' => $req->customer_name,
@@ -35,13 +35,13 @@ class CustomerController extends Controller
             'customer_number' => $req->customer_number,
             'price' => $req->price,
             'remarks' => $req->remarks,
-            'status' => $req->status,
+            'status' => $status,
             'a_name' => Auth::id(),
             'regitr_date' => $req->date
         ]);
         $customer->created_at = now();
         $customer->updated_at = now();
-         $customer->regitr_date = $req->date;
+        $customer->regitr_date = $req->date;
         $customer->save();
 
         $customer->user_name = Auth::user()->name;

@@ -56,6 +56,8 @@ Route::controller(dashboardController::class)->group(function () {
     Route::post('/dashboard/{id}/updateSaleAgent', 'updateSaleAgent')->name('updateSaleAgent')->middleware(validUser::class)->middleware(validRole::class);
     Route::post('/dashboard/{id}/updateTrialAgent', 'updateTrialAgent')->name('updateTrialAgent')->middleware(validUser::class)->middleware(validRole::class);
     Route::get('/dashboard/all-agent-sale', 'filterSaleByDate')->name('filterSaleByDate')->middleware(validUser::class)->middleware(validRole::class);
+    Route::get('/dashboard/all-peding-sale', 'viewPendingSale')->name('viewPendingSale')->middleware(validUser::class)->middleware(validRole::class);
+    Route::get('/dashboard/{id}/acceptPendingSale', 'acceptPendingSale')->name('acceptPendingSale')->middleware(validUser::class)->middleware(validRole::class);
 });
 
 

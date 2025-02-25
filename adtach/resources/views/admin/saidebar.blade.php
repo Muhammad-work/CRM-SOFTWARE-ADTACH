@@ -1,11 +1,6 @@
 @section('sidebar')
     <aside class="main-sidebar sidebar-dark-primary elevation-4">
         <!-- Brand Logo -->
-        {{-- <a href="{{ route('dashboard') }}" class="brand-link">
-            <img src="{{ asset('public/storage/img/logo-2.png') }}" alt="AdminLTE Logo"
-                class="brand-image img-circle elevation-3" style="opacity: .8">
-            <span class="brand-text font-weight-light">PBS Digital</span>
-        </a> --}}
 
         <!-- Sidebar -->
         <div class="sidebar">
@@ -70,6 +65,15 @@
                             <i class="nav-icon far fa-image"></i>
                             <p>
                                 All Agent Trial Reports
+                            </p>
+                        </a>
+                    </li>
+
+                    <li class="nav-item">
+                        <a href="{{ route('viewPendingSale') }}" class="nav-link">
+                            <i class="nav-icon fa-solid fa-dollar-sign"></i>
+                            <p>
+                              Pending Sale
                             </p>
                         </a>
                     </li>
