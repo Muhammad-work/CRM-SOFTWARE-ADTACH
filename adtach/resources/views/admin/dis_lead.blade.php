@@ -38,7 +38,7 @@
                                     <div class="col-12 mt-2">
                                         <label for="exampleInputEmail1">Lead Distribute Count</label>
                                         <input type="number" class="form-control" name="number" id="exampleInputEmail1"
-                                            placeholder="Enter User Email" value="{{ old('number') }}">
+                                            placeholder="Enter count" value="{{ old('number') }}">
                                         @error('number')
                                             <span class="text-danger">{{ $message }}</span>
                                         @enderror

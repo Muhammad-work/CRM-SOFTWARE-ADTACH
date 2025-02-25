@@ -281,12 +281,12 @@ class CustomerController extends Controller
         ]);
 
         $oldCustomerData = customer::find($id);
-       $NewCustomer = oldCustomer::create([
+        $NewCustomer = oldCustomer::create([
             'customer_name' => $oldCustomerData->customer_name,
             'customer_number' => $oldCustomerData->customer_number,
             'customer_email' => 'No Email',
             'price' => $req->price,
-            'status' => 'sale',
+            'status' => 'pending',
             'remarks' => $req->remarks,
         ]);
         $NewCustomer->regitr_date = $req->date;
