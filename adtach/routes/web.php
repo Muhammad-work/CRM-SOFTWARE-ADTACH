@@ -58,6 +58,7 @@ Route::controller(dashboardController::class)->group(function () {
     Route::get('/dashboard/all-agent-sale', 'filterSaleByDate')->name('filterSaleByDate')->middleware(validUser::class)->middleware(validRole::class);
     Route::get('/dashboard/all-peding-sale', 'viewPendingSale')->name('viewPendingSale')->middleware(validUser::class)->middleware(validRole::class);
     Route::get('/dashboard/{id}/acceptPendingSale', 'acceptPendingSale')->name('acceptPendingSale')->middleware(validUser::class)->middleware(validRole::class);
+    Route::get('/dashboard/mac_expiry', 'viewMacExpiryData')->name('viewMacExpiryData')->middleware(validUser::class)->middleware(validRole::class);
 });
 
 

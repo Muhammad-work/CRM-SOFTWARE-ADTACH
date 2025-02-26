@@ -143,6 +143,7 @@ class dashboardController extends Controller
             'remarks' => $req->remarks,
             'status' => $req->status,
             'regitr_date' => $req->date,
+            'expiry_date' => $req->expiry_date
         ]);
         $customer->make_address = $req->make_address;
         $customer->regitr_date = $req->date;
@@ -647,10 +648,27 @@ class dashboardController extends Controller
         }
     }
 
-    public function expiryDateNumberReturnToNumberTable()
+    public function viewMacExpiryData()
     {
-        $date = Carbon::now();
-        $customer_Number = customerNumber::where('date', $date)->get();
-        return $customer_Number;
+        $oldCustomer = customer::where('status', 'sale')
+            ->whereDate('expiry_date', '<=', now())
+            ->get();
+
+        $newCustomer = oldCustomer::where('status', 'sale')
+            ->whereDate('expiry_date', '<=', now())
+            ->get();
+
+        $customers = $oldCustomer->merge($newCustomer);
+        $customers = $customers->map(function ($customer) {
+            $expiryDate = Carbon::parse($customer->expiry_date);
+            $now = Carbon::now();
+
+            $customer->expired_days = intval($expiryDate->diffInDays($now));
+            $customer->expired_months = intval($expiryDate->diffInMonths($now));
+
+            return $customer;
+        });
+
+        return view('admin.mac_expiry', compact('customers'));
     }
 }

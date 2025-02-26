@@ -59,6 +59,14 @@
                                 </p>
                             </a>
                         </li>
+                        <li class="nav-item">
+                            <a href="{{ route('viewMacExpiryData') }}" class="nav-link">
+                                <i class="nav-icon fa-solid fa-exclamation"></i>
+                                <p>
+                                   Mac Expiry
+                                </p>
+                            </a>
+                        </li>
                     @endif
                     <li class="nav-item">
                         <a href="{{ route('viewAgentTrialTable') }}" class="nav-link">

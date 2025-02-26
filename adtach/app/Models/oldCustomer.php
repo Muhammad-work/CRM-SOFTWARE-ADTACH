@@ -14,6 +14,7 @@ class oldCustomer extends Model
         'remarks',
         'status',
         'a_name',
+        'expiry_date'
     ];
 
     public function user(){
@@ -23,7 +24,7 @@ class oldCustomer extends Model
      public static function getSalesByAgentAndMonth($agent_id, $month, $year)
      {
          return self::where('agent', $agent_id)
-                     ->where('status', 'sale') 
+                     ->where('status', 'sale')
                      ->whereMonth('regitr_date', $month)
                      ->whereYear('regitr_date', $year)
                      ->count();
