@@ -7,14 +7,13 @@
         <div class="content-header">
             <div class="container-fluid">
                 <div class="row mb-2">
-                    <div class="col-sm-6">
+                    <div class="col-sm-3">
                         <h1 class="m-0 d-inline">All Agent Sale Report</h1>
                     </div><!-- /.col -->
+                    <div class="col-sm-3">
+                        <a href="{{ route('viewAddNewAgentSaleForm') }}" class="btn btn-primary">Add New</a>
+                    </div><!-- /.col -->
                     <div class="col-sm-6">
-                        {{-- <ol class="breadcrumb float-sm-right">
-                            <li class="breadcrumb-item"><a href="{{ route('dashboard') }}">DashBord</a></li>
-                            <li class="breadcrumb-item active">All Agent Sale Report</li>
-                        </ol> --}}
                         <form action="{{ route('filterSaleByDate') }}" method="get" id="filterbyDateForm">
                             <label for="exampleInputEmail1">Filter By Date</label>
                             <input type="date" class="form-control" name="date"

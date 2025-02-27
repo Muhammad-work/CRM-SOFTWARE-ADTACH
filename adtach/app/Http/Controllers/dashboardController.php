@@ -671,4 +671,42 @@ class dashboardController extends Controller
 
         return view('admin.mac_expiry', compact('customers'));
     }
+
+    public function viewAddNewAgentSaleForm()
+    {
+        $allAgent = user::select('id', 'name')->where('role', 'user')->get();
+        return view('admin.add_sale', compact('allAgent'));
+    }
+
+    public function saveNewAgentSale(Request $req)
+    {
+        $req->validate([
+            'customer_name' => 'required|string',
+            'customer_number' => 'required|numeric|unique:customers,customer_number',
+            'status' => 'required',
+            'price' => 'required|numeric',
+            'remarks' => 'required',
+            'date' => 'required|date',
+            'agent' => 'required'
+        ]);
+        $agent = user::select('id', 'name')->find($req->agent);
+        $email = $req->customer_email ?: 'No Email';
+        $macAddress = $req->make_address ?: null;
+        $mac_expiry = $req->expiry_date ?: null;
+         customer::create([
+            'customer_name' => $req->customer_name,
+            'customer_number' => $req->customer_number,
+            'customer_email' =>  $email,
+            'status' => $req->status,
+            'price' => $req->price,
+            'remarks' => $req->remarks,
+            'regitr_date' => $req->date,
+            'a_name' => $agent->id,
+            'user_name' => $agent->name,
+            'make_address' => $macAddress,
+            'expiry_date' =>  $mac_expiry
+        ]);
+
+        return redirect()->route('viewAgentSaleTable')->with(['success' => 'New Customer Add Successfuly']);
+    }
 }

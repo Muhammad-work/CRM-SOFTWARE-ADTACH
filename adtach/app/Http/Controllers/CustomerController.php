@@ -14,7 +14,8 @@ use Carbon\Carbon;
 
 class CustomerController extends Controller
 {
-    public function storeCustomerDetail(Request $req){
+    public function storeCustomerDetail(Request $req)
+    {
         $req->validate([
             'customer_name' => 'required|string',
             'customer_number' => 'required|numeric|unique:customers,customer_number',
@@ -27,7 +28,7 @@ class CustomerController extends Controller
         ]);
 
         $email = $req->customer_email ?: 'No Email';
-        $status = $req->status === 'sale' ? 'pending': $req->status;
+        $status = $req->status === 'sale' ? 'pending' : $req->status;
 
         $customer = customer::create([
             'customer_name' => $req->customer_name,
@@ -50,60 +51,70 @@ class CustomerController extends Controller
         return back()->with(['success' => 'Customer Created Successfully']);
     }
 
-    public function customerStatus(Request $req,string $id){
+    public function customerStatus(Request $req, string $id)
+    {
 
         $customer = customer::find($id);
-        $customer->update([
-            'status' => $req->status
-        ]);
-
+        if ($req->status == 'sale') {
+            $customer->update([
+                'status' => 'pending'
+            ]);
+        } else {
+            $customer->update([
+                'status' => $req->status
+            ]);
+        }
         return back()->with(['update' => 'Update Customer Status Successfuly']);
     }
 
-    public function customerSalesTable(){
+    public function customerSalesTable()
+    {
         $oldcustomers = Customer::with('user')->where('a_name', Auth::id())
-                              ->where('status', 'sale')
-                              ->orderBy('regitr_date','desc')
-                              ->get();
+            ->where('status', 'sale')
+            ->orderBy('regitr_date', 'desc')
+            ->get();
 
         $newCustomer = oldCustomer::with('user')->where('agent', Auth::id())
-                                 ->where('status', 'sale')
-                                 ->orderBy('regitr_date','desc')
-                                 ->get();
+            ->where('status', 'sale')
+            ->orderBy('regitr_date', 'desc')
+            ->get();
 
-         $customers = $oldcustomers->merge($newCustomer);
-        return view('front.customer_sale',compact(['customers']));
+        $customers = $oldcustomers->merge($newCustomer);
+        return view('front.customer_sale', compact(['customers']));
     }
 
-    public function customerLeadTable(){
+    public function customerLeadTable()
+    {
 
-             $customers = Customer::where('a_name', Auth::id())
-                                   ->where('status', 'lead')
-                                   ->orderByRaw('MONTH(regitr_date) desc')
-                                   ->get();
+        $customers = Customer::where('a_name', Auth::id())
+            ->where('status', 'lead')
+            ->orderByRaw('MONTH(regitr_date) desc')
+            ->get();
         $user = user::where('id', Auth::id())->first();
-        return view('front.customer_lead',compact(['user','customers']));
+        return view('front.customer_lead', compact(['user', 'customers']));
     }
 
 
 
-    public function customerTrialTable(){
+    public function customerTrialTable()
+    {
 
-           $customers = Customer::with('user')
-                                   ->where('a_name', Auth::id())
-                                   ->where('status', 'trial')
-                                   ->orderByRaw('MONTH(regitr_date) desc')
-                                   ->get();
+        $customers = Customer::with('user')
+            ->where('a_name', Auth::id())
+            ->where('status', 'trial')
+            ->orderByRaw('MONTH(regitr_date) desc')
+            ->get();
 
-        return view('front.customer_trial',compact('customers'));
+        return view('front.customer_trial', compact('customers'));
     }
 
-    public function viewCunstomerNumberTable(){
+    public function viewCunstomerNumberTable()
+    {
         $today = Carbon::today();
         $customerNumbers = CustomerNumber::with('user')
-                          ->where('agent',Auth::id())
-                          ->whereDate('date', '>=', now())
-                          ->orderByRaw("CASE
+            ->where('agent', Auth::id())
+            ->whereDate('date', '>=', now())
+            ->orderByRaw("CASE
                             WHEN status = 'pending' THEN 0
                             WHEN status = 'VM' THEN 1
                             WHEN status = 'not int' THEN 2
@@ -113,12 +124,13 @@ class CustomerController extends Controller
                             WHEN status = 'call back' THEN 6
                             ELSE 7
                         END")
-                        ->orderBy('status', 'desc')
-                       ->get();
-         return view('front.customer_number',compact('customerNumbers'));
+            ->orderBy('status', 'desc')
+            ->get();
+        return view('front.customer_number', compact('customerNumbers'));
     }
 
-    public function storeCustomerNumbersDetails(Request $req,string $id){
+    public function storeCustomerNumbersDetails(Request $req, string $id)
+    {
         if ($req->status == 'lead' || $req->status == 'trial') {
             $req->validate([
                 'status' => 'required',
@@ -136,7 +148,7 @@ class CustomerController extends Controller
             $authName = Auth::user()->name;
             $date = now();
 
-     $customerLeadDataStoreAndTrialDataStore = customer::create([
+            $customerLeadDataStoreAndTrialDataStore = customer::create([
                 'customer_name' => $customerName,
                 'customer_email' =>  $customerEmail,
                 'customer_number' =>  $customer->customer_number,
@@ -148,18 +160,17 @@ class CustomerController extends Controller
                 'regitr_date' => $date,
             ]);
 
-            $customerLeadDataStoreAndTrialDataStore->user_name =$authName;
-            $customerLeadDataStoreAndTrialDataStore->regitr_date =$date;
+            $customerLeadDataStoreAndTrialDataStore->user_name = $authName;
+            $customerLeadDataStoreAndTrialDataStore->regitr_date = $date;
             $customerLeadDataStoreAndTrialDataStore->save();
             $customer->delete();
 
-           if ($req->status == 'lead') {
-            return redirect()->route('viewCunstomerNumberTable')->with(['success' => 'Add Customer Information To Youre Lead Page Successfuly']);
-            }else{
-               return redirect()->route('viewCunstomerNumberTable')->with(['success' => 'Add Customer Information To Youre Trial Page Successfuly']);
-           }
-
-        }else{
+            if ($req->status == 'lead') {
+                return redirect()->route('viewCunstomerNumberTable')->with(['success' => 'Add Customer Information To Youre Lead Page Successfuly']);
+            } else {
+                return redirect()->route('viewCunstomerNumberTable')->with(['success' => 'Add Customer Information To Youre Trial Page Successfuly']);
+            }
+        } else {
             $req->validate([
                 'status' => 'required',
                 'remarks' => 'required',
@@ -168,7 +179,7 @@ class CustomerController extends Controller
 
             $customer = CustomerNumber::find($id);
             $customerName = $req->customer_name ?: 'No Name';
-            $customer->customer_name =$customerName;
+            $customer->customer_name = $customerName;
             $customer->status = $req->status;
             $customer->remarks = $req->remarks;
             $customer->save();
@@ -177,12 +188,14 @@ class CustomerController extends Controller
         }
     }
 
-    public function viewCustomerNumberEditForm(string $id){
+    public function viewCustomerNumberEditForm(string $id)
+    {
         $customer = CustomerNumber::find($id);
-        return view('front.edit_customer_number',compact('customer'));
+        return view('front.edit_customer_number', compact('customer'));
     }
 
-      public function storeCustomerNumberEditDetails(Request $req, string $id){
+    public function storeCustomerNumberEditDetails(Request $req, string $id)
+    {
 
 
         if ($req->status == 'lead' || $req->status == 'trial') {
@@ -202,7 +215,7 @@ class CustomerController extends Controller
             $authName = Auth::user()->name;
             $date = now();
 
-     $customerLeadDataStoreAndTrialDataStore = customer::create([
+            $customerLeadDataStoreAndTrialDataStore = customer::create([
                 'customer_name' => $customerName,
                 'customer_email' =>  $customerEmail,
                 'customer_number' =>  $customer->customer_number,
@@ -214,18 +227,17 @@ class CustomerController extends Controller
                 'regitr_date' => $date,
             ]);
 
-            $customerLeadDataStoreAndTrialDataStore->user_name =$authName;
-            $customerLeadDataStoreAndTrialDataStore->regitr_date =$date;
+            $customerLeadDataStoreAndTrialDataStore->user_name = $authName;
+            $customerLeadDataStoreAndTrialDataStore->regitr_date = $date;
             $customerLeadDataStoreAndTrialDataStore->save();
             $customer->delete();
 
-           if ($req->status == 'lead') {
-            return redirect()->route('viewCunstomerNumberTable')->with(['success' => 'Add Customer Information To Youre Lead Page Successfuly']);
-            }else{
-               return redirect()->route('viewCunstomerNumberTable')->with(['success' => 'Add Customer Information To Youre Trial Page Successfuly']);
-           }
-
-        }else{
+            if ($req->status == 'lead') {
+                return redirect()->route('viewCunstomerNumberTable')->with(['success' => 'Add Customer Information To Youre Lead Page Successfuly']);
+            } else {
+                return redirect()->route('viewCunstomerNumberTable')->with(['success' => 'Add Customer Information To Youre Trial Page Successfuly']);
+            }
+        } else {
             $req->validate([
                 'customer_name' => 'required',
                 'status' => 'required',
@@ -241,39 +253,40 @@ class CustomerController extends Controller
 
             return redirect()->route('viewCunstomerNumberTable')->with(['success' => 'Update Customer Information Successfuly']);
         }
-
-
-
-      }
-
-
-    public function viewEditCustomerSaleDetailForm(Request $req, string $id){
-       $customer = customer::where('a_name',Auth::id())->find($id);
-
-       return view('front.edit_customer_sale',compact('customer'));
     }
 
-    public function storeEditCustomerSaleDetails(request $req,string $id){
-         $req->validate([
+
+    public function viewEditCustomerSaleDetailForm(Request $req, string $id)
+    {
+        $customer = customer::where('a_name', Auth::id())->find($id);
+
+        return view('front.edit_customer_sale', compact('customer'));
+    }
+
+    public function storeEditCustomerSaleDetails(request $req, string $id)
+    {
+        $req->validate([
             'price' => 'required',
             'remarks' => 'required',
-         ]);
-         $customer = customer::find($id);
+        ]);
+        $customer = customer::find($id);
 
-         $customer->price = $req->price;
-         $customer->remarks = $req->remarks;
-         $customer->save();
+        $customer->price = $req->price;
+        $customer->remarks = $req->remarks;
+        $customer->save();
 
-         return redirect()->route('customerSalesTable')->with(['success' => 'Update Sale Detail Successfuly']);
+        return redirect()->route('customerSalesTable')->with(['success' => 'Update Sale Detail Successfuly']);
     }
 
 
-    public function  viewOldCustomerNewPKG(string $id){
+    public function  viewOldCustomerNewPKG(string $id)
+    {
         $oldCustomerData = customer::find($id);
-        return view('front.add_old_customer_sale',compact('oldCustomerData'));
+        return view('front.add_old_customer_sale', compact('oldCustomerData'));
     }
 
-    public function storeOldCustomerNewPKGData(Request $req,string $id){
+    public function storeOldCustomerNewPKGData(Request $req, string $id)
+    {
         $req->validate([
             'price' => 'required',
             'date' => 'required',
@@ -296,12 +309,14 @@ class CustomerController extends Controller
     }
 
 
-    public function viewleadEditForm(string $id){
-       $customer  = customer::find($id);
-       return view('front.lead_edit',compact('customer'));
+    public function viewleadEditForm(string $id)
+    {
+        $customer  = customer::find($id);
+        return view('front.lead_edit', compact('customer'));
     }
 
-    public function storeUpdateLeadData(Request $req,string $id){
+    public function storeUpdateLeadData(Request $req, string $id)
+    {
         $req->validate([
             'price' => 'required',
             'date' => 'required',
@@ -316,16 +331,17 @@ class CustomerController extends Controller
         $customer->save();
 
         return redirect()->route('customerLeadTable')->with(['success' => 'update customer detail']);
-
     }
 
-    public function viewTrialEditForm(string $id){
+    public function viewTrialEditForm(string $id)
+    {
         $customer  = customer::find($id);
 
-        return view('front.trial_edit',compact('customer'));
-     }
+        return view('front.trial_edit', compact('customer'));
+    }
 
-     public function storeUpdateTrialData(Request $req,string $id){
+    public function storeUpdateTrialData(Request $req, string $id)
+    {
         $req->validate([
             'price' => 'required',
             'date' => 'required',
@@ -340,20 +356,18 @@ class CustomerController extends Controller
         $customer->save();
 
         return redirect()->route('customerTrialTable')->with(['success' => 'update customer detail']);
-
     }
 
 
-    public function customerDeniedTable(){
+    public function customerDeniedTable()
+    {
 
         $customers = Customer::with('user')
-                              ->where('status', 'denied')
-                              ->orderByRaw('MONTH(regitr_date) desc')
-                              ->where('a_name',Auth::id())
-                              ->get();
+            ->where('status', 'denied')
+            ->orderByRaw('MONTH(regitr_date) desc')
+            ->where('a_name', Auth::id())
+            ->get();
 
-       return view('front.customer_denied',compact('customers'));
-   }
-
-
+        return view('front.customer_denied', compact('customers'));
+    }
 }

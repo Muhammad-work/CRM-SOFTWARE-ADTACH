@@ -17,12 +17,11 @@
                     <tr class="bg-gray-100 text-gray-700">
                         <th class="px-4 py-2 border border-gray-300">CUSTOMER NAME</th>
                         <th class="px-4 py-2 border border-gray-300">CUSTOMER NUMBER</th>
-                        <th class="px-4 py-2 border border-gray-300">CUSTOMER EMAIL</th>
+                        <th class="px-4 py-2 border border-gray-300">CUSTOMER EMAIL (optional)</th>
                         <th class="px-4 py-2 border border-gray-300">PRICE</th>
                         <th class="px-4 py-2 border border-gray-300">REMARKS</th>
                         <th class="px-4 py-2 border border-gray-300">STATUS</th>
                         <th class="px-4 py-2 border border-gray-300">CUSTOMER REGISTRATION DATE</th>
-                        {{-- <th class="px-4 py-2 border border-gray-300">AGENT NAME</th> --}}
                     </tr>
                 </thead>
                 <tbody>
@@ -36,7 +35,7 @@
                             @enderror
                         </td>
                         <td class="px-4 py-2 border border-gray-300">
-                            <input type="text" name="customer_number" value="{{ old('customer_number') }}"
+                            <input type="number" name="customer_number" value="{{ old('customer_number') }}"
                                 id="customer_number_1" placeholder="Enter Customer Number"
                                 class="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-400">
                             @error('customer_number')
@@ -99,104 +98,6 @@
 
     </div>
     {{--  Cuntomer Form   --}}
-
-
-    {{-- search customer details --}}
-    {{-- <div class="w- full h-[80px] flex justify-center place-items-center bg-[#1D4ED8] mt-5">
-        <input type="text" name="" onkeyup="searchTable()" id="searchInput" placeholder="Search Customer"
-            class="w-[50%] py-2 px-3 outline-none border-0 rounded">
-    </div> --}}
-    {{-- search customer details --}}
-
-
-
-
-    {{-- Show Customer Details --}}
-
-    {{-- <div class="w-full h-auto overflow-x-auto">
-        <div class="w-full mx-auto mt-5 ">
-            <table class="w-full min-w-[600px] table-auto border-collapse border border-gray-200 ">
-                @if (session('update'))
-                    <div class="alert alert-success" role="alert">
-                        {{ session('update') }}
-                    </div>
-                @endif
-                <thead>
-                    <tr class="bg-gray-100 text-gray-700">
-                        <th class="px-4 py-2 border border-gray-300">S.NO</th>
-                        <th class="px-4 py-2 border border-gray-300">CUSTOMER NAME</th>
-                        <th class="px-4 py-2 border border-gray-300">CUSTOMER NUMBER</th>
-                        <th class="px-4 py-2 border border-gray-300">CUSTOMER EMAIL</th>
-                        <th class="px-4 py-2 border border-gray-300">PRICE</th>
-                        <th class="px-4 py-2 border border-gray-300">REMARKS</th>
-                        <th class="px-4 py-2 border border-gray-300">STATUS</th>
-                        <th class="px-4 py-2 border border-gray-300">CUSTOMER REGISTRATION DATE</th>
-                        <th class="px-4 py-2 border border-gray-300">AGENT NAME</th>
-                        <th class="px-4 py-2 border border-gray-300">ACTION</th>
-                    </tr>
-                </thead>
-                <tbody id="tableBody">
-                    @foreach ($customers as $index => $customer)
-                        @if ($customer->status !== 'sale')
-                            <tr class="odd:bg-gray-50 even:bg-white">
-                                <td class="px-4 py-2 border border-gray-300 customer"> {{ $index + 1 }} </td>
-                                <td class="px-4 py-2 border border-gray-300 customer"> {{ $customer->customer_name }}
-                                </td>
-                                <td class="px-4 py-2 border border-gray-300 customer">{{ $customer->customer_number }}
-                                </td>
-                                <td class="px-4 py-2 border border-gray-300 customer">{{ $customer->customer_email }}</td>
-                                <td class="px-4 py-2 border border-gray-300 customer">${{ $customer->price }}</td>
-                                <td class="px-4 py-2 border border-gray-300 customer hidden md:table-cell">
-                                    {{ $customer->remarks }}</td>
-                                <td class="px-4 py-2 border border-gray-300 customer">
-                                    @if ($customer->status === 'lead')
-                                        <span class="bg-warning py-1 px-2 rounded font-bold text-xl text-white">Lead</span>
-                                    @elseif($customer->status === 'trial')
-                                        <span class="bg-danger py-1 px-2 rounded font-bold text-xl text-white">Trial</span>
-                                    @endif
-                                </td>
-                                <td class="px-4 py-2 border border-gray-300 customer hidden sm:table-cell">
-                                    @if ($customer->regitr_date)
-                                        {{ \Carbon\Carbon::parse($customer->regitr_date)->format('d M, Y') }}
-                                    @else
-                                        No Registration Date
-                                    @endif
-                                </td>
-                                <td class="px-4 py-2 border border-gray-300 customer hidden md:table-cell">
-                                    {{ $user->name }}</td>
-
-                                @if ($customer->status === 'lead')
-                                    <form action="{{ route('customerStatus', $customer->id) }}" method="POST">
-                                        @csrf
-                                        <td class="flex gap-1 mt-4">
-                                            <input type="hidden" name="status" id="input">
-                                            <button class="btn btn-success" id="statusBtn">sale</button>
-                                            <button class="btn btn-danger" id="statusBtn">trial</button>
-                                        </td>
-                                    </form>
-                                @elseif($customer->status === 'trial')
-                                    <form action="{{ route('customerStatus', $customer->id) }}" method="POST">
-                                        @csrf
-                                        <td class="flex gap-1 mt-4">
-                                            <input type="hidden" name="status" id="input">
-                                            <button class="btn btn-warning" id="statusBtn">lead</button>
-                                            <button class="btn btn-success" id="statusBtn">sale</button>
-                                        </td>
-                                    </form>
-                                @else
-                                @endif
-
-                            </tr>
-                        @endif
-                    @endforeach
-                </tbody>
-            </table>
-        </div>
-    </div> --}}
-
-
-    {{-- Show Customer Details --}}
-
 
     <script>
         function searchTable() {

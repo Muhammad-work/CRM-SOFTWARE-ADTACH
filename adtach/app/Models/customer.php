@@ -14,7 +14,9 @@ class customer extends Model
         'remarks',
         'status',
         'a_name',
-        'expiry_date'
+        'regitr_date',
+        'expiry_date',
+        'make_address'
     ];
 
     public  $timestamps = true;

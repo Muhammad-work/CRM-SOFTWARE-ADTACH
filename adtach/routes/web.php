@@ -59,6 +59,8 @@ Route::controller(dashboardController::class)->group(function () {
     Route::get('/dashboard/all-peding-sale', 'viewPendingSale')->name('viewPendingSale')->middleware(validUser::class)->middleware(validRole::class);
     Route::get('/dashboard/{id}/acceptPendingSale', 'acceptPendingSale')->name('acceptPendingSale')->middleware(validUser::class)->middleware(validRole::class);
     Route::get('/dashboard/mac_expiry', 'viewMacExpiryData')->name('viewMacExpiryData')->middleware(validUser::class)->middleware(validRole::class);
+    Route::get('/dashboard/add_sale', 'viewAddNewAgentSaleForm')->name('viewAddNewAgentSaleForm')->middleware(validUser::class)->middleware(validRole::class);
+    Route::post('/dashboard/save_sale', 'saveNewAgentSale')->name('saveNewAgentSale')->middleware(validUser::class)->middleware(validRole::class);
 });
 
 
