@@ -26,6 +26,6 @@ class validUser
             // If the user is not logged in, redirect to the login page
             return redirect()->route('login');
         }
-    
+
     }
 }
