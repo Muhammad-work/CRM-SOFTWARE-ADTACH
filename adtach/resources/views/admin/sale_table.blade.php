@@ -79,7 +79,7 @@
                                         </td>
                                         <td>
                                             @if ($customer->expiry_date)
-                                            {{ \Carbon\Carbon::parse($customer->expiry_date)->format('d M, Y') }}
+                                                {{ \Carbon\Carbon::parse($customer->expiry_date)->format('d M, Y') }}
                                             @else
                                                 No Expiry Date
                                             @endif
