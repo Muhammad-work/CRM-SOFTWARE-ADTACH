@@ -113,6 +113,14 @@
                                 </p>
                             </a>
                         </li>
+                        <li class="nav-item">
+                            <a href="{{ route('viewOldNumber') }}" class="nav-link">
+                                <i class="nav-icon fa-solid fa-phone"></i>
+                                <p>
+                                  Old Numbers
+                                </p>
+                            </a>
+                        </li>
                     @endif
 
                     @if (Auth::user()->role === 'admin')

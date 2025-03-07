@@ -61,6 +61,9 @@ Route::controller(dashboardController::class)->group(function () {
     Route::get('/dashboard/mac_expiry', 'viewMacExpiryData')->name('viewMacExpiryData')->middleware(validUser::class)->middleware(validRole::class);
     Route::get('/dashboard/add_sale', 'viewAddNewAgentSaleForm')->name('viewAddNewAgentSaleForm')->middleware(validUser::class)->middleware(validRole::class);
     Route::post('/dashboard/save_sale', 'saveNewAgentSale')->name('saveNewAgentSale')->middleware(validUser::class)->middleware(validRole::class);
+    Route::get('/dashboard/old_number', 'viewOldNumber')->name('viewOldNumber')->middleware(validUser::class)->middleware(validRole::class);
+    Route::get('/dashboard/dis_old_number', 'disOldCustomerNumberToAgent')->name('disOldCustomerNumberToAgent')->middleware(validUser::class)->middleware(validRole::class);
+    Route::post('/dashboard/dis_old_number', 'storeOldCustomerNumber')->name('storeOldCustomerNumber')->middleware(validUser::class)->middleware(validRole::class);
 });
 
 

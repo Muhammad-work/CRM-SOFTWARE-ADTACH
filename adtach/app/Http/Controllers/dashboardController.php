@@ -9,6 +9,7 @@ use App\Models\help;
 use App\Models\customer;
 use App\Models\client_number;
 use App\Models\customerNumber;
+use App\Models\old_number;
 use App\Models\oldCustomer;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\DB;
@@ -502,16 +503,26 @@ class dashboardController extends Controller
         $customerNumberArray = explode("\r\n", $req->customerNumber);
         foreach ($customerNumberArray as $number) {
             $number = trim($number);
-            $existingNumber = client_number::where('number', $number)->first();
-            if (!$existingNumber) {
-                client_number::create([
-                    'number' => $number
-                ]);
-            } else {
+
+            if (old_number::where('number', $number)->exists()) {
+                return redirect()->route('viewNumbersTable')->with(['error' => 'This number already exists in old records.']);
+            }
+
+            if (client_number::where('number', $number)->exists()) {
                 return redirect()->route('viewNumbersTable')->with(['error' => 'You Can Not Add Same Numbers']);
             }
+
+            if (customerNumber::where('customer_number', $number)->exists()) {
+                return redirect()->route('viewNumbersTable')->with(['error' => 'This number is already assigned to an agent.']);
+            }
+
+            client_number::create([
+                'number' => $number,
+                'date' => Carbon::now()
+            ]);
         }
-        return redirect()->route('viewNumbersTable')->with(['success' => 'Add Numbers Successfuly']);
+
+        return redirect()->route('viewNumbersTable')->with(['success' => 'Numbers Added Successfully']);
     }
 
 
@@ -693,7 +704,7 @@ class dashboardController extends Controller
         $email = $req->customer_email ?: 'No Email';
         $macAddress = $req->make_address ?: null;
         $mac_expiry = $req->expiry_date ?: null;
-         customer::create([
+        customer::create([
             'customer_name' => $req->customer_name,
             'customer_number' => $req->customer_number,
             'customer_email' =>  $email,
@@ -708,5 +719,47 @@ class dashboardController extends Controller
         ]);
 
         return redirect()->route('viewAgentSaleTable')->with(['success' => 'New Customer Add Successfuly']);
+    }
+
+    public function viewOldNumber()
+    {
+        $old_number = old_number::get();
+        return view('admin.old_number', compact('old_number'));
+    }
+
+    public function disOldCustomerNumberToAgent()
+    {
+        $agentName = User::select('name', 'id')->where('role', 'user')->get();
+        $allClientNumbersCount = old_number::count();
+        return view('admin.dis_old_number', compact(['agentName', 'allClientNumbersCount']));
+    }
+
+    public function storeOldCustomerNumber(Request $req)
+    {
+        $req->validate([
+            'agent' => 'required',
+            'date' => 'required|date',
+            'number' => 'required|integer|min:1',
+        ]);
+
+        $number = $req->input('number');
+        $clientNumbers = old_number::select('number', 'id')->take($number)->get();
+        $customerName = 'No Customer Name';
+
+        foreach ($clientNumbers as $clientNumber) {
+            customerNumber::create([
+                'customer_name' => $customerName,
+                'customer_number' => $clientNumber->number,
+                'agent' => $req->agent,
+                'date' => $req->date,
+                'created_at' => now(),
+                'updated_at' => now(),
+            ]);
+        }
+        $clientNumbers->each(function ($clientNumber) {
+            $clientNumber->delete();
+        });
+
+        return redirect()->route('viewOldNumber')->with(['success' => 'Distribute To Customer Old Numbers Successfully']);
     }
 }

@@ -7,6 +7,7 @@ use App\Models\client_number;
 use Illuminate\Http\Request;
 use App\Models\customer;
 use App\Models\customerNumber;
+use App\Models\old_number;
 use App\Models\user;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Auth;
@@ -20,10 +21,12 @@ class homeController extends Controller
         $user = user::where('id', Auth::id())->first();
         $expiredNumbers = customerNumber::where('date', '<', Carbon::now())->get();
         $numbers = $expiredNumbers->pluck('customer_number')->toArray();
-
+        
         if ($numbers) {
             foreach ($numbers as $num) {
-                client_number::create(['number' => $num]);
+                if (!old_number::where('number', $num)->exists()) {
+                    old_number::create(['number' => $num]);
+                }
             }
             CustomerNumber::where('date', '<', Carbon::now())->delete();
         }
