@@ -501,28 +501,31 @@ class dashboardController extends Controller
     public function storeNumbers(Request $req)
     {
         $customerNumberArray = explode("\r\n", $req->customerNumber);
-        foreach ($customerNumberArray as $number) {
-            $number = trim($number);
+        $customerNumberArray = array_map('trim', $customerNumberArray); // Trim spaces
+        $customerNumberArray = array_unique($customerNumberArray); // Remove duplicates
 
-            if (old_number::where('number', $number)->exists()) {
-                return redirect()->route('viewNumbersTable')->with(['error' => 'This number already exists in old records.']);
-            }
+        $existingNumbers = old_number::whereIn('number', $customerNumberArray)->pluck('number')->toArray();
+        $existingNumbers = array_merge(
+            $existingNumbers,
+            client_number::whereIn('number', $customerNumberArray)->pluck('number')->toArray(),
+            customerNumber::whereIn('customer_number', $customerNumberArray)->pluck('customer_number')->toArray()
+        );
 
-            if (client_number::where('number', $number)->exists()) {
-                return redirect()->route('viewNumbersTable')->with(['error' => 'You Can Not Add Same Numbers']);
-            }
+        $newNumbers = array_diff($customerNumberArray, $existingNumbers); // Remove existing numbers
 
-            if (customerNumber::where('customer_number', $number)->exists()) {
-                return redirect()->route('viewNumbersTable')->with(['error' => 'This number is already assigned to an agent.']);
-            }
+        if (empty($newNumbers)) {
+            return redirect()->route('viewNumbersTable')->with(['error' => 'All numbers already exist in the records.']);
+        }
 
+        // Insert only new numbers
+        foreach ($newNumbers as $number) {
             client_number::create([
                 'number' => $number,
                 'date' => Carbon::now()
             ]);
         }
 
-        return redirect()->route('viewNumbersTable')->with(['success' => 'Numbers Added Successfully']);
+        return redirect()->route('viewNumbersTable')->with(['success' => 'New numbers added successfully']);
     }
 
 
