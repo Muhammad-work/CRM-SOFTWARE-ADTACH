@@ -501,8 +501,8 @@ class dashboardController extends Controller
     public function storeNumbers(Request $req)
     {
         $customerNumberArray = explode("\r\n", $req->customerNumber);
-        $customerNumberArray = array_map('trim', $customerNumberArray); // Trim spaces
-        $customerNumberArray = array_unique($customerNumberArray); // Remove duplicates
+        $customerNumberArray = array_map('trim', $customerNumberArray);
+        $customerNumberArray = array_unique($customerNumberArray);
 
         $existingNumbers = old_number::whereIn('number', $customerNumberArray)->pluck('number')->toArray();
         $existingNumbers = array_merge(
@@ -511,13 +511,13 @@ class dashboardController extends Controller
             customerNumber::whereIn('customer_number', $customerNumberArray)->pluck('customer_number')->toArray()
         );
 
-        $newNumbers = array_diff($customerNumberArray, $existingNumbers); // Remove existing numbers
+        $newNumbers = array_diff($customerNumberArray, $existingNumbers);
 
         if (empty($newNumbers)) {
             return redirect()->route('viewNumbersTable')->with(['error' => 'All numbers already exist in the records.']);
         }
 
-        // Insert only new numbers
+
         foreach ($newNumbers as $number) {
             client_number::create([
                 'number' => $number,
@@ -631,10 +631,13 @@ class dashboardController extends Controller
     public function  filterSaleByDate(Request $req)
     {
         $date = Carbon::parse($req->date);
-        $day = $date->format('d');
-        $oldCustomers = Customer::whereRaw('DAY(regitr_date) = ?', [$day])->get();
-        $newCustomers = OldCustomer::whereRaw('DAY(regitr_date) = ?', [$day])->get();
+        $month = $date->format('m');
+
+        $oldCustomers = Customer::whereRaw('MONTH(regitr_date) = ?', [$month])->get();
+        $newCustomers = OldCustomer::whereRaw('MONTH(regitr_date) = ?', [$month])->get();
+
         $customers = $oldCustomers->merge($newCustomers);
+
         return view('admin.all_sale', compact('customers'));
     }
 

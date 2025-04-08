@@ -15,8 +15,8 @@
                     </div><!-- /.col -->
                     <div class="col-sm-6">
                         <form action="{{ route('filterSaleByDate') }}" method="get" id="filterbyDateForm">
-                            <label for="exampleInputEmail1">Filter By Date</label>
-                            <input type="date" class="form-control" name="date"
+                            <label for="exampleInputEmail1">Filter By Month</label>
+                            <input type="month" class="form-control" name="date"
                                 aria-label="Text input with 2 dropdown buttons" id="filterbyDate">
                         </form>
                     </div><!-- /.col -->

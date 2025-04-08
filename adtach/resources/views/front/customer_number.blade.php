@@ -51,9 +51,9 @@
                                 @endif
                             </td>
                             <td class="px-4 py-2 border border-gray-300 "><span
-                                    class="number">{{ $customer->customer_number }}</span> <span
-                                    class="px-2 py-1 bg-[blue] text-white rounded cursor-pointer copy"><i
-                                        class="fa-regular fa-copy"></i></span></td>
+                                    class="number">{{ $customer->customer_number }}</span>
+                                    <span class="px-2 py-1 bg-[blue] text-white rounded cursor-pointer copy"><i class="fa-regular fa-copy"></i></span>
+                                </td>
                             <td class="px-4 py-2 border border-gray-300 ">
                                 @if ($customer->status === 'pending')
                                     <select class="form-select" name="status" aria-label="Default select example"

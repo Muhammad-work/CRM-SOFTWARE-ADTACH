@@ -11,7 +11,6 @@ use App\Http\Controllers\saleContoller;
 use App\Http\Middleware\validUser;
 use App\Http\Middleware\validRole;
 
-
 Route::controller(dashboardController::class)->group(function () {
     Route::get('/dashboard', 'viewDashboard')->name('dashboard')->middleware(validUser::class)->middleware(validRole::class);
     Route::get('/dashboard/viewAgentSaleTable', 'viewAgentSaleTable')->name('viewAgentSaleTable')->middleware(validUser::class)->middleware(validRole::class);
@@ -131,4 +130,3 @@ Route::controller(HelpController::class)->group(function () {
     Route::get('/help-Detail', 'viewHelpTable')->name('viewHelpTable')->middleware(validUser::class);
     Route::post('/storeHelpRequest', 'storeHelpRequest')->name('storeHelpRequest')->middleware(validUser::class);
 });
-
