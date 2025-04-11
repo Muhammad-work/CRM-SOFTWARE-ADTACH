@@ -83,7 +83,7 @@ class userController extends Controller
         $subject = 'Hello ' . $req->user_name . ' Login Now';
         $message = 'Email : ' . $req->user_email . ' Password : ' . $req->user_password;
 
-        Mail::to($toSendMail)->send(new sendAgentMail($subject, $message));
+        // Mail::to($toSendMail)->send(new sendAgentMail($subject, $message));
 
         user::insert([
             'name' => $req->user_name,
