@@ -2,7 +2,6 @@
 @extends('front.nav')
 
 @section('home')
-
     {{-- Search customer details --}}
     <div class="w-full h-[80px] flex justify-center items-center bg-[#1D4ED8]">
         <input type="text" name="" onkeyup="searchTable()" id="searchInput" placeholder="Search Customer"
@@ -37,7 +36,7 @@
                         @csrf
                         <tr class="odd:bg-gray-50 even:bg-white">
                             <td class="px-4 py-2 border border-gray-300">
-                               {{ $index + 1 }}
+                                {{ $index + 1 }}
                             </td>
                             <td class="px-4 py-2 border border-gray-300">
                                 @if ($customer->status === 'pending')
@@ -52,8 +51,9 @@
                             </td>
                             <td class="px-4 py-2 border border-gray-300 "><span
                                     class="number">{{ $customer->customer_number }}</span>
-                                    <span class="px-2 py-1 bg-[blue] text-white rounded cursor-pointer copy"><i class="fa-regular fa-copy"></i></span>
-                                </td>
+                                <span class="px-2 py-1 bg-[blue] text-white rounded cursor-pointer copy"><i
+                                        class="fa-regular fa-copy"></i></span>
+                            </td>
                             <td class="px-4 py-2 border border-gray-300 ">
                                 @if ($customer->status === 'pending')
                                     <select class="form-select" name="status" aria-label="Default select example"
@@ -183,30 +183,30 @@
 
         // status code start
 
-    let statusElements = document.querySelectorAll('#status');
-    let heading = document.querySelector('#heading');
+        let statusElements = document.querySelectorAll('#status');
+        let heading = document.querySelector('#heading');
 
-    let content = document.querySelector('#content');
+        let content = document.querySelector('#content');
 
-    statusElements.forEach(status => {
-        status.addEventListener('change', function() {
-            let row = this.closest('tr');
-            let content = row.querySelector('#content');
+        statusElements.forEach(status => {
+            status.addEventListener('change', function() {
+                let row = this.closest('tr');
+                let content = row.querySelector('#content');
 
-            if (this.value == 'lead' || this.value == 'trial') {
-                heading.classList.remove('hidden');
-                content.classList.remove('hidden');
+                if (this.value == 'lead' || this.value == 'trial') {
+                    heading.classList.remove('hidden');
+                    content.classList.remove('hidden');
 
-                let priceInput = content.querySelector('#price');
+                    let priceInput = content.querySelector('#price');
 
 
-                priceInput.type = 'number';
-            } else {
-                heading.classList.add('hidden');
-                content.classList.add('hidden');
-            }
+                    priceInput.type = 'number';
+                } else {
+                    heading.classList.add('hidden');
+                    content.classList.add('hidden');
+                }
+            });
         });
-    });
         // status code end
     </script>
 @endsection

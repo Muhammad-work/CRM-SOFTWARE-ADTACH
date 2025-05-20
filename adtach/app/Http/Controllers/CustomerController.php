@@ -125,7 +125,7 @@ class CustomerController extends Controller
                             ELSE 7
                         END")
             ->orderBy('status', 'desc')
-            ->get();
+            ->paginate(5000);
         return view('front.customer_number', compact('customerNumbers'));
     }
 

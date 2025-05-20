@@ -104,6 +104,11 @@ Route::controller(userController::class)->group(function () {
 Route::controller(homeController::class)->group(function () {
     Route::get('/', 'viewHome')->name('viewHome')->middleware(validUser::class);
 });
+
+// Route::get('    ', [CustomerController::class, 'getCustomerNumber'])
+//     ->name('ajax.customer-number')
+//     ->middleware(validUser::class);
+
 Route::controller(CustomerController::class)->group(function () {
     Route::post('/storeCustomerDetail', 'storeCustomerDetail')->name('storeCustomerDetail');
     Route::post('/customerStatus/{id}', 'customerStatus')->name('customerStatus');
