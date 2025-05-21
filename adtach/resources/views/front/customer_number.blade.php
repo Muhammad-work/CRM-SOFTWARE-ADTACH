@@ -32,7 +32,7 @@
             </thead>
             <tbody id="tableBody">
                 @foreach ($customerNumbers as $index => $customer)
-                    <form action="{{ route('storeCustomerNumbersDetails', $customer->id) }}" method="POST">
+                    <form class="customer-form" data-id="{{ $customer->id }}">
                         @csrf
                         <tr class="odd:bg-gray-50 even:bg-white">
                             <td class="px-4 py-2 border border-gray-300">
@@ -57,7 +57,7 @@
                             <td class="px-4 py-2 border border-gray-300 ">
                                 @if ($customer->status === 'pending')
                                     <select class="form-select" name="status" aria-label="Default select example"
-                                        id="status">
+                                        id="status" required>
                                         <option selected>-- Select Status --</option>
                                         <option value="vm">vm</option>
                                         <option value="not int">Not Interested</option>
@@ -90,17 +90,15 @@
                                 @endif
                             </td>
 
-                            <td class="px-0 py-2 border border-gray-300 hidden" id="content">
-                                <input type="hidden" class="form-control" placeholder="Enter Price" aria-label="price"
-                                    name="price" aria-describedby="basic-addon1" id="price">
-                                @error('price')
-                                    <span class="text-danger">{{ $message }}</span>
-                                @enderror
+                            <td class="px-0 py-2 border border-gray-300 hidden price-column">
+                                <input type="hidden" class="form-control price-input" placeholder="Enter Price"
+                                    aria-label="price" name="price" aria-describedby="basic-addon1" required>
                             </td>
                             @if ($customer->remarks === null)
                                 <td class="px-2 py-2 border border-gray-300">
                                     <textarea name="remarks" id="remarks_1" cols="15" rows="1" placeholder="Enter Remarks"
-                                        class="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-400">{{ old('remarks') }}</textarea>
+                                        class="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-400"
+                                        required>{{ old('remarks') }}</textarea>
                                     @error('remarks')
                                         <span class="text-danger"> {{ $message }} </span>
                                     @enderror
@@ -140,6 +138,49 @@
     {{-- Show Customer Details --}}
 
     <script>
+        //   customer Detail Send To Controller Using Ajax
+
+        document.querySelectorAll('.customer-form').forEach(form => {
+            form.addEventListener('submit', function(e) {
+                e.preventDefault();
+
+                const customerId = this.getAttribute('data-id');
+                const formData = new FormData(this);
+
+                fetch(`/${customerId}/storeCustomerNumbersDetails`, {
+                        method: 'POST',
+                        headers: {
+                            'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]')
+                                .getAttribute('content'),
+                        },
+                        body: formData
+                    })
+                    .then(async response => {
+                        if (!response.ok) {
+                            throw new Error('Network response was not ok');
+                        }
+
+                        // Handle empty response safely
+                        const text = await response.text();
+                        const data = text ? JSON.parse(text) : {
+                            message: 'Saved successfully.'
+                        };
+
+                        alert(data.message);
+                        window.location.reload();
+                    })
+                    .catch(error => {
+                        console.error('Error:', error);
+                        alert('An error occurred.');
+                    });
+
+            });
+        });
+
+        //   customer Detail Send To Controller Using Ajax
+
+
+
         function searchTable() {
             const searchInput = document.getElementById("searchInput").value.toLowerCase();
             const tableBody = document.getElementById("tableBody");
@@ -184,29 +225,27 @@
         // status code start
 
         let statusElements = document.querySelectorAll('#status');
-        let heading = document.querySelector('#heading');
 
-        let content = document.querySelector('#content');
+        let heading = document.querySelector('#heading');
 
         statusElements.forEach(status => {
             status.addEventListener('change', function() {
                 let row = this.closest('tr');
-                let content = row.querySelector('#content');
+                let content = row.querySelector('.price-column');
+                let priceInput = row.querySelector('.price-input');
 
-                if (this.value == 'lead' || this.value == 'trial') {
+                if (this.value === 'lead' || this.value === 'trial') {
                     heading.classList.remove('hidden');
                     content.classList.remove('hidden');
-
-                    let priceInput = content.querySelector('#price');
-
-
                     priceInput.type = 'number';
                 } else {
-                    heading.classList.add('hidden');
                     content.classList.add('hidden');
+                    priceInput.value = ''; // clear price if hidden
+                    priceInput.type = 'hidden';
                 }
             });
         });
+
         // status code end
     </script>
 @endsection

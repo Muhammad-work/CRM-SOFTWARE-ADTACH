@@ -124,9 +124,8 @@ class CustomerController extends Controller
                             WHEN status = 'call back' THEN 6
                             ELSE 7
                         END")
-            ->orderBy('status', 'desc')
-            ->paginate(5000);
-        return view('front.customer_number', compact('customerNumbers'));
+            ->orderBy('status', 'desc')->latest()->get();
+        return view('front.customer_number',compact('customerNumbers'));
     }
 
     public function storeCustomerNumbersDetails(Request $req, string $id)
@@ -166,9 +165,9 @@ class CustomerController extends Controller
             $customer->delete();
 
             if ($req->status == 'lead') {
-                return redirect()->route('viewCunstomerNumberTable')->with(['success' => 'Add Customer Information To Youre Lead Page Successfuly']);
+                return response()->json(['message' => 'Add Customer Information To Youre Lead Page Successfuly']);
             } else {
-                return redirect()->route('viewCunstomerNumberTable')->with(['success' => 'Add Customer Information To Youre Trial Page Successfuly']);
+                return response()->json(['message' => 'Add Customer Information To Youre Trial Page Successfuly']);
             }
         } else {
             $req->validate([
@@ -184,7 +183,7 @@ class CustomerController extends Controller
             $customer->remarks = $req->remarks;
             $customer->save();
 
-            return redirect()->route('viewCunstomerNumberTable')->with(['success' => 'Add Customer Information Successfuly']);
+            return response()->json(['message' => 'Customer updated successfully.']);
         }
     }
 
