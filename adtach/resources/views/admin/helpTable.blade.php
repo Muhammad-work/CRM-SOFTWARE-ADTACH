@@ -10,9 +10,6 @@
                     <div class="col-sm-6">
                         <h1 class="m-0 d-inline">All Agent Help Request</h1>
                     </div><!-- /.col -->
-                    {{-- <div class="col-sm-4">
-                        <h1 class="m-0 d-inline"><a href="{{ route('addUser') }}" class="btn btn-primary">Add New</a></h1>
-                    </div><!-- /.col --> --}}
                     <div class="col-sm-6">
                         <ol class="breadcrumb float-sm-right">
                             <li class="breadcrumb-item"><a href="{{ route('dashboard') }}">DashBord</a></li>
@@ -66,9 +63,7 @@
                                             <td>{{ \Carbon\Carbon::parse($data->created_at)->format('d M, Y') }}</td>
                                             <td>
                                                 <a href="{{ route('downHelpRequestStatus', $data->id) }}"
-                                                    class="btn btn-success staus">Resolve</a>
-                                                <a href="{{ route('cancelHelpRequestStatus', $data->id) }}"
-                                                    class="btn btn-danger staus">Refund</a>
+                                                    class="btn btn-primary btn-sm staus">Update Status</a>
                                             </td>
                                         </tr>
                                     @endif
@@ -83,8 +78,10 @@
                                             <td>
                                                 @if ($data->status === 'pending')
                                                     <span class="bg-warning py-1 px-2 rounded text-white">Pending</span>
-                                                @elseif($data->status === 'down')
+                                                @elseif($data->status === 'resolve')
                                                     <span class="bg-success py-1 px-2 rounded text-white">Resolve</span>
+                                                @elseif($data->status === 'working')
+                                                    <span class="bg-primary py-1 px-2 rounded text-white">Working</span>
                                                 @else
                                                     <span class="bg-danger py-1 px-2 rounded text-white">Refund</span>
                                                 @endif
@@ -92,12 +89,8 @@
                                             <td> {{ $data->user_name }}</td>
                                             <td>{{ \Carbon\Carbon::parse($data->created_at)->format('d M, Y') }}</td>
                                             <td>
-                                                @if ($data->status === 'pending')
-                                                    <a href="{{ route('downHelpRequestStatus', $data->id) }}"
-                                                        class="btn btn-success staus">Resolve</a>
-                                                    <a href="{{ route('cancelHelpRequestStatus', $data->id) }}"
-                                                        class="btn btn-danger staus">Refund</a>
-                                                @endif
+                                                <a href="{{ route('downHelpRequestStatus', $data->id) }}"
+                                                    class="btn btn-primary btn-sm staus">Update Status</a>
                                             </td>
                                         </tr>
                                     @endif

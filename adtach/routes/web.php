@@ -29,7 +29,6 @@ Route::controller(dashboardController::class)->group(function () {
     Route::get('/dashboard/{id}/deleteCustomerDetails', 'deleteCustomerDetails')->name('deleteCustomerDetails')->middleware(validUser::class)->middleware(validRole::class);
     Route::get('/dashboard/Help-Request', 'viewHelpRequestTableDashboard')->name('viewHelpRequestTableDashboard')->middleware(validUser::class)->middleware(validRole::class);
     Route::get('/dashboard/{id}/downHelpRequestStatus', 'downHelpRequestStatus')->name('downHelpRequestStatus')->middleware(validUser::class)->middleware(validRole::class);
-    Route::get('/dashboard/{id}/cancelHelpRequestStatus', 'cancelHelpRequestStatus')->name('cancelHelpRequestStatus')->middleware(validUser::class)->middleware(validRole::class);
     Route::get('/dashboard/{id}/viewTrialDaysForm', 'viewTrialDaysForm')->name('viewTrialDaysForm')->middleware(validUser::class)->middleware(validRole::class);
     Route::post('/dashboard/update-customer-status', 'updateStatusCustomerTrial')->name('updateStatusCustomerTrial')->middleware(validUser::class);
     Route::get('/dashboard/{id}/view-update-customer-status', 'viewupdateSaleCustomerStatus')->name('viewupdateSaleCustomerStatus')->middleware(validUser::class)->middleware(validRole::class);
@@ -63,6 +62,7 @@ Route::controller(dashboardController::class)->group(function () {
     Route::get('/dashboard/old_number', 'viewOldNumber')->name('viewOldNumber')->middleware(validUser::class)->middleware(validRole::class);
     Route::get('/dashboard/dis_old_number', 'disOldCustomerNumberToAgent')->name('disOldCustomerNumberToAgent')->middleware(validUser::class)->middleware(validRole::class);
     Route::post('/dashboard/dis_old_number', 'storeOldCustomerNumber')->name('storeOldCustomerNumber')->middleware(validUser::class)->middleware(validRole::class);
+    Route::post('/dashboard/{id}/updateHelpRequeststatus', 'updateHelpRequeststatus')->name('updateHelpRequeststatus')->middleware(validUser::class)->middleware(validRole::class);
 });
 
 

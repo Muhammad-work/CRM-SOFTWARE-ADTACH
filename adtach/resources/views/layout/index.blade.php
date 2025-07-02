@@ -30,28 +30,27 @@
         integrity="sha384-cVKIPhGWiC2Al4u+LWgxfKTRIcfu0JTxR+EQDz/bgldoEyl4H0zUF0QKbrJ0EcQF" crossorigin="anonymous">
     </script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
-    <script>
+    {{-- <script>
         function updateCustomerTrialStatus() {
             $.ajax({
-                url: '/dashboard/update-customer-status',
-                type: 'POST',
+                url: '/dashboard/viewHelpStatus',
+                type: 'GET',
                 dataType: 'json',
                 data: {
                     _token: '{{ csrf_token() }}',
                 },
                 success: function(response) {
-                    console.log('Customer status updated:', response);
+                    console.log('Hi=========',response);
                 },
                 error: function(error) {
                     console.error('Error updating customer status:', error);
 
-                    setTimeout(updateCustomerTrialStatus, 1000);
                 }
             });
         }
 
-        setInterval(updateCustomerTrialStatus, 1800000);
-    </script>
+        // setInterval(updateCustomerTrialStatus, 0);
+    </script> --}}
 </body>
 
 </html>

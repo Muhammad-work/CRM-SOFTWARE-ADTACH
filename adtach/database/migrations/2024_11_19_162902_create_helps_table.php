@@ -20,7 +20,8 @@ return new class extends Migration
             $table->longText('help_reason');
             $table->string('user_id');
             $table->string('user_name');
-            $table->enum('status',['pending','down','cancel'])->default('pending');
+            $table->enum('status',['pending','resolve','refund','working'])->default('pending');
+            $table->string('remarks')->nullable();
             $table->timestamps();
         });
     }

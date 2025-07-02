@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Controllers\Controller;
+use Auth;
 use Illuminate\Http\Request;
 use App\Models\user;
 use App\Models\help;
@@ -66,7 +67,7 @@ class dashboardController extends Controller
         ]));
     }
 
-    public function  viewAgentSaleTable()
+    public function viewAgentSaleTable()
     {
         $customers = Customer::with('user')
             ->select('a_name', DB::raw('count(*) as total'))
@@ -149,7 +150,7 @@ class dashboardController extends Controller
         $customer->make_address = $req->make_address;
         $customer->regitr_date = $req->date;
         $customer->save();
-        return  redirect()->route('viewAgentSaleTable')->with(['success' => 'Customer Detail Update Successfuly']);
+        return redirect()->route('viewAgentSaleTable')->with(['success' => 'Customer Detail Update Successfuly']);
     }
 
     public function deleteSaleCustomerDetails(string $id)
@@ -163,10 +164,10 @@ class dashboardController extends Controller
             $customer = $newcustomer;
         }
         $customer->delete();
-        return  redirect()->route('viewAgentSaleTable')->with(['success' => 'Customer Detail Deleted Successfuly']);
+        return redirect()->route('viewAgentSaleTable')->with(['success' => 'Customer Detail Deleted Successfuly']);
     }
 
-    public function  viewAgentLeadlTable()
+    public function viewAgentLeadlTable()
     {
         $customers = Customer::with('user')
             ->select('a_name', DB::raw('count(*) as total'))
@@ -246,17 +247,17 @@ class dashboardController extends Controller
         $customer->regitr_date = $req->date;
         $customer->save();
 
-        return  redirect()->route('viewAgentLeadlTable')->with(['success' => 'Customer Detail Updated Successfuly']);
+        return redirect()->route('viewAgentLeadlTable')->with(['success' => 'Customer Detail Updated Successfuly']);
     }
 
     public function deleteLeadCustomerDetails(string $id)
     {
         $customer = customer::find($id);
         $customer->delete();
-        return  redirect()->route('viewAgentLeadlTable')->with(['success' => 'Customer Detail Deleted Successfuly']);
+        return redirect()->route('viewAgentLeadlTable')->with(['success' => 'Customer Detail Deleted Successfuly']);
     }
 
-    public function  viewAgentTrialTable()
+    public function viewAgentTrialTable()
     {
         $customers = Customer::with('user')
             ->select('a_name', DB::raw('count(*) as total'))
@@ -337,14 +338,14 @@ class dashboardController extends Controller
         $customer->regitr_date = $req->date;
         $customer->save();
 
-        return  redirect()->route('viewAgentTrialTable')->with(['success' => 'Customer Detail Update Successfuly']);
+        return redirect()->route('viewAgentTrialTable')->with(['success' => 'Customer Detail Update Successfuly']);
     }
 
     public function deleteTrialCustomerDetails(string $id)
     {
         $customer = customer::find($id);
         $customer->delete();
-        return  redirect()->route('viewAgentTrialTable')->with(['success' => 'Customer Detail Deleted Successfuly']);
+        return redirect()->route('viewAgentTrialTable')->with(['success' => 'Customer Detail Deleted Successfuly']);
     }
 
     public function updateCustomerStatus(string $id)
@@ -357,34 +358,38 @@ class dashboardController extends Controller
         $customer->end_date = null;
         $customer->date_count = null;
         $customer->save();
-        return  redirect()->route('viewAgentTrialTable')->with(['success' => 'Customer Detail Updated Successfuly']);
+        return redirect()->route('viewAgentTrialTable')->with(['success' => 'Customer Detail Updated Successfuly']);
     }
 
     public function deleteCustomerDetails(string $id)
     {
         $customer = customer::find($id);
         $customer->delete();
-        return  redirect()->route('viewAgentTrialTable')->with(['success' => 'Customer Cencel Successfuly']);
+        return redirect()->route('viewAgentTrialTable')->with(['success' => 'Customer Cencel Successfuly']);
     }
     public function viewHelpRequestTableDashboard()
     {
         $helpRequest = help::all();
         return view('admin.helpTable', compact('helpRequest'));
     }
+
+
     public function downHelpRequestStatus(string $id)
     {
         $help = help::find($id);
-        $help->status = 'down';
-        $help->save();
-        return redirect()->route('viewHelpRequestTableDashboard')->with(['success' => 'Help Request is Down Successfuly']);
+        return view('admin.updateHelpStatus', compact('help'));
     }
-
-    public function cancelHelpRequestStatus(string $id)
+    public function updateHelpRequeststatus(Request $req, string $id)
     {
+        $req->validate([
+            'remarks' => 'required',
+            'status' => 'required',
+        ]);
         $help = help::find($id);
-        $help->status = 'cancel';
+        $help->status = $req->status;
+        $help->remarks = $req->remarks;
         $help->save();
-        return redirect()->route('viewHelpRequestTableDashboard')->with(['success' => 'Help Request is Cancel Successfuly']);
+        return redirect()->route('viewHelpRequestTableDashboard')->with(['success' => 'Help Request Updated Successfuly']);
     }
 
     public function viewTrialDaysForm(string $id)
@@ -628,7 +633,7 @@ class dashboardController extends Controller
         return redirect()->route('viewAgentSaleTable')->with(['success' => 'Distribute Sale Successfully']);
     }
 
-    public function  filterSaleByDate(Request $req)
+    public function filterSaleByDate(Request $req)
     {
         $date = Carbon::parse($req->date);
         $month = $date->format('m');
@@ -705,7 +710,7 @@ class dashboardController extends Controller
             'remarks' => 'required',
             'date' => 'required|date',
             'agent' => 'required'
-        ]);
+        ]);        
         $agent = user::select('id', 'name')->find($req->agent);
         $email = $req->customer_email ?: 'No Email';
         $macAddress = $req->make_address ?: null;
@@ -713,7 +718,7 @@ class dashboardController extends Controller
         customer::create([
             'customer_name' => $req->customer_name,
             'customer_number' => $req->customer_number,
-            'customer_email' =>  $email,
+            'customer_email' => $email,
             'status' => $req->status,
             'price' => $req->price,
             'remarks' => $req->remarks,
@@ -721,7 +726,7 @@ class dashboardController extends Controller
             'a_name' => $agent->id,
             'user_name' => $agent->name,
             'make_address' => $macAddress,
-            'expiry_date' =>  $mac_expiry
+            'expiry_date' => $mac_expiry
         ]);
 
         return redirect()->route('viewAgentSaleTable')->with(['success' => 'New Customer Add Successfuly']);
