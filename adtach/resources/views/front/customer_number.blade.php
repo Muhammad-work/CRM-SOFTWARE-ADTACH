@@ -145,7 +145,7 @@
                 e.preventDefault();
 
                 const customerId = this.getAttribute('data-id');
-                const formData = new FormData(this);
+                const formData = new FormData(form);
 
                 fetch(`/${customerId}/storeCustomerNumbersDetails`, {
                         method: 'POST',

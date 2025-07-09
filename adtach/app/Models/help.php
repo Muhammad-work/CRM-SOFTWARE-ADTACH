@@ -15,6 +15,7 @@ class help extends Model
         'user_id',
         'user_name',
         'status',
+        'remarks'
     ];
 
     public function user(){

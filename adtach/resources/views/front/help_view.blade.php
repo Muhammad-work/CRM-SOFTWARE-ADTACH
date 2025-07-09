@@ -19,13 +19,12 @@
                     <th class="px-4 py-2 border border-gray-300">S.NO</th>
                     <th class="px-4 py-2 border border-gray-300">CUSTOMER NAME</th>
                     <th class="px-4 py-2 border border-gray-300">CUSTOMER NUMBER</th>
-                    <th class="px-4 py-2 border border-gray-300">CUSTOMER EMAIL</th>
                     <th class="px-4 py-2 border border-gray-300">MAC ADDRESS</th>
                     <th class="px-4 py-2 border border-gray-300">STATUS</th>
                     <th class="px-4 py-2 border border-gray-300">HELP REASON</th>
                     <th class="px-4 py-2 border border-gray-300">ADMIN REMARKS</th>
-                    <th class="px-4 py-2 border border-gray-300">AGENT NAME</th>
                     <th class="px-4 py-2 border border-gray-300">DATE</th>
+                    <th class="px-4 py-2 border border-gray-300">ACTION</th>
                 </tr>
             </thead>
             <tbody id="tableBody">
@@ -34,7 +33,6 @@
                         <td class="px-4 py-2 border border-gray-300 customer"> {{ $index + 1 }} </td>
                         <td class="px-4 py-2 border border-gray-300 customer"> {{ $data->c_name }} </td>
                         <td class="px-4 py-2 border border-gray-300 customer">{{ $data->c_number }}</td>
-                        <td class="px-4 py-2 border border-gray-300 customer">{{ $data->c_email }}</td>
                         <td class="px-4 py-2 border border-gray-300 customer">{{ $data->make_address }}</td>
                         <td class="px-4 py-2 border border-gray-300 customer">
                             @if ($data->status === 'pending')
@@ -49,8 +47,14 @@
                         </td>
                         <td class="px-4 py-2 border border-gray-300 customer">{{ $data->help_reason }}</td>
                         <td class="px-4 py-2 border border-gray-300 customer">{{ $data->remarks ?: 'N/A' }}</td>
-                        <td class="px-4 py-2 border border-gray-300 customer">{{ $data->user_name }}</td>
-                        <td class="px-4 py-2 border border-gray-300 customer">{{ \Carbon\Carbon::parse($data->created_at)->format('d M, Y') }}</td>
+                        <td class="px-4 py-2 border border-gray-300 customer">
+                            {{ \Carbon\Carbon::parse($data->created_at)->format('d M, Y') }}</td>
+                        <td class="px-4 py-2 border border-gray-300 customer">
+                            @if ($data->status == 'pending' || $data->status == 'working')
+                                <a href="{{ route('updateRemarksForm', $data->id) }}"
+                                    class="btn btn-primary btn-sm">update</a>
+                            @endif
+                        </td>
                     </tr>
                 @endforeach
                 @if ($helpRequestDetail->isEmpty())

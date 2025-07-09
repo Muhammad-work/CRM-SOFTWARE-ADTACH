@@ -105,10 +105,6 @@ Route::controller(homeController::class)->group(function () {
     Route::get('/', 'viewHome')->name('viewHome')->middleware(validUser::class);
 });
 
-// Route::get('    ', [CustomerController::class, 'getCustomerNumber'])
-//     ->name('ajax.customer-number')
-//     ->middleware(validUser::class);
-
 Route::controller(CustomerController::class)->group(function () {
     Route::post('/storeCustomerDetail', 'storeCustomerDetail')->name('storeCustomerDetail');
     Route::post('/customerStatus/{id}', 'customerStatus')->name('customerStatus');
@@ -133,5 +129,7 @@ Route::controller(CustomerController::class)->group(function () {
 Route::controller(HelpController::class)->group(function () {
     Route::get('/help-Request', 'viewHelpForm')->name('help')->middleware(validUser::class);
     Route::get('/help-Detail', 'viewHelpTable')->name('viewHelpTable')->middleware(validUser::class);
+    Route::get('/update/{id}/remarks', 'updateRemarksForm')->name('updateRemarksForm')->middleware(validUser::class);
     Route::post('/storeHelpRequest', 'storeHelpRequest')->name('storeHelpRequest')->middleware(validUser::class);
+    Route::post('/agent/{id}/remarks-update', 'agentRemarksUpdate')->name('agentRemarksUpdate')->middleware(validUser::class);
 });

@@ -33,12 +33,11 @@
                                 <tr>
                                     <th>ID</th>
                                     <th>CUSTOMER NAME</th>
-                                    <th>CUSTOMER EMAIL</th>
                                     <th>CUSTOMER PHONE</th>
-                                    <th>MAC ADDRESS</th>
                                     <th>HELP REASON</th>
                                     <th>STATUS</th>
                                     <th>AGENT NAME</th>
+                                    <th>ADMIN REMARKS</th>
                                     <th>DATE</th>
                                     <th>ACTION</th>
                                 </tr>
@@ -49,9 +48,7 @@
                                         <tr>
                                             <td> {{ $index + 1 }} </td>
                                             <td> {{ $data->c_name }} </td>
-                                            <td>{{ $data->c_email }}</td>
                                             <td>{{ $data->c_number }}</td>
-                                            <td>{{ $data->make_address }}</td>
                                             <td>{{ $data->help_reason }}</td>
                                             <td>
                                                 @if ($data->status === 'pending')
@@ -60,6 +57,7 @@
                                                 @endif
                                             </td>
                                             <td> {{ $data->user_name }}</td>
+                                            <td> {{ $data->remarks ?: 'N/A' }}</td>
                                             <td>{{ \Carbon\Carbon::parse($data->created_at)->format('d M, Y') }}</td>
                                             <td>
                                                 <a href="{{ route('downHelpRequestStatus', $data->id) }}"
@@ -71,9 +69,7 @@
                                         <tr>
                                             <td> {{ $index + 1 }} </td>
                                             <td> {{ $data->c_name }} </td>
-                                            <td>{{ $data->c_email }}</td>
                                             <td>{{ $data->c_number }}</td>
-                                            <td>{{ $data->make_address }}</td>
                                             <td>{{ $data->help_reason }}</td>
                                             <td>
                                                 @if ($data->status === 'pending')
@@ -87,10 +83,14 @@
                                                 @endif
                                             </td>
                                             <td> {{ $data->user_name }}</td>
+                                            <td> {{ $data->remarks ?: 'N/A' }}</td>
+
                                             <td>{{ \Carbon\Carbon::parse($data->created_at)->format('d M, Y') }}</td>
                                             <td>
-                                                <a href="{{ route('downHelpRequestStatus', $data->id) }}"
-                                                    class="btn btn-primary btn-sm staus">Update Status</a>
+                                                @if ($data->status == 'working' || $data->status == 'pending')
+                                                    <a href="{{ route('downHelpRequestStatus', $data->id) }}"
+                                                        class="btn btn-primary btn-sm staus">Update Status</a>
+                                                @endif
                                             </td>
                                         </tr>
                                     @endif

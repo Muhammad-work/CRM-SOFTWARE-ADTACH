@@ -5,7 +5,9 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
+        {{-- <meta name="csrf-token" content="{{ csrf_token() }}"> --}}
     <meta name="csrf-token" content="{{ csrf_token() }}">
+
 
     <title> PBS Digitals </title>
     <link rel="shortcut icon" href="{{ asset('storage/img/logo-2.png') }}" type="image/x-icon">
