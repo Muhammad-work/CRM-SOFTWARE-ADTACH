@@ -15,9 +15,18 @@
                     </div><!-- /.col -->
                     <div class="col-sm-6">
                         <form action="{{ route('filterSaleByDate') }}" method="get" id="filterbyDateForm">
-                            <label for="exampleInputEmail1">Filter By Month</label>
-                            <input type="month" class="form-control" name="date"
-                                aria-label="Text input with 2 dropdown buttons" id="filterbyDate">
+                            <div class="row">
+                                <div class="col-6">
+                                    <label for="exampleInputEmail1">From</label>
+                                    <input type="date" class="form-control" name="from"
+                                        aria-label="Text input with 2 dropdown buttons" id="from">
+                                </div>
+                                <div class="col-6">
+                                    <label for="exampleInputEmail1">To</label>
+                                    <input type="date" class="form-control" name="to"
+                                        aria-label="Text input with 2 dropdown buttons" id="to">
+                                </div>
+                            </div>
                         </form>
                     </div><!-- /.col -->
                 </div><!-- /.row -->
@@ -62,9 +71,17 @@
             </div>
             <script>
                 let filterbyDate = document.querySelector('#filterbyDate');
-                let filterbyDateForm = document.querySelector('#filterbyDateForm');
-                filterbyDate.addEventListener('change', () => {
-                    filterbyDateForm.submit();
-                })
+                let from = document.querySelector('#from');
+                let to = document.querySelector('#to');
+                if (from && to) {
+                    function trySubmit() {
+                        if (from.value && to.value) { // dono filled hain
+                            filterbyDateForm.submit();
+                        }
+                    }
+
+                    from.addEventListener('change', trySubmit);
+                    to.addEventListener('change', trySubmit);
+                }
             </script>
         @endsection

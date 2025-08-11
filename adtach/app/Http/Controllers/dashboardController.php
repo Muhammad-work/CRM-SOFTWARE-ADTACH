@@ -635,11 +635,11 @@ class dashboardController extends Controller
 
     public function filterSaleByDate(Request $req)
     {
-        $date = Carbon::parse($req->date);
-        $month = $date->format('m');
+        $from = Carbon::parse($req->from)->format('Y-m-d');
+        $to   = Carbon::parse($req->to)->format('Y-m-d');
 
-        $oldCustomers = Customer::whereRaw('MONTH(regitr_date) = ?', [$month])->get();
-        $newCustomers = OldCustomer::whereRaw('MONTH(regitr_date) = ?', [$month])->get();
+        $oldCustomers = Customer::whereBetween('regitr_date', [$from, $to])->get();
+        $newCustomers = OldCustomer::whereBetween('regitr_date', [$from, $to])->get();
 
         $customers = $oldCustomers->merge($newCustomers);
 
@@ -710,7 +710,7 @@ class dashboardController extends Controller
             'remarks' => 'required',
             'date' => 'required|date',
             'agent' => 'required'
-        ]);        
+        ]);
         $agent = user::select('id', 'name')->find($req->agent);
         $email = $req->customer_email ?: 'No Email';
         $macAddress = $req->make_address ?: null;
@@ -773,5 +773,4 @@ class dashboardController extends Controller
 
         return redirect()->route('viewOldNumber')->with(['success' => 'Distribute To Customer Old Numbers Successfully']);
     }
-
 }
